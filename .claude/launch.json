@@ -4,7 +4,7 @@
     {
       "name": "knb-static",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["/Users/angelomiguel/Documents/GitHub/KNB-SALARY-CLIENT/.claude/server.mjs"],
+      "runtimeArgs": [".claude/server.mjs"],
       "port": 8765
     }
   ]
