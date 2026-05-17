@@ -2248,23 +2248,303 @@
 
     .employee-directory {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
       gap: 10px;
     }
+
+    /* Compact KPI tiles inside employees tab so directory fits above the fold */
+    .employees-bento .kpi-tile {
+      min-height: 92px;
+      padding: 11px 12px 8px;
+    }
+    .employees-bento .kpi-tile .kpi-value { font-size: 18px; }
+    .employees-bento .kpi-tile .kpi-spark { display: none; }
+    .employees-bento .kpi-tile .kpi-compare {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .employees-bento .kpi-tile::after { display: none; } /* no jump arrow on employee KPIs */
+
+    /* Tighter analytics cards */
+    .employees-bento .employees-hero,
+    .employees-bento .bento-side > .card,
+    .employees-bento .bento-tenure,
+    .employees-bento .bento-employee-reviews {
+      padding: 12px 14px;
+    }
+    .employees-bento .employees-hero .card-header,
+    .employees-bento .bento-side > .card .card-header,
+    .employees-bento .bento-tenure .card-header,
+    .employees-bento .bento-employee-reviews .card-header { margin-bottom: 8px; }
+    .employees-bento .employees-hero h2,
+    .employees-bento .bento-side > .card h2,
+    .employees-bento .bento-tenure h2,
+    .employees-bento .bento-employee-reviews h2 { font-size: 13px; }
+    .employees-bento .employees-hero p,
+    .employees-bento .bento-side > .card p,
+    .employees-bento .bento-tenure p,
+    .employees-bento .bento-employee-reviews p { font-size: 11px; }
+
+    .employees-bento .bento-side { gap: 10px; }
+    .employees-bento .insights-card .insight-item { padding: 6px 4px; font-size: 11.5px; }
+    .employees-bento .insights-card .insight-item strong { font-size: 11.5px; }
+
+    /* ----- Scope banner (shared base) ----- */
+    .scope-banner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      border-radius: var(--dashboard-card-radius);
+    }
+    .scope-banner .scope-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .scope-banner .scope-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+    .scope-banner .scope-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .scope-banner .scope-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .scope-banner .scope-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+    .scope-banner .scope-meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #f4f4f5;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* ----- Employees banner ----- */
+    .employees-banner {
+      padding: 12px 16px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+    .employees-banner::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--accent) 0%, #6b6f88 100%);
+    }
+    .employees-banner .scope-icon {
+      background: var(--accent);
+      color: #ffffff;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+    }
+    .employees-banner .scope-value { font-size: 15px; font-weight: 740; letter-spacing: -0.01em; }
+    .employees-banner .muted-inline { color: var(--muted); font-weight: 600; font-size: 12px; margin-left: 4px; }
+    .employees-banner .scope-meta-chip {
+      gap: 6px;
+      padding: 4px 10px;
+      background: #fafafa;
+    }
+    .employees-banner .scope-meta-chip .dot {
+      width: 6px; height: 6px; border-radius: 999px;
+      background: currentColor;
+      opacity: 0.85;
+    }
+    .employees-banner .scope-meta-chip.good { color: var(--good); background: var(--good-bg); }
+    .employees-banner .scope-meta-chip.warn { color: var(--warn); background: var(--warn-bg); }
+    .employees-banner .scope-meta-chip .chip-sub { color: var(--muted); font-weight: 600; font-size: 10px; margin-left: 2px; }
+
+    /* ----- Employees bento layout ----- */
+    /* Order: KPIs → Directory (above the fold) → 3-col analytics → side panels */
+    .employees-bento .bento-kpis      { grid-column: 1 / 13; order: 1; }
+    .employees-bento .bento-directory { grid-column: 1 / 13; order: 2; }
+    .employees-bento .employees-hero  { grid-column: 1 / 5;  order: 3; }
+    .employees-bento .bento-side      { grid-column: 5 / 9;  order: 4; }
+    .employees-bento .bento-tenure    { grid-column: 9 / 13; order: 5; }
+    .employees-bento .bento-employee-reviews { grid-column: 1 / 13; order: 6; }
+
+    @media (max-width: 1100px) {
+      .employees-bento .employees-hero,
+      .employees-bento .bento-side,
+      .employees-bento .bento-tenure,
+      .employees-bento .bento-employee-reviews { grid-column: 1 / 13; }
+    }
+
+    .employees-hero {
+      background: #ffffff;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .employees-hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent) 0%, #6b6f88 50%, var(--accent) 100%);
+      opacity: 0.85;
+    }
+    .employees-hero .card-header { padding-top: 4px; }
+    .employees-dept-rows .dept-row { background: #ffffff; }
+
+    /* Status mix card */
+    .status-mix-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .status-mix-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+    }
+    .status-mix-row .status-swatch {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+    .status-mix-row .status-swatch.active     { background: var(--good); }
+    .status-mix-row .status-swatch.probation  { background: var(--warn); }
+    .status-mix-row .status-swatch.inactive   { background: #9aa0b3; }
+    .status-mix-row .status-swatch.resigned   { background: #9aa0b3; }
+    .status-mix-row .status-swatch.terminated { background: var(--bad); }
+    .status-mix-row .status-label {
+      flex: 1;
+      color: var(--text);
+      text-transform: capitalize;
+    }
+    .status-mix-row .status-bar {
+      flex: 2;
+      height: 5px;
+      background: #f0f0f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .status-mix-row .status-bar > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+    }
+    .status-mix-row .status-bar.active > span     { background: var(--good); }
+    .status-mix-row .status-bar.probation > span  { background: var(--warn); }
+    .status-mix-row .status-bar.inactive > span   { background: #9aa0b3; }
+    .status-mix-row .status-bar.resigned > span   { background: #9aa0b3; }
+    .status-mix-row .status-bar.terminated > span { background: var(--bad); }
+    .status-mix-row .status-count {
+      min-width: 36px;
+      text-align: right;
+      font-weight: 720;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Tenure distribution */
+    .tenure-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .tenure-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+    }
+    .tenure-row .tenure-label {
+      width: 96px;
+      color: var(--text);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .tenure-row .tenure-bar {
+      flex: 1;
+      height: 6px;
+      background: #f0f0f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .tenure-row .tenure-bar > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+    }
+    .tenure-row .tenure-count {
+      min-width: 40px;
+      text-align: right;
+      font-weight: 720;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .tenure-row .tenure-cost {
+      min-width: 110px;
+      text-align: right;
+      font-size: 11px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Directory wrapper card matches bento aesthetic */
+    .directory-card { padding-bottom: 12px; }
+    .directory-card .card-header { margin-bottom: 14px; }
 
     .employee-card {
       background: #ffffff;
       border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 14px;
-      box-shadow: var(--shadow);
+      border-radius: var(--radius-lg);
+      padding: 14px 14px 12px;
+      box-shadow: var(--shadow-soft);
       min-width: 0;
-      display: grid;
-      gap: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+
+    .employee-card:hover,
+    .employee-card:focus-visible {
+      border-color: var(--accent);
+      box-shadow: var(--shadow);
+      transform: translateY(-1px);
     }
 
     .employee-card.archived {
-      opacity: 0.62;
+      opacity: 0.7;
       background: #fafafa;
     }
 
@@ -2272,126 +2552,165 @@
       display: grid;
       grid-template-columns: auto minmax(0, 1fr) auto;
       gap: 12px;
-      align-items: start;
+      align-items: center;
     }
 
     .employee-avatar {
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
-      background: #0a0a0a;
-      color: #ffffff;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.04em;
+      font-size: 14px;
+      font-weight: 760;
+      letter-spacing: 0.02em;
       flex: 0 0 auto;
     }
 
     .employee-identity {
       min-width: 0;
-    }
-
-    .employee-name-row {
       display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .employee-name {
       color: var(--text);
-      font-size: 16px;
-      font-weight: 800;
-      line-height: 1.15;
+      font-size: 15px;
+      font-weight: 740;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
       min-width: 0;
-      overflow-wrap: anywhere;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .employee-role {
       color: var(--muted);
       font-size: 12px;
       line-height: 1.35;
-      margin-top: 4px;
-      overflow-wrap: anywhere;
-    }
-
-    .employee-salary {
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-      white-space: nowrap;
-    }
-
-    .employee-salary strong {
-      display: block;
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--text);
-      line-height: 1.15;
-    }
-
-    .employee-salary span {
-      display: block;
-      color: var(--muted);
-      font-size: 11px;
-      margin-top: 3px;
-    }
-
-    .employee-meta-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-      padding: 11px 0;
-      border-top: 1px solid #f1f1f3;
-      border-bottom: 1px solid #f1f1f3;
-    }
-
-    .employee-meta {
-      min-width: 0;
-    }
-
-    .employee-meta-label {
-      color: var(--micro);
-      font-size: 10px;
-      font-weight: 760;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-
-    .employee-meta-value {
-      color: var(--text);
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.35;
-      overflow-wrap: anywhere;
-    }
-
-    .employee-meta-sub {
-      color: var(--muted);
-      font-size: 11px;
-      margin-top: 2px;
-    }
-
-    .employee-card-actions {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .employee-notes {
-      color: var(--muted);
-      font-size: 12px;
-      min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      flex: 1 1 180px;
+    }
+
+    /* Salary block: monthly | yearly | total with thin dividers */
+    .employee-salary-block {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px;
+      background: #fafafa;
+      border-radius: var(--radius-md);
+    }
+    .employee-salary-block .salary-main { flex: 1; min-width: 0; }
+    .employee-salary-block .salary-yearly,
+    .employee-salary-block .salary-total { flex: 1; min-width: 0; text-align: right; }
+    .employee-salary-block .salary-divider {
+      width: 1px;
+      height: 22px;
+      background: var(--line);
+    }
+    .employee-salary-block .salary-label {
+      color: var(--muted);
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .employee-salary-block .salary-value {
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 760;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+    .employee-salary-block .salary-value-secondary {
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Chip row (department, tenure, review) */
+    .employee-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .emp-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #f3f3f3;
+      color: var(--text);
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .emp-chip svg { flex-shrink: 0; opacity: 0.7; }
+    .emp-chip.dept { background: var(--accent-soft); color: var(--accent); }
+    .emp-chip.neutral { background: #f3f3f3; color: var(--text); }
+    .emp-chip.info { background: var(--accent-soft); color: var(--accent); }
+    .emp-chip.warn { background: var(--warn-bg); color: var(--warn); }
+    .emp-chip.bad  { background: var(--bad-bg);  color: var(--bad); }
+    .emp-chip.muted { background: #f3f3f3; color: var(--muted); }
+
+    .employee-note {
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.4;
+      padding: 6px 0;
+      border-top: 1px dashed var(--line);
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .employee-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      min-height: 28px;
+    }
+
+    .employee-card-footer-meta {
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    /* Action buttons fade in on hover/focus */
+    .employee-card .hover-actions {
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+    .employee-card:hover .hover-actions,
+    .employee-card:focus-within .hover-actions {
+      opacity: 1;
+    }
+    .employee-card .hover-actions .btn { padding: 5px 9px; font-size: 11px; }
+    @media (hover: none) {
+      .employee-card .hover-actions { opacity: 1; }
     }
 
     table {
@@ -2596,18 +2915,483 @@
 
     /* Modal form sections */
     .form-section {
-      padding: 12px 0;
+      padding: 14px 0;
       border-top: 1px solid #f1f1f3;
     }
-    .form-section:first-of-type { padding-top: 0; border-top: 0; }
+    .form-section:first-of-type { padding-top: 4px; border-top: 0; }
+    .form-section.compact { padding: 12px 0; }
+    .form-section.compact + .form-section.compact { padding-top: 12px; }
     .form-section-title {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--micro);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
+    .form-section.compact .form-grid { gap: 10px 12px; }
+    .form-section.compact textarea { min-height: 60px; }
+
+    /* Employee modal v3 — two-column profile editor */
+    #modalBackdrop:has(.emp3-layout) .modal { max-width: 880px; }
+    .emp3-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .emp3-side {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 14px;
+      background: linear-gradient(180deg, #fafafa 0%, #f4f4f5 100%);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      text-align: center;
+    }
+    .emp3-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+      box-shadow: 0 6px 18px rgba(17,17,17,0.08);
+      margin-bottom: 2px;
+    }
+    .emp3-name {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      line-height: 1.2;
+      color: var(--text);
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .emp3-role {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.3;
+      max-width: 100%;
+    }
+    .emp3-role .muted { font-style: italic; opacity: 0.7; }
+    .emp3-dot { color: #d4d4d8; }
+    .emp3-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      color: var(--text);
+      margin-top: 4px;
+    }
+    .emp3-status .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+    .emp3-status.active { color: var(--good); }
+    .emp3-status.probation { color: var(--warn); }
+    .emp3-status.inactive,
+    .emp3-status.resigned,
+    .emp3-status.terminated { color: #b91c1c; }
+
+    .emp3-stats {
+      width: 100%;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+    }
+    .emp3-stat { display: flex; flex-direction: column; gap: 2px; }
+    .emp3-stat-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--micro);
+    }
+    .emp3-stat-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.2;
+    }
+    .emp3-stat-value small {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-left: 2px;
+      letter-spacing: 0;
+    }
+
+    .emp3-main {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+    }
+    .emp3-field-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 14px;
+    }
+    .emp3-field-row.full { grid-template-columns: 1fr; }
+    .emp3-field-row > div { min-width: 0; }
+    .emp3-field-row label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    .emp3-field-row input,
+    .emp3-field-row select,
+    .emp3-field-row textarea {
+      padding: 9px 12px;
+      font-size: 13px;
+      border-radius: 8px;
+    }
+    .emp3-field-row textarea { min-height: 80px; resize: vertical; }
+    .emp3-divider {
+      height: 1px;
+      background: #f1f1f3;
+      margin: 4px 0;
+    }
+    .emp3-history-wrap { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+    .emp3-history-wrap .emp-history { margin-top: 0; padding-top: 0; border-top: 0; }
+
+    @media (max-width: 760px) {
+      .emp3-layout { grid-template-columns: 1fr; gap: 16px; }
+      .emp3-side {
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .emp3-avatar { width: 52px; height: 52px; border-radius: 14px; font-size: 18px; }
+      .emp3-side > .emp3-name,
+      .emp3-side > .emp3-role { text-align: left; }
+      .emp3-stats {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 0;
+        padding-top: 12px;
+        gap: 12px 20px;
+      }
+      .emp3-stat { flex: 1 1 130px; }
+    }
+
+    /* Legacy v2 styles (kept to avoid orphan rules; safe to remove later) */
+    .employee-form.v2 { display: flex; flex-direction: column; gap: 18px; }
+
+    .emp2-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 2px 2px 0;
+    }
+    .emp2-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+    .emp2-identity { flex: 1; min-width: 0; }
+    .emp2-name {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      line-height: 1.2;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .emp2-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 3px;
+      font-size: 12px;
+      color: var(--muted);
+      flex-wrap: wrap;
+    }
+    .emp2-meta-item { white-space: nowrap; }
+    .emp2-meta-item.muted { font-style: italic; opacity: 0.7; }
+    .emp2-meta-sep { color: #d4d4d8; }
+
+    .emp2-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #f4f4f5;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+    .emp2-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+    .emp2-badge.active { color: var(--good); background: var(--good-bg); }
+    .emp2-badge.probation { color: var(--warn); background: var(--warn-bg); }
+    .emp2-badge.inactive,
+    .emp2-badge.resigned,
+    .emp2-badge.terminated { color: #b91c1c; background: #fee2e2; }
+
+    .emp2-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      padding: 14px 4px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .emp2-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 0 12px;
+      min-width: 0;
+      position: relative;
+    }
+    .emp2-stat + .emp2-stat::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 4px;
+      bottom: 4px;
+      width: 1px;
+      background: #f1f1f3;
+    }
+    .emp2-stat:first-child { padding-left: 4px; }
+    .emp2-stat:last-child { padding-right: 4px; }
+    .emp2-stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--micro);
+    }
+    .emp2-stat-value {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .emp2-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .emp2-section-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .emp2-section-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: #f4f4f5;
+      color: var(--muted);
+    }
+    .emp2-section .form-grid { gap: 10px 12px; }
+    .emp2-section textarea { min-height: 64px; resize: vertical; }
+
+    @media (max-width: 640px) {
+      .emp2-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .emp2-stat + .emp2-stat::before { display: none; }
+    }
+
+    /* Salary change form */
+    .salary-form { display: flex; flex-direction: column; gap: 16px; }
+    .sal-hero {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: linear-gradient(180deg, #fafafa 0%, #f4f4f5 100%);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .sal-hero-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+    .sal-hero-identity { flex: 1; min-width: 0; }
+    .sal-hero-name {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sal-hero-role {
+      margin-top: 3px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sal-hero-role .muted { font-style: italic; opacity: 0.7; }
+    .sal-hero-current {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      flex-shrink: 0;
+      padding-left: 12px;
+      border-left: 1px solid var(--line);
+    }
+    .sal-hero-current-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--micro);
+    }
+    .sal-hero-current-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .salary-delta-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .salary-delta-field { flex: 1 1 140px; min-width: 0; }
+    .salary-delta-field label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+      display: block;
+    }
+    .salary-delta-field input {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      font-variant-numeric: tabular-nums;
+      padding: 8px 10px;
+    }
+    .salary-delta-arrow {
+      font-size: 16px;
+      color: var(--muted);
+      padding-bottom: 10px;
+      flex-shrink: 0;
+    }
+    .salary-delta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 2px;
+      white-space: nowrap;
+    }
+    .salary-delta-chip.good { color: var(--good); background: var(--good-bg); }
+    .salary-delta-chip.bad { color: var(--bad); background: var(--bad-bg); }
+    .salary-delta-chip.neutral { color: var(--muted); background: #f3f4f6; }
+
+    .salary-presets {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .salary-presets-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .salary-presets .preset-pill {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      font-variant-numeric: tabular-nums;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+    .salary-presets .preset-pill:hover {
+      background: #fafafa;
+      border-color: #d4d4d8;
+    }
+    [data-salary-reason-custom][hidden] { display: none; }
 
     /* Release batch header rows */
     .payroll-group-header td {
@@ -2892,28 +3676,94 @@
       background: #fff;
       border: 1px solid var(--line);
       border-radius: 16px;
-      max-width: 760px;
+      max-width: 720px;
       margin: 40px auto;
-      padding: 24px;
-      box-shadow: 0 18px 50px rgba(17, 17, 17, 0.14);
+      box-shadow: 0 24px 64px rgba(17, 17, 17, 0.18);
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 80px);
+      overflow: hidden;
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+      flex-shrink: 0;
     }
 
-    .modal-header h2 { margin: 0; }
+    .modal-header h2 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .modal-header .btn { padding: 6px 12px; font-size: 12px; }
+    .modal-close-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    .modal-close-btn:hover {
+      background: #f4f4f5;
+      color: var(--text);
+      border-color: var(--line);
+    }
+    .modal-close-btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
+    }
+
+    #recordForm {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 14px 20px;
+      gap: 0;
+    }
+    #recordForm > .form-actions {
+      position: sticky;
+      bottom: -14px;
+      margin: 12px -20px -14px;
+      flex-shrink: 0;
+    }
 
     .form-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+      gap: 12px 14px;
     }
 
     .form-grid .full { grid-column: 1 / -1; }
+    .form-grid label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .form-grid input,
+    .form-grid select,
+    .form-grid textarea {
+      padding: 9px 12px;
+      font-size: 13px;
+      border-radius: 8px;
+    }
 
     label {
       display: block;
@@ -2926,9 +3776,12 @@
     .form-actions {
       display: flex;
       justify-content: flex-end;
-      gap: 10px;
-      margin-top: 18px;
+      gap: 8px;
+      padding: 10px 20px;
+      border-top: 1px solid var(--line);
+      background: #fafafa;
     }
+    .form-actions .btn { padding: 8px 16px; font-size: 13px; }
 
     .two-col {
       display: grid;
@@ -3010,6 +3863,124 @@
       box-shadow: 0 14px 40px rgba(17, 17, 17, 0.18);
       z-index: 50;
       max-width: 360px;
+    }
+
+    .toast-confirm {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      background: #ffffff;
+      color: var(--text);
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 48px rgba(17, 17, 17, 0.22);
+      z-index: 9999;
+      max-width: 380px;
+      min-width: 280px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      transform: translateY(8px);
+      opacity: 0;
+      transition: transform 160ms ease, opacity 160ms ease;
+    }
+    .toast-confirm.visible { display: flex; transform: translateY(0); opacity: 1; }
+    .toast-confirm[data-tone="danger"] { border-left: 4px solid #d4183d; }
+    .toast-confirm[data-tone="warn"]   { border-left: 4px solid #d97706; }
+    .toast-confirm[data-tone="info"]   { border-left: 4px solid #2563eb; }
+    .toast-confirm .toast-confirm-message {
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.45;
+      color: var(--text);
+    }
+    .toast-confirm .toast-confirm-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    .toast-confirm .toast-confirm-actions .btn { font-size: 12px; padding: 6px 12px; }
+
+    .emp-history {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #f1f1f3;
+    }
+    .emp-history-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .emp-history-header h3 {
+      margin: 0;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--micro);
+    }
+    .emp-history-sub { display: none; }
+    .emp-history-header .btn { padding: 4px 10px; font-size: 11px; }
+    .emp-history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .emp-history-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      background: #fafafa;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .emp-history-main { flex: 1; min-width: 0; }
+    .emp-history-date {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .emp-history-amounts {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .emp-history-prev { color: var(--muted); text-decoration: line-through; }
+    .emp-history-arrow { color: var(--muted); }
+    .emp-history-new { color: var(--text); }
+    .emp-history-delta { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: #f1f5f9; }
+    .emp-history-delta.good { color: var(--good); background: var(--good-bg); }
+    .emp-history-delta.bad { color: var(--bad); background: var(--bad-bg); }
+    .emp-history-reason {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .emp-history-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .emp-history-empty {
+      padding: 14px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      background: #fafafa;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
     }
 
     .mobile-note {
@@ -3759,6 +4730,25 @@
       text-transform: uppercase;
     }
 
+    #dashboard .chart-heading-tools {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    #dashboard .salary-spend-toggle {
+      padding: 2px;
+      flex-shrink: 0;
+    }
+
+    #dashboard .salary-spend-toggle .series-pill {
+      padding: 4px 9px;
+      font-size: 10px;
+      line-height: 1.1;
+    }
+
     #dashboard .hero-row {
       display: grid;
       grid-template-columns: minmax(220px, 0.95fr) minmax(0, 1.45fr);
@@ -3848,6 +4838,42 @@
       font-variant-numeric: tabular-nums;
     }
 
+    #dashboard .substat-deltas {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 4px;
+    }
+    #dashboard .substat-delta-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    #dashboard .substat-delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      font-variant-numeric: tabular-nums;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+    #dashboard .substat-delta.good { color: var(--good); background: var(--good-bg); }
+    #dashboard .substat-delta.bad { color: var(--bad); background: var(--bad-bg); }
+    #dashboard .substat-delta.neutral { color: var(--muted); background: #f3f4f6; }
+    #dashboard .substat-delta-period {
+      color: var(--micro);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
     #dashboard .hero-right {
       display: flex;
       flex-direction: column;
@@ -3872,7 +4898,24 @@
       text-transform: uppercase;
       text-align: right;
       padding-right: 2px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
+    #dashboard .hero-trend-meta .trend-delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      font-variant-numeric: tabular-nums;
+    }
+    #dashboard .hero-trend-meta .trend-delta.good { color: var(--good); background: var(--good-bg); }
+    #dashboard .hero-trend-meta .trend-delta.bad { color: var(--bad); background: var(--bad-bg); }
+    #dashboard .hero-trend-meta .trend-delta.neutral { color: var(--muted); background: #f3f4f6; }
 
     @media (max-width: 1100px) {
       #dashboard .hero-row {
@@ -4206,7 +5249,6 @@
       <div class="brand-subtitle">Salary &amp; client payments</div>
       <button class="nav-btn active" data-section="dashboard"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></button>
       <button class="nav-btn" data-section="employees"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.5-3.5 3.5-5.5 6.5-5.5s5.5 2 6.5 5"/><circle cx="17" cy="9.5" r="2.5"/><path d="M16 14.5c2.5.2 4.5 1.8 5 4.5"/></svg><span>Employees</span></button>
-      <button class="nav-btn" data-section="salary"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6"/><path d="M4 19h16"/><path d="M7 16l3-4 3 3 5-7"/></svg><span>Salary History</span></button>
       <button class="nav-btn" data-section="payroll"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M7 15h4"/></svg><span>Salary Outgoing</span></button>
       <button class="nav-btn" data-section="clients"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l5-4 5 4v13"/><path d="M13 21V11h8v10"/><path d="M16 15h2"/><path d="M16 18h2"/></svg><span>Clients</span></button>
       <button class="nav-btn" data-section="payments"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="13" rx="2"/><path d="M2.5 10.5h19"/><path d="M6 15.5h3"/></svg><span>Payments</span><span class="nav-badge" id="paymentsBadge" hidden>0</span></button>
@@ -4264,7 +5306,13 @@
           <div class="card bento-hero">
             <div class="card-header">
               <h2>Cash flow</h2>
-              <span class="chart-meta" id="cashFlowMeta">12-month net trend</span>
+              <div class="chart-heading-tools">
+                <span class="chart-meta" id="cashFlowMeta">Yearly salary spend since 2022</span>
+                <div class="series-toggle salary-spend-toggle" id="salarySpendMode" data-print-hide>
+                  <button class="series-pill active" data-spend-mode="year">Year</button>
+                  <button class="series-pill" data-spend-mode="month">Month</button>
+                </div>
+              </div>
             </div>
             <div class="hero-row">
               <div class="hero-left" id="cashFlowHero"></div>
@@ -4316,14 +5364,19 @@
       </section>
 
       <section id="employees" class="section">
-        <div class="topbar">
+        <div class="topbar topbar-sticky">
           <div>
             <h1>Employees</h1>
-            <div class="step-label">2 Employee Profile</div>
-            <p class="subtitle">Manage salary, yearly total, department, status, review dates, and archives.</p>
+            <p class="subtitle">Team roster, salaries, departments, and reviews.</p>
           </div>
-          <button class="btn" data-open="employee">+ Add Employee</button>
+          <div class="button-group dashboard-controls">
+            <button class="btn" data-open="employee">+ Add Employee</button>
+            <button class="btn secondary small" data-export="employees" title="Export visible employees as CSV">Export CSV</button>
+          </div>
         </div>
+
+        <div class="scope-banner" id="employeesBanner"></div>
+
         <div class="toolbar">
           <div class="filters">
             <input class="search" id="employeeSearch" placeholder="Search employees" />
@@ -4351,26 +5404,82 @@
             </select>
             <button class="btn secondary" id="clearEmployeeFilters">Clear Filters</button>
           </div>
-          <button class="btn secondary" data-export="employees">Export CSV</button>
         </div>
-        <div class="employee-summary-grid" id="employeeSummaryGrid"></div>
-        <div class="employee-directory" id="employeesTable"></div>
-      </section>
 
-      <section id="salary" class="section">
-        <div class="topbar">
-          <div>
-            <h1>Salary History</h1>
-            <div class="step-label">3 Salary Details</div>
-            <p class="subtitle">Track previous salary, new salary, increase amount, percentage, and reason.</p>
+        <div class="bento employees-bento">
+          <!-- KPI strip -->
+          <div class="bento-kpis">
+            <div class="kpi-grid" id="employeeKpiGrid"></div>
           </div>
-          <button class="btn" data-open="salary">+ Add Salary Change</button>
+
+          <!-- Hero: Department breakdown -->
+          <div class="card bento-hero employees-hero">
+            <div class="card-header">
+              <div>
+                <h2>Departments</h2>
+                <p>Headcount and monthly payroll per department.</p>
+              </div>
+            </div>
+            <div class="dept-rows employees-dept-rows" id="employeeDeptRows"></div>
+          </div>
+
+          <!-- Side: Status mix + Insights -->
+          <div class="bento-side">
+            <div class="card status-mix-card">
+              <div class="card-header">
+                <div>
+                  <h2>Team status</h2>
+                  <p>Mix of active, probation, and other statuses.</p>
+                </div>
+              </div>
+              <div class="status-mix-list" id="employeeStatusMix"></div>
+            </div>
+            <div class="card insights-card">
+              <div class="card-header">
+                <div>
+                  <h2>Team insights</h2>
+                  <p>Auto-generated signals from your roster.</p>
+                </div>
+              </div>
+              <div class="insights-list" id="employeeInsights"></div>
+            </div>
+          </div>
+
+          <!-- Tenure distribution + Upcoming reviews -->
+          <div class="card bento-tenure">
+            <div class="card-header">
+              <div>
+                <h2>Tenure distribution</h2>
+                <p>How long the active team has been with you.</p>
+              </div>
+            </div>
+            <div class="tenure-rows" id="employeeTenureRows"></div>
+          </div>
+
+          <div class="card bento-employee-reviews">
+            <div class="card-header">
+              <div>
+                <h2>Upcoming reviews</h2>
+                <p>Salary reviews coming up in the next 90 days.</p>
+              </div>
+            </div>
+            <div class="mini-list" id="employeeUpcomingReviews"></div>
+          </div>
+
+          <!-- Directory (full width) -->
+          <div class="bento-directory">
+            <div class="card directory-card">
+              <div class="card-header">
+                <div>
+                  <h2>Employee directory</h2>
+                  <p>Click an employee row to edit. Use the filters above to narrow the list.</p>
+                </div>
+                <div class="muted" id="directoryCount" style="font-size: 12px;"></div>
+              </div>
+              <div class="employee-directory" id="employeesTable"></div>
+            </div>
+          </div>
         </div>
-        <div class="toolbar">
-          <input class="search" id="salarySearch" placeholder="Search salary records" />
-          <button class="btn secondary" data-export="salaryHistory">Export CSV</button>
-        </div>
-        <div class="table-wrap"><table id="salaryTable"></table></div>
       </section>
 
       <section id="payroll" class="section">
@@ -4545,6 +5654,21 @@
             <canvas id="clientIncomeChart"></canvas>
           </div>
         </div>
+
+        <div class="card" style="margin-top: 16px;">
+          <div class="toolbar">
+            <div>
+              <h2>Salary Spend Since 2022</h2>
+              <p class="subtitle">Tracked salary outgoing by release date, grouped by year.</p>
+            </div>
+            <button class="btn secondary" data-export="salarySpendSince2022">Export CSV</button>
+          </div>
+          <div class="chart-card" style="margin-bottom: 14px;">
+            <div class="chart-canvas-wrap"><canvas id="salarySpendSinceChart"></canvas></div>
+          </div>
+          <div class="table-wrap"><table id="salarySpendSinceTable"></table></div>
+        </div>
+
         <div class="card">
           <div class="toolbar">
             <div>
@@ -4739,7 +5863,9 @@
     <div class="modal">
       <div class="modal-header">
         <h2 id="modalTitle">Add Record</h2>
-        <button class="btn secondary" id="closeModal">Close</button>
+        <button class="modal-close-btn" id="closeModal" aria-label="Close" type="button">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+        </button>
       </div>
       <form id="recordForm"></form>
     </div>
@@ -4778,6 +5904,7 @@
     let selectedCashFlowSeries = "net";
     let compareMode = "none"; // none | prevMonth | prevYear | goal
     let drillTarget = null;   // null | "income" | "collected" | "open" | "payroll" | "net" | "netTotal"
+    let selectedSalarySpendMode = "year"; // year | month
     const SALARY_RELEASE_DAYS = [5, 20];
 
     // -----------------------------------------------------------------------------
@@ -5018,6 +6145,40 @@
 
     function showToast(message) {
       $("#toast").text(message).stop(true, true).fadeIn(150).delay(1800).fadeOut(200);
+    }
+
+    function confirmToast(message, { confirmLabel = "Confirm", cancelLabel = "Cancel", tone = "danger" } = {}) {
+      return new Promise((resolve) => {
+        let $el = $("#toastConfirm");
+        if (!$el.length) {
+          $el = $('<div id="toastConfirm" class="toast-confirm" role="alertdialog" aria-modal="true"></div>').appendTo(document.body);
+        }
+        const confirmClass = tone === "danger" ? "danger" : tone === "warn" ? "warn" : "";
+        $el.attr("data-tone", tone).html(`
+          <div class="toast-confirm-message"></div>
+          <div class="toast-confirm-actions">
+            <button class="btn small secondary" data-toast-cancel>${escapeHtml(cancelLabel)}</button>
+            <button class="btn small ${confirmClass}" data-toast-confirm>${escapeHtml(confirmLabel)}</button>
+          </div>
+        `);
+        $el.find(".toast-confirm-message").text(message);
+        requestAnimationFrame(() => $el.addClass("visible"));
+        $el.find("[data-toast-confirm]").trigger("focus");
+
+        const cleanup = (result) => {
+          $el.removeClass("visible").off("click.toastConfirm");
+          $(document).off("keydown.toastConfirm");
+          setTimeout(() => { if (!$el.hasClass("visible")) $el.hide(); }, 180);
+          $el.css("display", "flex");
+          resolve(result);
+        };
+        $el.on("click.toastConfirm", "[data-toast-confirm]", () => cleanup(true));
+        $el.on("click.toastConfirm", "[data-toast-cancel]", () => cleanup(false));
+        $(document).on("keydown.toastConfirm", (e) => {
+          if (e.key === "Escape") cleanup(false);
+          if (e.key === "Enter") cleanup(true);
+        });
+      });
     }
 
     function currency(value) {
@@ -5634,10 +6795,46 @@
           }));
       }
       if (key === "net") {
-        return [{ title: "Net = Income − Payroll", date: "", reference: "", status: "", amount: null, hint: "Click Reports for the full breakdown." }];
+        const periods = monthList;
+        const income = periods.reduce((s, p) => s + expectedMonthlyIncome(p), 0);
+        const collected = periods.reduce((s, p) => s + paidMonthlyIncome(p), 0);
+        const outstanding = periods.reduce((s, p) => s + pendingMonthlyIncome(p), 0);
+        const payroll = periods.reduce((s, p) => s + salaryOutgoingAmount(p, ["paid", "scheduled", "pending"]), 0);
+        const paidPayroll = periods.reduce((s, p) => s + salaryOutgoingAmount(p, ["paid"]), 0);
+        const net = income - payroll;
+        const cashNet = collected - paidPayroll;
+        return [
+          { title: "Expected income", date: "", reference: "Invoices billed", status: "", amount: income, tone: "info" },
+          { title: "Collected income", date: "", reference: "Paid invoices", status: "paid", amount: collected, tone: "good" },
+          { title: "Outstanding income", date: "", reference: "Pending + overdue", status: "open", amount: outstanding, tone: "warn" },
+          { title: "Payroll (tracked)", date: "", reference: "Paid + scheduled + pending", status: "", amount: -payroll, tone: "bad" },
+          { title: "Payroll (paid only)", date: "", reference: "Cash out the door", status: "paid", amount: -paidPayroll, tone: "bad" },
+          { title: "Net (Income − Payroll)", date: "", reference: "Accrual view", status: "", amount: net, tone: net >= 0 ? "good" : "bad" },
+          { title: "Net cash (Collected − Paid payroll)", date: "", reference: "Cash view", status: "", amount: cashNet, tone: cashNet >= 0 ? "good" : "bad" }
+        ];
       }
       if (key === "netTotal") {
-        return [{ title: "Net YTD", date: "", reference: "", status: "", amount: null, hint: "Paid income − paid payroll, Jan 1 through selected month." }];
+        const year = Number(selectedDashboard.year || today.getFullYear());
+        const throughMonth = Number(selectedDashboard.month ?? 11);
+        let income = 0, collected = 0, payroll = 0, paidPayroll = 0;
+        for (let m = 0; m <= throughMonth; m++) {
+          const p = { month: m, year };
+          income += expectedMonthlyIncome(p);
+          collected += paidMonthlyIncome(p);
+          payroll += salaryOutgoingAmount(p, ["paid", "scheduled", "pending"]);
+          paidPayroll += salaryOutgoingAmount(p, ["paid"]);
+        }
+        const net = income - payroll;
+        const cashNet = collected - paidPayroll;
+        const rangeLabel = `Jan–${months[throughMonth].slice(0,3)} ${year}`;
+        return [
+          { title: "Expected income YTD", date: rangeLabel, reference: "Invoices billed", status: "", amount: income, tone: "info" },
+          { title: "Collected income YTD", date: rangeLabel, reference: "Paid invoices", status: "paid", amount: collected, tone: "good" },
+          { title: "Payroll YTD", date: rangeLabel, reference: "Paid + scheduled + pending", status: "", amount: -payroll, tone: "bad" },
+          { title: "Payroll paid YTD", date: rangeLabel, reference: "Cash out the door", status: "paid", amount: -paidPayroll, tone: "bad" },
+          { title: "Net YTD (Income − Payroll)", date: rangeLabel, reference: "Accrual view", status: "", amount: net, tone: net >= 0 ? "good" : "bad" },
+          { title: "Net cash YTD (Collected − Paid payroll)", date: rangeLabel, reference: "Cash view", status: "", amount: cashNet, tone: cashNet >= 0 ? "good" : "bad" }
+        ];
       }
       return [];
     }
@@ -5661,7 +6858,20 @@
         netTotal: "Year-to-date net"
       };
       const rows = drillRowsFor(key);
-      const total = rows.reduce((s, r) => s + (Number(r.amount) || 0), 0);
+      const drillFooter = (() => {
+        if (key === "net") {
+          const row = rows.find(r => r.title === "Net (Income − Payroll)");
+          return { label: "Net balance", amount: row ? Number(row.amount || 0) : 0 };
+        }
+        if (key === "netTotal") {
+          const row = rows.find(r => r.title === "Net YTD (Income − Payroll)");
+          return { label: "Net YTD", amount: row ? Number(row.amount || 0) : 0 };
+        }
+        return {
+          label: "Total",
+          amount: rows.reduce((s, r) => s + (Number(r.amount) || 0), 0)
+        };
+      })();
       const hasAmounts = rows.some(r => r.amount != null);
       const closeIcon = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>';
 
@@ -5703,8 +6913,8 @@
                 <div class="drill-cell drill-cell-client">${rows.length} ${rows.length === 1 ? "record" : "records"}</div>
                 <div class="drill-cell drill-cell-date"></div>
                 <div class="drill-cell drill-cell-ref"></div>
-                <div class="drill-cell drill-cell-status drill-total-label">Total</div>
-                <div class="drill-cell drill-amount">${currency(total)}</div>
+                <div class="drill-cell drill-cell-status drill-total-label">${escapeHtml(drillFooter.label)}</div>
+                <div class="drill-cell drill-amount">${currency(drillFooter.amount)}</div>
               </div>
             ` : ""}
           </div>
@@ -5792,6 +7002,49 @@
       };
     }
 
+    function salarySince2022Series(period) {
+      const series = [];
+      const endMonth = Number(period.month || 0);
+      const endYear = Number(period.year || today.getFullYear());
+      const startYear = 2022;
+      let y = startYear;
+      let m = 0;
+      while (y < endYear || (y === endYear && m <= endMonth)) {
+        const p = { month: m, year: y };
+        const payroll = salaryOutgoingAmount(p, ["paid", "scheduled", "pending"]);
+        series.push({
+          label: y % 12 === 0 || m === 0 ? `${months[m].slice(0, 3)} ${String(y).slice(2)}` : months[m].slice(0, 3),
+          fullLabel: `${months[m]} ${y}`,
+          year: y,
+          month: m,
+          value: payroll,
+          payroll
+        });
+        m += 1;
+        if (m > 11) { m = 0; y += 1; }
+      }
+      return series;
+    }
+
+    function salarySpendYearSeries(startYear = 2022, endYear = today.getFullYear()) {
+      const rows = salarySpendSinceRows(startYear)
+        .filter(row => row.year <= endYear);
+      return rows.map(row => ({
+        label: String(row.year),
+        fullLabel: String(row.year),
+        year: row.year,
+        value: row.tracked,
+        paid: row.paid,
+        open: row.open
+      }));
+    }
+
+    function salarySpendDisplaySeries(period, mode = selectedSalarySpendMode) {
+      return mode === "month"
+        ? salarySince2022Series(period)
+        : salarySpendYearSeries(2022, Number(period.year || today.getFullYear()));
+    }
+
     function rolling12MonthsNet(period) {
       const series = [];
       let m = Number(period.month || 0);
@@ -5817,7 +7070,8 @@
 
     function renderCashFlowStory() {
       const period = { month: Number(selectedDashboard.month || 0), year: Number(selectedDashboard.year || today.getFullYear()) };
-      const series = rolling12MonthsNet(period);
+      const series = salarySpendDisplaySeries(period);
+      const isMonthlySpend = selectedSalarySpendMode === "month";
 
       const income = expectedMonthlyIncome(period);
       const payroll = salaryOutgoingAmount(period, ["paid", "scheduled", "pending"]);
@@ -5825,7 +7079,15 @@
       const net = income - payroll;
 
       const prev = previousPeriod(period);
-      const prevNet = expectedMonthlyIncome(prev) - salaryOutgoingAmount(prev, ["paid", "scheduled", "pending"]);
+      const yoyPeriod = { month: period.month, year: period.year - 1 };
+      const prevPayroll = salaryOutgoingAmount(prev, ["paid", "scheduled", "pending"]);
+      const yoyPayroll = salaryOutgoingAmount(yoyPeriod, ["paid", "scheduled", "pending"]);
+      const prevIncome = expectedMonthlyIncome(prev);
+      const yoyIncome = expectedMonthlyIncome(yoyPeriod);
+      const prevCollected = paidMonthlyIncome(prev);
+      const yoyCollected = paidMonthlyIncome(yoyPeriod);
+
+      const prevNet = prevIncome - prevPayroll;
       const delta = net - prevNet;
       const deltaDir = Math.abs(delta) < 0.5 ? "flat" : delta > 0 ? "up" : "down";
       const arrow = deltaDir === "up" ? "▲" : deltaDir === "down" ? "▼" : "—";
@@ -5836,29 +7098,65 @@
 
       const label = `Net · ${months[period.month]} ${period.year}`;
 
+      // For payroll: increases are "bad" (more cost), decreases are "good". For income/collected it's reversed.
+      const deltaChip = (current, prev, { higherIsGood = true } = {}) => {
+        if (!prev) return current ? `<span class="substat-delta neutral">new</span>` : "";
+        const pct = ((current - prev) / Math.abs(prev)) * 100;
+        if (!Number.isFinite(pct)) return "";
+        const rounded = Math.abs(pct) < 0.1 ? 0 : pct;
+        const dir = rounded > 0 ? "up" : rounded < 0 ? "down" : "flat";
+        const a = dir === "up" ? "▲" : dir === "down" ? "▼" : "—";
+        const tone = dir === "flat" ? "neutral" : ((dir === "up") === higherIsGood ? "good" : "bad");
+        const txt = `${rounded > 0 ? "+" : ""}${rounded.toFixed(1)}%`;
+        return `<span class="substat-delta ${tone}">${a} ${txt}</span>`;
+      };
+
+      const substat = (label, value, prev, yoy, opts = {}) => `
+        <div class="substat">
+          <span class="substat-label">${label}</span>
+          <strong>${compactCurrency(value)}</strong>
+          <div class="substat-deltas">
+            <span class="substat-delta-row">${deltaChip(value, prev, opts)}<span class="substat-delta-period">MoM</span></span>
+            <span class="substat-delta-row">${deltaChip(value, yoy, opts)}<span class="substat-delta-period">YoY</span></span>
+          </div>
+        </div>`;
+
       $("#cashFlowHero").html(`
         <div class="hero-meta">${escapeHtml(label)}</div>
         <div class="hero-value">${currency(net)}</div>
         <div class="hero-delta ${deltaTone}">${arrow} ${escapeHtml(deltaText)}</div>
         <div class="hero-substats">
-          <div class="substat">
-            <span class="substat-label">Income</span>
-            <strong>${compactCurrency(income)}</strong>
-          </div>
-          <div class="substat">
-            <span class="substat-label">Payroll</span>
-            <strong>${compactCurrency(payroll)}</strong>
-          </div>
-          <div class="substat">
-            <span class="substat-label">Collected</span>
-            <strong>${compactCurrency(collected)}</strong>
-          </div>
+          ${substat("Income", income, prevIncome, yoyIncome, { higherIsGood: true })}
+          ${substat("Payroll", payroll, prevPayroll, yoyPayroll, { higherIsGood: false })}
+          ${substat("Collected", collected, prevCollected, yoyCollected, { higherIsGood: true })}
         </div>
       `);
 
       const first = series[0]?.fullLabel || "";
       const last = series[series.length - 1]?.fullLabel || "";
-      $("#cashFlowTrendMeta").text(first && last ? `${first} → ${last}` : "");
+      const salaryTotal = series.reduce((sum, item) => sum + Number(item.value || 0), 0);
+      $("#cashFlowMeta").text(`${isMonthlySpend ? "Monthly" : "Yearly"} salary spend since 2022`);
+
+      const lastIdx = series.length - 1;
+      const curVal = Number(series[lastIdx]?.value || 0);
+      const prevVal = lastIdx > 0 ? Number(series[lastIdx - 1]?.value || 0) : 0;
+      const priorLabel = isMonthlySpend ? "vs prev month" : "vs prev year";
+      let deltaHtml = "";
+      if (prevVal) {
+        const pct = ((curVal - prevVal) / Math.abs(prevVal)) * 100;
+        const dir = pct > 0.05 ? "up" : pct < -0.05 ? "down" : "flat";
+        const arrow = dir === "up" ? "▲" : dir === "down" ? "▼" : "—";
+        const tone = dir === "flat" ? "neutral" : dir === "up" ? "bad" : "good";
+        deltaHtml = `<span class="trend-delta ${tone}">${arrow} ${pct >= 0 ? "+" : ""}${pct.toFixed(1)}% ${priorLabel}</span>`;
+      } else if (curVal) {
+        deltaHtml = `<span class="trend-delta neutral">new ${priorLabel}</span>`;
+      }
+      $("#cashFlowTrendMeta").html(first && last
+        ? `<span>${escapeHtml(first)} → ${escapeHtml(last)} · total ${compactCurrency(salaryTotal)}</span>${deltaHtml}`
+        : "");
+      $("#salarySpendMode .series-pill").each(function () {
+        $(this).toggleClass("active", $(this).data("spend-mode") === selectedSalarySpendMode);
+      });
 
       // Stash the series so drawCharts can render the sparkline without recomputing.
       window._cashFlowSeries = series;
@@ -6437,6 +7735,237 @@
       renderPayroll();
     }
 
+    function tenureMonths(startDateStr) {
+      const d = dateValue(startDateStr);
+      if (!d) return null;
+      const now = new Date();
+      return (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth());
+    }
+
+    function renderEmployeeBanner(rows, allEmployees) {
+      const live = rows.filter(e => !e.archived);
+      const active = live.filter(e => e.status === "active");
+      const probation = live.filter(e => e.status === "probation");
+      const totalMonthly = [...active, ...probation].reduce((s, e) => s + Number(e.monthlySalary || 0), 0);
+      $("#employeesBanner").attr("class", "scope-banner employees-banner").html(`
+        <div class="scope-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.5-3.5 3.5-5.5 6.5-5.5s5.5 2 6.5 5"/><circle cx="17" cy="9.5" r="2.5"/><path d="M16 14.5c2.5.2 4.5 1.8 5 4.5"/></svg>
+        </div>
+        <div class="scope-text">
+          <div class="scope-label">Team roster</div>
+          <div class="scope-value">${rows.length} ${rows.length === 1 ? "employee" : "employees"} <span class="muted-inline">in view · ${allEmployees.length} total</span></div>
+        </div>
+        <div class="scope-meta">
+          <span class="scope-meta-chip good"><span class="dot"></span><strong>${active.length}</strong> active</span>
+          <span class="scope-meta-chip warn"><span class="dot"></span><strong>${probation.length}</strong> probation</span>
+          <span class="scope-meta-chip"><strong>${currency(totalMonthly)}</strong><span class="chip-sub">/mo</span></span>
+          <span class="scope-meta-chip"><strong>${currency(totalMonthly * 12)}</strong><span class="chip-sub">/yr</span></span>
+        </div>
+      `);
+    }
+
+    function renderEmployeeKpis(rows) {
+      const live = rows.filter(e => !e.archived);
+      const active = live.filter(e => e.status === "active");
+      const probation = live.filter(e => e.status === "probation");
+      const totalMonthly = [...active, ...probation].reduce((s, e) => s + Number(e.monthlySalary || 0), 0);
+      const avgSalary = active.length ? Math.round(totalMonthly / (active.length + probation.length || 1)) : 0;
+      const departments = new Set([...active, ...probation].map(e => String(e.department || "").trim()).filter(Boolean)).size;
+
+      const tenureValues = active.map(e => tenureMonths(e.startDate)).filter(v => v != null);
+      const avgTenureMonths = tenureValues.length ? Math.round(tenureValues.reduce((s, v) => s + v, 0) / tenureValues.length) : 0;
+      const avgTenureLabel = avgTenureMonths >= 12
+        ? `${(avgTenureMonths / 12).toFixed(1)} yrs`
+        : `${avgTenureMonths} mo`;
+
+      const tiles = [
+        { key: "headcount", label: "Headcount", value: String(active.length + probation.length), sub: `${active.length} active · ${probation.length} probation` },
+        { key: "monthly",   label: "Monthly Payroll", value: currency(totalMonthly), sub: `${currency(totalMonthly * 12)} / year run rate` },
+        { key: "avg",       label: "Avg Salary", value: currency(avgSalary), sub: "Per active/probation employee" },
+        { key: "depts",     label: "Departments", value: String(departments), sub: "Distinct active groupings" },
+        { key: "tenure",    label: "Avg Tenure", value: avgTenureLabel, sub: `${active.length} active counted` },
+        { key: "archived",  label: "Archived", value: String(rows.filter(e => e.archived).length), sub: "Total archived in view" }
+      ];
+
+      $("#employeeKpiGrid").html(tiles.map(t => `
+        <div class="kpi-tile" title="${escapeHtml(t.sub)}" tabindex="0">
+          <div class="kpi-label">${escapeHtml(t.label)}</div>
+          <div class="kpi-value">${escapeHtml(t.value)}</div>
+          <div class="kpi-compare">${escapeHtml(t.sub)}</div>
+        </div>
+      `).join(""));
+    }
+
+    function renderEmployeeDepartments(rows) {
+      const active = rows.filter(e => !e.archived && ["active", "probation"].includes(e.status));
+      const groups = active.reduce((acc, e) => {
+        const k = (e.department || "Unassigned").trim() || "Unassigned";
+        if (!acc[k]) acc[k] = { count: 0, total: 0 };
+        acc[k].count++;
+        acc[k].total += Number(e.monthlySalary || 0);
+        return acc;
+      }, {});
+      const list = Object.entries(groups).sort((a, b) => b[1].total - a[1].total);
+      const max = list[0]?.[1].total || 0;
+      if (!list.length) {
+        $("#employeeDeptRows").html(emptyIllus("activity", "No departments yet", "Add a department to your employees to see breakdowns."));
+        return;
+      }
+      $("#employeeDeptRows").html(list.map(([name, g]) => `
+        <div class="dept-row">
+          <div class="dept-name">${escapeHtml(name)}</div>
+          <div class="dept-stats"><span>${g.count} ${g.count === 1 ? "employee" : "employees"}</span><strong>${currency(g.total)}</strong></div>
+          <div class="dept-bar"><span style="width:${((g.total / max) * 100).toFixed(1)}%"></span></div>
+        </div>
+      `).join(""));
+    }
+
+    function renderEmployeeStatusMix(rows) {
+      const live = rows.filter(e => !e.archived);
+      const counts = {};
+      for (const e of live) {
+        const s = e.status || "active";
+        counts[s] = (counts[s] || 0) + 1;
+      }
+      const total = live.length || 1;
+      // Render in a stable order, then add any other statuses found
+      const order = ["active", "probation", "inactive", "resigned", "terminated"];
+      const rest = Object.keys(counts).filter(k => !order.includes(k));
+      const allKeys = [...order, ...rest].filter(k => counts[k]);
+
+      if (!allKeys.length) {
+        $("#employeeStatusMix").html(emptyIllus("activity", "No team status data", "Add employees to see the team mix."));
+        return;
+      }
+      $("#employeeStatusMix").html(allKeys.map(k => {
+        const pct = ((counts[k] / total) * 100).toFixed(1);
+        return `
+          <div class="status-mix-row">
+            <span class="status-swatch ${k}"></span>
+            <span class="status-label">${escapeHtml(k)}</span>
+            <div class="status-bar ${k}"><span style="width:${pct}%"></span></div>
+            <span class="status-count">${counts[k]}</span>
+          </div>
+        `;
+      }).join(""));
+    }
+
+    function renderEmployeeTenure(rows) {
+      const active = rows.filter(e => !e.archived && ["active", "probation"].includes(e.status));
+      const buckets = [
+        { label: "0–1 yr",  test: m => m < 12,            count: 0, total: 0 },
+        { label: "1–3 yrs", test: m => m >= 12 && m < 36, count: 0, total: 0 },
+        { label: "3–5 yrs", test: m => m >= 36 && m < 60, count: 0, total: 0 },
+        { label: "5+ yrs",  test: m => m >= 60,           count: 0, total: 0 }
+      ];
+      for (const e of active) {
+        const m = tenureMonths(e.startDate);
+        if (m == null) continue;
+        for (const b of buckets) {
+          if (b.test(m)) { b.count++; b.total += Number(e.monthlySalary || 0); break; }
+        }
+      }
+      const max = Math.max(1, ...buckets.map(b => b.count));
+      $("#employeeTenureRows").html(buckets.map(b => `
+        <div class="tenure-row">
+          <span class="tenure-label">${escapeHtml(b.label)}</span>
+          <div class="tenure-bar"><span style="width:${((b.count / max) * 100).toFixed(1)}%"></span></div>
+          <span class="tenure-count">${b.count}</span>
+          <span class="tenure-cost">${currency(b.total)}/mo</span>
+        </div>
+      `).join(""));
+    }
+
+    function renderEmployeeInsights(rows) {
+      const active = rows.filter(e => !e.archived && ["active", "probation"].includes(e.status));
+      const totalMonthly = active.reduce((s, e) => s + Number(e.monthlySalary || 0), 0);
+      const out = [];
+
+      // 1. Top earner share
+      if (active.length >= 2) {
+        const sorted = [...active].sort((a, b) => Number(b.monthlySalary || 0) - Number(a.monthlySalary || 0));
+        const topShare = Math.round((Number(sorted[0].monthlySalary || 0) / totalMonthly) * 100);
+        if (topShare >= 35) {
+          out.push({ tone: "warn", title: `${sorted[0].name} is ${topShare}% of payroll`, body: `Top contributor concentration is high. Consider risk diversification.` });
+        }
+      }
+
+      // 2. Probation count
+      const prob = active.filter(e => e.status === "probation");
+      if (prob.length) {
+        out.push({ tone: "info", title: `${prob.length} on probation`, body: `${prob.map(e => e.name).slice(0, 3).join(", ")}${prob.length > 3 ? ` +${prob.length - 3} more` : ""}` });
+      }
+
+      // 3. Recently added (within 60 days)
+      const recent = active.filter(e => {
+        const m = tenureMonths(e.startDate);
+        return m != null && m <= 2;
+      });
+      if (recent.length) {
+        out.push({ tone: "good", title: `${recent.length} new hire${recent.length === 1 ? "" : "s"} in the last 60 days`, body: recent.map(e => e.name).slice(0, 3).join(", ") });
+      }
+
+      // 4. Reviews due soon (within 30 days)
+      const reviewSoon = active.filter(e => {
+        if (!e.nextReview) return false;
+        const diff = daysBetween(today, dateValue(e.nextReview));
+        return diff >= 0 && diff <= 30;
+      });
+      if (reviewSoon.length) {
+        out.push({ tone: "warn", title: `${reviewSoon.length} review${reviewSoon.length === 1 ? "" : "s"} due within 30 days`, body: reviewSoon.map(e => e.name).slice(0, 3).join(", ") });
+      }
+
+      // 5. Missing department info
+      const missingDept = active.filter(e => !(e.department || "").trim());
+      if (missingDept.length) {
+        out.push({ tone: "info", title: `${missingDept.length} employee${missingDept.length === 1 ? "" : "s"} missing department`, body: `Fill in department to improve breakdowns.` });
+      }
+
+      // Always-on context
+      if (active.length) {
+        out.push({ tone: "good", title: `${active.length} on active roster`, body: `${currency(totalMonthly)} planned monthly payroll · ${currency(totalMonthly * 12)} run rate.` });
+      } else {
+        out.push({ tone: "info", title: "No active employees", body: "Add team members to see insights here." });
+      }
+
+      $("#employeeInsights").html(out.map(i => `
+        <div class="insight-item ${i.tone}">
+          <div class="insight-dot"></div>
+          <div>
+            <strong>${escapeHtml(i.title)}</strong>
+            <div class="insight-body">${escapeHtml(i.body)}</div>
+          </div>
+        </div>
+      `).join(""));
+    }
+
+    function renderEmployeeUpcomingReviews(rows) {
+      const horizon = new Date(today);
+      horizon.setDate(horizon.getDate() + 90);
+      const upcoming = rows
+        .filter(e => !e.archived && e.nextReview)
+        .map(e => ({ e, d: dateValue(e.nextReview) }))
+        .filter(x => x.d && x.d >= today && x.d <= horizon)
+        .sort((a, b) => a.d - b.d)
+        .slice(0, 6);
+      if (!upcoming.length) {
+        $("#employeeUpcomingReviews").html(emptyIllus("reviews", "No reviews coming up", "Set a next-review date on an employee to see it here."));
+        return;
+      }
+      $("#employeeUpcomingReviews").html(upcoming.map(({ e, d }) => {
+        const diff = daysBetween(today, d);
+        return `
+          <div class="mini-item">
+            <div>
+              <strong>${escapeHtml(e.name)}</strong>
+              <div class="muted">${escapeHtml(e.position || "—")} · in ${diff} day${diff === 1 ? "" : "s"}</div>
+            </div>
+            <div>${escapeHtml(e.nextReview)}</div>
+          </div>
+        `;
+      }).join(""));
+    }
+
     function renderEmployees() {
       const search = $("#employeeSearch").val()?.toLowerCase() || "";
       const status = $("#employeeStatusFilter").val() || "";
@@ -6446,27 +7975,14 @@
         return text.includes(search) && (!status || e.status === status) && archiveMatches(e, archiveFilter);
       }));
 
-      const liveRows = rows.filter(e => !e.archived);
-      const activeRows = liveRows.filter(e => ["active", "probation"].includes(e.status));
-      const totalMonthly = activeRows.reduce((sum, e) => sum + Number(e.monthlySalary || 0), 0);
-      const departments = new Set(activeRows.map(e => String(e.department || "").trim()).filter(Boolean)).size;
-      const nextReview = activeRows
-        .map(e => ({ name: e.name, date: dateValue(e.nextReview) }))
-        .filter(x => x.date)
-        .sort((a, b) => a.date - b.date)[0];
-
-      $("#employeeSummaryGrid").html([
-        ["Visible employees", rows.length, `${activeRows.length} active/probation in this view`],
-        ["Monthly payroll", currency(totalMonthly), `${currency(totalMonthly * 12)} yearly run rate`],
-        ["Departments", departments, "Active/probation departments"],
-        ["Next review", nextReview ? nextReview.date.toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" }) : "-", nextReview ? nextReview.name : "No review date set"]
-      ].map(item => `
-        <div class="employee-summary-item">
-          <div class="employee-summary-label">${escapeHtml(item[0])}</div>
-          <div class="employee-summary-value">${escapeHtml(item[1])}</div>
-          <div class="employee-summary-note">${escapeHtml(item[2])}</div>
-        </div>
-      `).join(""));
+      renderEmployeeBanner(rows, db.employees);
+      renderEmployeeKpis(rows);
+      renderEmployeeDepartments(rows);
+      renderEmployeeStatusMix(rows);
+      renderEmployeeTenure(rows);
+      renderEmployeeInsights(rows);
+      renderEmployeeUpcomingReviews(rows);
+      $("#directoryCount").text(`${rows.length} ${rows.length === 1 ? "result" : "results"}`);
 
       const initials = (name) => String(name || "?")
         .split(/\s+/)
@@ -6475,43 +7991,115 @@
         .map(part => part.charAt(0).toUpperCase())
         .join("") || "?";
 
+      // Deterministic color hash for avatars so the same person always gets the same color.
+      const AVATAR_TONES = [
+        ["#eef2ff", "#3a3f5c"], // slate-indigo (accent)
+        ["#e8f4f1", "#0f5c5c"], // teal
+        ["#fef3c7", "#92400e"], // amber
+        ["#fee2e2", "#9f1d1d"], // rose
+        ["#eaf7ee", "#166534"], // green
+        ["#fce7f3", "#9d174d"], // pink
+        ["#e0f2fe", "#0c4a6e"], // sky
+        ["#f3e8ff", "#6b21a8"]  // violet
+      ];
+      const avatarTone = (name) => {
+        const s = String(name || "");
+        let h = 0;
+        for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+        return AVATAR_TONES[h % AVATAR_TONES.length];
+      };
+
+      const isMeaningfulNote = (n) => {
+        if (!n) return false;
+        const s = String(n).trim();
+        if (!s) return false;
+        if (/^Employee ID: EMP-\d+\.( Imported from KNB payslip backup\.)?$/.test(s)) return false;
+        return true;
+      };
+
+      const reviewChip = (e) => {
+        if (!e.nextReview) return "";
+        const d = dateValue(e.nextReview);
+        if (!d) return "";
+        const diff = daysBetween(today, d);
+        let tone = "neutral";
+        let label = e.nextReview;
+        if (diff < 0) { tone = "bad"; label = `Overdue · ${e.nextReview}`; }
+        else if (diff <= 30) { tone = "warn"; label = `In ${diff} day${diff === 1 ? "" : "s"} · ${e.nextReview}`; }
+        else if (diff <= 90) { tone = "info"; label = `In ${diff} days · ${e.nextReview}`; }
+        else { label = e.nextReview; }
+        return `
+          <span class="emp-chip ${tone}" title="Next review">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            ${escapeHtml(label)}
+          </span>`;
+      };
+
+      const tenureChip = (e) => {
+        const m = tenureMonths(e.startDate);
+        if (m == null) return "";
+        const label = m < 12 ? `${m} mo` : `${(m / 12).toFixed(1)} yr`;
+        return `
+          <span class="emp-chip neutral" title="Tenure">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 12V8"/><path d="M12 12l3 2"/></svg>
+            ${escapeHtml(label)}
+          </span>`;
+      };
+
+      const deptChip = (e) => {
+        const dept = (e.department || "").trim();
+        if (!dept) return `<span class="emp-chip muted">Unassigned</span>`;
+        return `
+          <span class="emp-chip dept" title="Department">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l5-4 5 4v13"/><path d="M13 21V11h8v10"/></svg>
+            ${escapeHtml(dept)}
+          </span>`;
+      };
+
       $("#employeesTable").html(rows.length ? rows.map(e => {
         const t = formatTenure(e.startDate);
-        const reviewDate = e.nextReview ? escapeHtml(e.nextReview) : "-";
+        const yearly = Number(e.monthlySalary || 0) * 12;
+        const [avBg, avFg] = avatarTone(e.name);
+        const note = isMeaningfulNote(e.notes) ? e.notes : "";
         return `
-          <article class="employee-card ${e.archived ? "archived" : ""}">
+          <article class="employee-card ${e.archived ? "archived" : ""}" data-card-edit="employee" data-id="${e.id}" tabindex="0" role="button" aria-label="Edit ${escapeHtml(e.name)}">
             <div class="employee-card-head">
-              <div class="employee-avatar">${escapeHtml(initials(e.name))}</div>
+              <div class="employee-avatar" style="background:${avBg};color:${avFg}">${escapeHtml(initials(e.name))}</div>
               <div class="employee-identity">
-                <div class="employee-name-row">
-                  <div class="employee-name">${escapeHtml(e.name)}</div>
-                  ${badge(e.status, e.archived)}
-                </div>
+                <div class="employee-name">${escapeHtml(e.name)}</div>
                 <div class="employee-role">${escapeHtml(e.position || "No role set")}</div>
               </div>
-              <div class="employee-salary">
-                <strong>${currency(e.monthlySalary)}</strong>
-                <span>monthly</span>
+              ${badge(e.status, e.archived)}
+            </div>
+
+            <div class="employee-salary-block">
+              <div class="salary-main">
+                <div class="salary-label">Monthly</div>
+                <div class="salary-value">${currency(e.monthlySalary)}</div>
+              </div>
+              <div class="salary-divider"></div>
+              <div class="salary-yearly">
+                <div class="salary-label">Yearly</div>
+                <div class="salary-value-secondary">${currency(yearly)}</div>
+              </div>
+              <div class="salary-divider"></div>
+              <div class="salary-total" title="${paidCountForEmployee(e.id)} paid payslip${paidCountForEmployee(e.id) === 1 ? "" : "s"}">
+                <div class="salary-label">Total paid</div>
+                <div class="salary-value-secondary">${currency(totalPaidForEmployee(e.id))}</div>
               </div>
             </div>
-            <div class="employee-meta-grid">
-              <div class="employee-meta">
-                <div class="employee-meta-label">Department</div>
-                <div class="employee-meta-value">${escapeHtml(e.department || "-")}</div>
-              </div>
-              <div class="employee-meta">
-                <div class="employee-meta-label">Started</div>
-                <div class="employee-meta-value">${escapeHtml(t.date || "-")}</div>
-                ${t.tenure ? `<div class="employee-meta-sub">${escapeHtml(t.tenure)}</div>` : ""}
-              </div>
-              <div class="employee-meta">
-                <div class="employee-meta-label">Review</div>
-                <div class="employee-meta-value">${reviewDate}</div>
-              </div>
+
+            <div class="employee-chips">
+              ${deptChip(e)}
+              ${tenureChip(e)}
+              ${reviewChip(e)}
             </div>
-            <div class="employee-card-actions">
-              <div class="employee-notes">${escapeHtml(e.notes || `${currency(Number(e.monthlySalary || 0) * 12)} yearly cost`)}</div>
-              <div class="action-group">
+
+            ${note ? `<div class="employee-note">${escapeHtml(note)}</div>` : ""}
+
+            <div class="employee-card-footer">
+              <div class="employee-card-footer-meta">Started ${escapeHtml(t.date || "—")}</div>
+              <div class="action-group hover-actions">
                 <button class="btn small secondary" data-edit="employee" data-id="${e.id}">Edit</button>
                 ${e.archived ? `<button class="btn small blue" data-restore="employee" data-id="${e.id}">Restore</button>` : `<button class="btn small warn" data-archive="employee" data-id="${e.id}">Archive</button>`}
                 <button class="btn small danger" data-delete="employee" data-id="${e.id}">Delete</button>
@@ -6828,6 +8416,74 @@
       return `<span class="health-chip ${t.tone === "neutral" ? "neutral" : t.tone}"><span class="dot"></span>${escapeHtml(t.label)}</span>`;
     }
 
+    function salarySpendSinceRows(startYear = 2022) {
+      const payrollYears = (db.salaryOutgoings || [])
+        .map(item => dateValue(payrollCashDate(item)))
+        .filter(Boolean)
+        .map(date => date.getFullYear());
+      const endYear = Math.max(today.getFullYear(), selectedReports.year || today.getFullYear(), ...payrollYears);
+      const rows = [];
+      for (let year = startYear; year <= endYear; year++) {
+        const records = (db.salaryOutgoings || []).filter(item => {
+          if (item.archived) return false;
+          const date = dateValue(payrollCashDate(item));
+          return date && date.getFullYear() === year;
+        });
+        const tracked = records
+          .filter(item => ["paid", "scheduled", "pending"].includes(item.status))
+          .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+        const paid = records
+          .filter(item => item.status === "paid")
+          .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+        const open = records
+          .filter(item => ["scheduled", "pending"].includes(item.status))
+          .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+        const activeMonths = new Set(records
+          .filter(item => ["paid", "scheduled", "pending"].includes(item.status))
+          .map(item => {
+            const date = dateValue(payrollCashDate(item));
+            return date ? `${date.getFullYear()}-${date.getMonth()}` : "";
+          })
+          .filter(Boolean)).size;
+        rows.push({
+          year,
+          tracked,
+          paid,
+          open,
+          releaseRows: records.length,
+          activeMonths,
+          averageMonthly: activeMonths ? tracked / activeMonths : 0
+        });
+      }
+      return rows;
+    }
+
+    function renderSalarySpendSinceTable() {
+      const rows = salarySpendSinceRows(2022);
+      const lifetime = rows.reduce((sum, row) => sum + row.tracked, 0);
+      $("#salarySpendSinceTable").html(`
+        <thead><tr><th>Year</th><th>Tracked Salary Spend</th><th>Paid Salary</th><th>Scheduled / Pending</th><th>Active Months</th><th>Avg Monthly Spend</th><th>Rows</th></tr></thead>
+        <tbody>
+          ${rows.map(row => `
+            <tr>
+              <td><strong>${row.year}</strong></td>
+              <td>${currency(row.tracked)}</td>
+              <td>${currency(row.paid)}</td>
+              <td>${currency(row.open)}</td>
+              <td>${row.activeMonths || "-"}</td>
+              <td>${row.activeMonths ? currency(row.averageMonthly) : "-"}</td>
+              <td>${row.releaseRows}</td>
+            </tr>
+          `).join("")}
+          <tr>
+            <td><strong>Total since 2022</strong></td>
+            <td><strong>${currency(lifetime)}</strong></td>
+            <td colspan="5" class="muted">Based on salary outgoing records only.</td>
+          </tr>
+        </tbody>
+      `);
+    }
+
     function renderReports() {
       const period = selectedReports;
       const payroll = monthlyPayroll();
@@ -6860,6 +8516,7 @@
       `).join(""));
 
       renderClientSummaryTable(period);
+      renderSalarySpendSinceTable();
 
       $("#yearlyCostTable").html(`
         <thead><tr><th>Employee</th><th>Department</th><th>Status</th><th>Monthly Salary</th><th>Yearly Cost</th></tr></thead>
@@ -6972,7 +8629,7 @@
       if (cashFlowCanvas) {
         const series = (window._cashFlowSeries && window._cashFlowSeries.length)
           ? window._cashFlowSeries
-          : rolling12MonthsNet({ month: Number(selectedDashboard.month || 0), year: Number(selectedDashboard.year || today.getFullYear()) });
+          : salarySpendDisplaySeries({ month: Number(selectedDashboard.month || 0), year: Number(selectedDashboard.year || today.getFullYear()) });
         const values = series.map(p => p.value);
         const labels = series.map(p => p.label);
         const lastIdx = values.length - 1;
@@ -6984,27 +8641,18 @@
         gradient.addColorStop(0, "rgba(10,10,10,0.10)");
         gradient.addColorStop(1, "rgba(10,10,10,0)");
 
+        const barColors = values.map((_, i) => i === lastIdx ? "#0a0a0a" : "rgba(10,10,10,0.55)");
         charts.cashFlow = new Chart(cashFlowCanvas, {
-          type: "line",
+          type: "bar",
           data: {
             labels,
             datasets: [{
-              label: "Net",
+              label: "Payroll",
               data: values,
-              borderColor: "#0a0a0a",
-              backgroundColor: gradient,
-              borderWidth: 2,
-              tension: 0.36,
-              fill: true,
-              spanGaps: false,
-              pointRadius: pointRadii,
-              pointBackgroundColor: pointBgs,
-              pointBorderColor: pointBorders,
-              pointBorderWidth: 1.5,
-              pointHoverRadius: 4,
-              pointHoverBackgroundColor: "#0a0a0a",
-              pointHoverBorderColor: "#ffffff",
-              pointHoverBorderWidth: 1.5
+              backgroundColor: barColors,
+              borderWidth: 0,
+              borderRadius: 2,
+              maxBarThickness: selectedSalarySpendMode === "month" ? 8 : 18
             }]
           },
           options: {
@@ -7017,6 +8665,7 @@
                 backgroundColor: "#111111",
                 titleColor: "#ffffff",
                 bodyColor: "#ffffff",
+                footerColor: "#d1d5db",
                 padding: 10,
                 cornerRadius: 8,
                 displayColors: false,
@@ -7025,13 +8674,44 @@
                     const idx = items[0]?.dataIndex ?? 0;
                     return series[idx]?.fullLabel || items[0]?.label || "";
                   },
-                  label: (item) => `Net: ${currency(item.parsed.y)}`
+                  label: (item) => `Salary spend: ${currency(item.parsed.y)}`,
+                  footer: (items) => {
+                    const idx = items[0]?.dataIndex ?? 0;
+                    const lines = [];
+                    const cur = Number(series[idx]?.value || 0);
+                    const prev = idx > 0 ? Number(series[idx - 1]?.value || 0) : null;
+                    const priorLabel = selectedSalarySpendMode === "month" ? "Prev month" : "Prev year";
+                    if (prev != null && prev !== 0) {
+                      const pct = ((cur - prev) / Math.abs(prev)) * 100;
+                      const arrow = pct > 0.05 ? "▲" : pct < -0.05 ? "▼" : "—";
+                      lines.push(`${priorLabel}: ${arrow} ${pct >= 0 ? "+" : ""}${pct.toFixed(1)}% (${currency(cur - prev)})`);
+                    } else if (prev === 0 && cur) {
+                      lines.push(`${priorLabel}: new`);
+                    }
+                    if (selectedSalarySpendMode === "month") {
+                      const yoyIdx = idx - 12;
+                      if (yoyIdx >= 0) {
+                        const yoy = Number(series[yoyIdx]?.value || 0);
+                        if (yoy) {
+                          const pct = ((cur - yoy) / Math.abs(yoy)) * 100;
+                          const arrow = pct > 0.05 ? "▲" : pct < -0.05 ? "▼" : "—";
+                          lines.push(`Same month last yr: ${arrow} ${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%`);
+                        }
+                      }
+                    }
+                    return lines;
+                  }
                 }
               }
             },
             scales: {
-              x: { ticks: { color: "#9ca3af", font: { size: 10 }, maxRotation: 0, autoSkipPadding: 12 }, grid: { display: false }, border: { display: false } },
-              y: { display: false, beginAtZero: false }
+              x: { ticks: { color: "#9ca3af", font: { size: 10 }, maxRotation: 0, autoSkipPadding: selectedSalarySpendMode === "month" ? 18 : 12 }, grid: { display: false }, border: { display: false } },
+              y: {
+                beginAtZero: true,
+                ticks: { color: "#9ca3af", font: { size: 10 }, callback: (v) => compactCurrency(v) },
+                grid: { color: "rgba(229, 231, 235, 0.75)", drawBorder: false },
+                border: { display: false }
+              }
             }
           }
         });
@@ -7094,6 +8774,54 @@
         });
       }
 
+      const salarySpendCanvas = document.getElementById("salarySpendSinceChart");
+      if (salarySpendCanvas) {
+        const spendRows = salarySpendSinceRows(2022);
+        charts.salarySpendSince = new Chart(salarySpendCanvas, {
+          type: "bar",
+          data: {
+            labels: spendRows.map(row => String(row.year)),
+            datasets: [
+              {
+                label: "Paid salary",
+                data: spendRows.map(row => row.paid),
+                backgroundColor: "#111111",
+                borderColor: "#111111",
+                borderWidth: 1
+              },
+              {
+                label: "Scheduled / pending",
+                data: spendRows.map(row => row.open),
+                backgroundColor: "#d1d5db",
+                borderColor: "#9ca3af",
+                borderWidth: 1
+              }
+            ]
+          },
+          options: {
+            ...chartDefaults,
+            interaction: { mode: "index", intersect: false },
+            scales: {
+              x: { stacked: true, ticks: { color: chartText }, grid: { display: false } },
+              y: { stacked: true, beginAtZero: true, ticks: { color: chartText, callback: (v) => compactCurrency(v) }, grid: { color: chartGrid, drawBorder: false } }
+            },
+            plugins: {
+              ...chartDefaults.plugins,
+              tooltip: {
+                backgroundColor: "#111111",
+                titleColor: "#ffffff",
+                bodyColor: "#ffffff",
+                padding: 10,
+                cornerRadius: 8,
+                callbacks: {
+                  label: (item) => `${item.dataset.label}: ${currency(item.parsed.y)}`
+                }
+              }
+            }
+          }
+        });
+      }
+
       const incomeCanvas = document.getElementById("clientIncomeChart");
       if (incomeCanvas) {
         charts.clientIncome = new Chart(incomeCanvas, {
@@ -7120,7 +8848,6 @@
       populatePeriodControls();
       renderDashboard();
       renderEmployees();
-      renderSalaryHistory();
       renderPayroll();
       renderClients();
       renderPayments();
@@ -7130,19 +8857,41 @@
       if (chartsVisibleSection()) setTimeout(drawCharts, 0);
     }
 
-    function openModal(type, id = null) {
+    let modalStack = [];
+
+    function openModal(type, id = null, prefill = null) {
       editing = { type, id };
       const isEdit = id !== null;
-      const record = getRecord(type, id) || {};
+      const record = { ...(getRecord(type, id) || {}), ...(prefill || {}) };
       $("#modalTitle").text(`${isEdit ? "Edit" : "Add"} ${titleCase(type)}`);
       $("#recordForm").html(getFormHtml(type, record));
       $("#modalBackdrop").show();
+      if (type === "salary" && typeof updateSalaryDeltaChip === "function") updateSalaryDeltaChip();
+    }
+
+    function pushAndOpen(type, id = null, prefill = null) {
+      modalStack.push({ ...editing });
+      openModal(type, id, prefill);
     }
 
     function closeModal() {
+      if (modalStack.length) {
+        const parent = modalStack.pop();
+        openModal(parent.type, parent.id);
+        return;
+      }
       $("#modalBackdrop").hide();
       $("#recordForm").html("");
       editing = { type: null, id: null };
+    }
+
+    function refreshEmployeeHistory() {
+      const $block = $("#recordForm .emp-history");
+      if (!$block.length) return;
+      const empId = Number($block.data("employee-id"));
+      const emp = db.employees.find(e => Number(e.id) === empId);
+      if (!emp) return;
+      $block.replaceWith(employeeSalaryHistoryBlock(emp));
     }
 
     function titleCase(text) {
@@ -7154,31 +8903,195 @@
       return map[type]?.find(item => Number(item.id) === Number(id));
     }
 
+    const AVATAR_TONES = [
+      ["#eef2ff", "#3a3f5c"], ["#e8f4f1", "#0f5c5c"], ["#fef3c7", "#92400e"],
+      ["#fee2e2", "#9f1d1d"], ["#eaf7ee", "#166534"], ["#fce7f3", "#9d174d"],
+      ["#e0f2fe", "#0c4a6e"], ["#f3e8ff", "#6b21a8"]
+    ];
+
+    function paidOutgoingsForEmployee(empId) {
+      return (db.salaryOutgoings || []).filter(o =>
+        !o.archived && o.status === "paid" && Number(o.employeeId) === Number(empId)
+      );
+    }
+    function totalPaidForEmployee(empId) {
+      return paidOutgoingsForEmployee(empId).reduce((s, o) => s + Number(o.amount || 0), 0);
+    }
+    function paidCountForEmployee(empId) {
+      return paidOutgoingsForEmployee(empId).length;
+    }
+    function nameInitials(name) {
+      return String(name || "?").split(/\s+/).filter(Boolean).slice(0, 2)
+        .map(p => p.charAt(0).toUpperCase()).join("") || "?";
+    }
+    function nameAvatarTone(name) {
+      const s = String(name || "");
+      let h = 0;
+      for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+      return AVATAR_TONES[h % AVATAR_TONES.length];
+    }
+
     function getFormHtml(type, record) {
       if (type === "employee") {
+        const [avBg, avFg] = nameAvatarTone(record.name);
+        const status = record.status || "active";
+        const heroName = record.name ? escapeHtml(record.name) : (record.id ? "Unnamed employee" : "New employee");
+        const role = record.position ? escapeHtml(record.position) : "";
+        const dept = record.department ? escapeHtml(record.department) : "";
+        const monthly = Number(record.monthlySalary || 0);
+        const yearly = monthly * 12;
+        const tenure = record.startDate ? tenureMonths(record.startDate) : null;
+        const tenureLabel = tenure == null ? "—" : tenure < 12 ? `${tenure} mo` : `${(tenure / 12).toFixed(1)} yr`;
+        const totalPaid = record.id ? totalPaidForEmployee(record.id) : 0;
+        const paidCount = record.id ? paidCountForEmployee(record.id) : 0;
+        const nextReviewLabel = record.nextReview || "—";
+        const startedLabel = record.startDate || "—";
+
         return `
-          <div class="form-grid">
-            ${field("name", "Employee Name", record.name)}
-            ${field("position", "Position / Role", record.position)}
-            ${field("department", "Department", record.department)}
-            ${field("startDate", "Start Date", record.startDate, "date")}
-            ${field("monthlySalary", "Monthly Salary", record.monthlySalary, "number")}
-            ${selectField("status", "Status", ["active", "inactive", "probation", "resigned", "terminated"], record.status || "active")}
-            ${field("lastIncrease", "Last Salary Increase Date", record.lastIncrease, "date")}
-            ${field("nextReview", "Next Salary Review Date", record.nextReview, "date")}
-            ${textareaField("notes", "Notes", record.notes)}
-          </div>${formActions()}`;
+          <div class="emp3-layout">
+            <aside class="emp3-side">
+              <div class="emp3-avatar" style="background:${avBg};color:${avFg}">${escapeHtml(nameInitials(record.name))}</div>
+              <div class="emp3-name">${heroName}</div>
+              <div class="emp3-role">
+                ${role || dept ? `${role}${role && dept ? ' <span class="emp3-dot">·</span> ' : ''}${dept}` : '<span class="muted">No role set</span>'}
+              </div>
+              <span class="emp3-status ${status}">
+                <span class="dot"></span>${escapeHtml(titleCase(status))}
+              </span>
+              <div class="emp3-stats">
+                <div class="emp3-stat">
+                  <span class="emp3-stat-label">Monthly salary</span>
+                  <span class="emp3-stat-value">${monthly ? currency(monthly) : "—"}</span>
+                </div>
+                <div class="emp3-stat">
+                  <span class="emp3-stat-label">Yearly</span>
+                  <span class="emp3-stat-value">${yearly ? currency(yearly) : "—"}</span>
+                </div>
+                <div class="emp3-stat">
+                  <span class="emp3-stat-label">Tenure</span>
+                  <span class="emp3-stat-value">${tenureLabel}<small> · since ${escapeHtml(startedLabel)}</small></span>
+                </div>
+                <div class="emp3-stat" title="${paidCount} paid payslip${paidCount === 1 ? "" : "s"}">
+                  <span class="emp3-stat-label">Total paid</span>
+                  <span class="emp3-stat-value">${totalPaid ? currency(totalPaid) : "—"}${paidCount ? `<small> · ${paidCount} payslip${paidCount === 1 ? "" : "s"}</small>` : ""}</span>
+                </div>
+                <div class="emp3-stat">
+                  <span class="emp3-stat-label">Next review</span>
+                  <span class="emp3-stat-value">${escapeHtml(nextReviewLabel)}</span>
+                </div>
+              </div>
+            </aside>
+
+            <div class="emp3-main">
+              <div class="emp3-field-row">
+                ${field("name", "Full name", record.name)}
+                ${selectField("status", "Status", ["active", "inactive", "probation", "resigned", "terminated"], status)}
+              </div>
+              <div class="emp3-field-row">
+                ${field("position", "Position", record.position)}
+                ${field("department", "Department", record.department)}
+              </div>
+              <div class="emp3-divider"></div>
+              <div class="emp3-field-row">
+                ${field("monthlySalary", "Monthly salary", record.monthlySalary, "number")}
+                ${field("startDate", "Start date", record.startDate, "date")}
+              </div>
+              <div class="emp3-field-row">
+                ${field("lastIncrease", "Last increase", record.lastIncrease, "date")}
+                ${field("nextReview", "Next review", record.nextReview, "date")}
+              </div>
+              <div class="emp3-divider"></div>
+              <div class="emp3-field-row full">
+                <div class="full">
+                  <label>Notes</label>
+                  <textarea name="notes" placeholder="Anything worth remembering — contracts, contact info, preferences…">${escapeHtml(record.notes || "")}</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          ${record.id ? `<div class="emp3-history-wrap">${employeeSalaryHistoryBlock(record)}</div>` : ""}
+          ${formActions()}`;
       }
 
       if (type === "salary") {
+        const emp = record.employeeId ? db.employees.find(e => Number(e.id) === Number(record.employeeId)) : null;
+        const lockedToEmployee = Boolean(emp);
+        const [avBg, avFg] = nameAvatarTone(emp?.name);
+        const prev = Number(record.previousSalary || emp?.monthlySalary || 0);
+        const next = Number(record.newSalary || 0);
+        const reasonOptions = ["Annual review", "Promotion", "Performance bonus", "Market adjustment", "Cost of living", "Correction", "Demotion / pay cut", "Other"];
+        const currentReason = record.reason || "";
+        const reasonIsCustom = currentReason && !reasonOptions.includes(currentReason);
         return `
-          <div class="form-grid">
-            ${employeeSelect(record.employeeId)}
-            ${field("previousSalary", "Previous Monthly Salary", record.previousSalary, "number")}
-            ${field("newSalary", "New Monthly Salary", record.newSalary, "number")}
-            ${field("effectiveDate", "Effective Date", record.effectiveDate || dateIso(today), "date")}
-            ${field("reason", "Reason", record.reason)}
-            ${textareaField("notes", "Notes", record.notes)}
+          <div class="salary-form" data-prev-default="${prev}">
+            ${lockedToEmployee ? `
+              <div class="sal-hero">
+                <div class="sal-hero-avatar" style="background:${avBg};color:${avFg}">${escapeHtml(nameInitials(emp.name))}</div>
+                <div class="sal-hero-identity">
+                  <div class="sal-hero-name">${escapeHtml(emp.name)}</div>
+                  <div class="sal-hero-role">${emp.position ? escapeHtml(emp.position) : '<span class="muted">No role set</span>'}</div>
+                </div>
+                <div class="sal-hero-current">
+                  <span class="sal-hero-current-label">Current</span>
+                  <span class="sal-hero-current-value">${currency(emp.monthlySalary)}</span>
+                </div>
+                <input type="hidden" name="employeeId" value="${emp.id}" />
+                <input type="hidden" name="employeeName" value="${escapeHtml(emp.name)}" />
+              </div>
+            ` : `
+              <div class="form-section compact">
+                <div class="form-section-title">Employee</div>
+                <div class="form-grid">${employeeSelect(record.employeeId)}</div>
+              </div>
+            `}
+
+            <div class="form-section compact">
+              <div class="form-section-title">Salary change</div>
+              <div class="salary-delta-row">
+                <div class="salary-delta-field">
+                  <label>Previous</label>
+                  <input name="previousSalary" type="number" step="any" value="${prev || ""}" data-salary-prev />
+                </div>
+                <div class="salary-delta-arrow" aria-hidden="true">→</div>
+                <div class="salary-delta-field">
+                  <label>New</label>
+                  <input name="newSalary" type="number" step="any" value="${next || ""}" data-salary-new />
+                </div>
+                <div class="salary-delta-chip neutral" data-salary-chip>—</div>
+              </div>
+              <div class="salary-presets" role="group" aria-label="Quick adjustments">
+                <span class="salary-presets-label">Quick set:</span>
+                <button type="button" class="preset-pill" data-salary-preset="-5">−5%</button>
+                <button type="button" class="preset-pill" data-salary-preset="5">+5%</button>
+                <button type="button" class="preset-pill" data-salary-preset="10">+10%</button>
+                <button type="button" class="preset-pill" data-salary-preset="15">+15%</button>
+                <button type="button" class="preset-pill" data-salary-preset="20">+20%</button>
+              </div>
+            </div>
+
+            <div class="form-section compact">
+              <div class="form-section-title">Context</div>
+              <div class="form-grid">
+                <div>
+                  <label>Effective date</label>
+                  <input name="effectiveDate" type="date" value="${escapeHtml(record.effectiveDate || dateIso(today))}" />
+                </div>
+                <div>
+                  <label>Reason</label>
+                  <select name="reasonPreset" data-salary-reason-preset>
+                    <option value="" ${!currentReason ? "selected" : ""}>—</option>
+                    ${reasonOptions.map(o => `<option value="${o}" ${(reasonIsCustom && o === "Other") || o === currentReason ? "selected" : ""}>${o}</option>`).join("")}
+                  </select>
+                </div>
+                <div class="full" data-salary-reason-custom ${reasonIsCustom ? "" : "hidden"}>
+                  <label>Custom reason</label>
+                  <input name="reason" type="text" value="${escapeHtml(reasonIsCustom ? currentReason : "")}" placeholder="Describe the reason" />
+                </div>
+                ${!reasonIsCustom ? `<input type="hidden" name="reason" value="${escapeHtml(currentReason)}" />` : ""}
+                ${textareaField("notes", "Notes", record.notes)}
+              </div>
+            </div>
           </div>${formActions()}`;
       }
 
@@ -7265,6 +9178,46 @@
 
     function formActions() {
       return `<div class="form-actions"><button type="button" class="btn secondary" id="cancelForm">Cancel</button><button type="submit" class="btn">Save</button></div>`;
+    }
+
+    function employeeSalaryHistoryBlock(record) {
+      const rows = (db.salaryHistory || [])
+        .filter(r => Number(r.employeeId) === Number(record.id))
+        .sort((a, b) => (b.effectiveDate || "").localeCompare(a.effectiveDate || ""));
+      const rowsHtml = rows.length ? rows.map(r => {
+        const inc = increaseAmount(r);
+        const pct = increasePercent(r);
+        const tone = inc > 0 ? "good" : inc < 0 ? "bad" : "neutral";
+        return `
+          <div class="emp-history-row" data-history-id="${r.id}">
+            <div class="emp-history-main">
+              <div class="emp-history-date">${escapeHtml(r.effectiveDate || "—")}</div>
+              <div class="emp-history-amounts">
+                <span class="emp-history-prev">${currency(r.previousSalary)}</span>
+                <span class="emp-history-arrow">→</span>
+                <span class="emp-history-new">${currency(r.newSalary)}</span>
+                <span class="emp-history-delta ${tone}">${inc >= 0 ? "+" : ""}${currency(inc)} · ${percent(pct)}</span>
+              </div>
+              ${r.reason ? `<div class="emp-history-reason">${escapeHtml(r.reason)}</div>` : ""}
+            </div>
+            <div class="emp-history-actions">
+              <button type="button" class="btn small secondary" data-emp-history-edit="${r.id}">Edit</button>
+              <button type="button" class="btn small danger" data-emp-history-delete="${r.id}">Delete</button>
+            </div>
+          </div>`;
+      }).join("") : `<div class="emp-history-empty">No salary changes logged yet.</div>`;
+
+      return `
+        <div class="emp-history" data-employee-id="${record.id}">
+          <div class="emp-history-header">
+            <div>
+              <h3>Salary history</h3>
+              <p class="emp-history-sub">Raises and salary changes for ${escapeHtml(record.name || "this employee")}.</p>
+            </div>
+            <button type="button" class="btn small" data-emp-history-add="${record.id}">+ Add salary change</button>
+          </div>
+          <div class="emp-history-list">${rowsHtml}</div>
+        </div>`;
     }
 
     function formToObject($form) {
@@ -7403,9 +9356,10 @@
       showToast("Saved locally.");
     }
 
-    function archiveRecord(type, id) {
+    async function archiveRecord(type, id) {
       const label = titleCase(type);
-      if (!confirm(`Archive this ${type}?`)) return;
+      const ok = await confirmToast(`Archive this ${type}? It can be restored later.`, { confirmLabel: "Archive", tone: "warn" });
+      if (!ok) return;
       const collectionName = collectionKey(type);
       const record = db[collectionName].find(item => Number(item.id) === Number(id));
       if (record) {
@@ -7428,8 +9382,9 @@
       }
     }
 
-    function deleteRecord(type, id) {
-      if (!confirm("Permanently delete this record? This cannot be undone unless you have a JSON backup.")) return;
+    async function deleteRecord(type, id) {
+      const ok = await confirmToast("Permanently delete this record? This cannot be undone unless you have a JSON backup.", { confirmLabel: "Delete", tone: "danger" });
+      if (!ok) return;
       const collectionName = collectionKey(type);
       const before = db[collectionName].find(item => Number(item.id) === Number(id));
       db[collectionName] = db[collectionName].filter(item => Number(item.id) !== Number(id));
@@ -7514,10 +9469,11 @@
       $bar.find("[data-bulk-total]").text(currency(total));
     }
 
-    function bulkPayrollStatusForSelected(status) {
+    async function bulkPayrollStatusForSelected(status) {
       const ids = getSelectedPayrollIds();
       if (!ids.length) return;
-      if (!confirm(`Set ${ids.length} record(s) to ${status}?`)) return;
+      const ok = await confirmToast(`Set ${ids.length} record(s) to ${status}?`, { confirmLabel: "Apply", tone: status === "paid" ? "info" : "warn" });
+      if (!ok) return;
       const today_iso = dateIso(today);
       const items = (db.salaryOutgoings || []).filter(o => ids.includes(Number(o.id)));
       items.forEach(item => {
@@ -7533,10 +9489,11 @@
       showToast(`${items.length} record(s) set to ${status}.`);
     }
 
-    function bulkPayrollArchive() {
+    async function bulkPayrollArchive() {
       const ids = getSelectedPayrollIds();
       if (!ids.length) return;
-      if (!confirm(`Archive ${ids.length} record(s)? They can be restored later.`)) return;
+      const ok = await confirmToast(`Archive ${ids.length} record(s)? They can be restored later.`, { confirmLabel: "Archive", tone: "warn" });
+      if (!ok) return;
       const items = (db.salaryOutgoings || []).filter(o => ids.includes(Number(o.id)));
       items.forEach(item => { item.archived = true; });
       addLog("Payroll bulk archive", `${items.length} record(s) archived.`);
@@ -7552,13 +9509,14 @@
       printPayslipsForItems(items, `Selected payslips (${items.length})`);
     }
 
-    function bulkPayrollStatusForRelease(releaseKey, status) {
+    async function bulkPayrollStatusForRelease(releaseKey, status) {
       const items = (db.salaryOutgoings || []).filter(item =>
         !item.archived && payrollReleaseDate(item) === releaseKey
       );
       if (!items.length) return;
       const action = status === "paid" ? "mark as paid" : `reset to ${status}`;
-      if (!confirm(`${action.charAt(0).toUpperCase() + action.slice(1)} all ${items.length} records in this release?`)) return;
+      const ok = await confirmToast(`${action.charAt(0).toUpperCase() + action.slice(1)} all ${items.length} records in this release?`, { confirmLabel: status === "paid" ? "Mark paid" : "Apply", tone: status === "paid" ? "info" : "warn" });
+      if (!ok) return;
       const today_iso = dateIso(today);
       items.forEach(item => {
         item.status = status;
@@ -7904,6 +9862,7 @@
       if (type === "clients") return db.clients;
       if (type === "payments") return db.payments;
       if (type === "payrollRuns") return db.salaryOutgoings || [];
+      if (type === "salarySpendSince2022") return salarySpendSinceRows(2022);
       if (type === "employeeYearlyCost") return db.employees.filter(e => !e.archived).map(e => ({ name: e.name, department: e.department, status: e.status, monthlySalary: e.monthlySalary, yearlyCost: Number(e.monthlySalary) * 12 }));
       if (type === "clientSummary") return clientSummaryRows(selectedReports);
       return [];
@@ -8008,28 +9967,30 @@
     function restoreJsonBackup(file) {
       if (!file) return;
       const reader = new FileReader();
-      reader.onload = function(event) {
+      reader.onload = async function(event) {
         try {
           const parsed = JSON.parse(event.target.result);
           const incoming = parsed.data || parsed;
           if (!incoming.employees || !incoming.clients || !incoming.payments) {
-            alert("This JSON file does not look like a valid dashboard backup.");
+            showToast("This JSON file does not look like a valid dashboard backup.");
             return;
           }
-          if (!confirm("Restore this backup? This will replace the current local data.")) return;
+          const ok = await confirmToast("Restore this backup? This will replace the current local data.", { confirmLabel: "Restore", tone: "danger" });
+          if (!ok) return;
           db = normalizeData(incoming);
           addLog("Backup restored", `Backup file ${file.name} was restored.`);
           saveData();
           showToast("Backup restored.");
         } catch (error) {
-          alert("Could not read JSON backup file.");
+          showToast("Could not read JSON backup file.");
         }
       };
       reader.readAsText(file);
     }
 
-    function resetSampleData() {
-      if (!confirm("Reset all local data back to sample data?")) return;
+    async function resetSampleData() {
+      const ok = await confirmToast("Reset all local data back to sample data? This wipes your current records.", { confirmLabel: "Reset", tone: "danger" });
+      if (!ok) return;
       db = buildSampleData();
       addLog("Sample data reset", "The local demo database was reset.");
       saveData();
@@ -8085,6 +10046,12 @@
       $("#breakdownSubtitle").text(tab === "departments" ? "Headcount and payroll per department." : "Top contributors to monthly payroll.");
     });
 
+    $(document).on("click", "#salarySpendMode .series-pill", function () {
+      selectedSalarySpendMode = $(this).data("spend-mode") || "year";
+      renderDashboard();
+      setTimeout(drawCharts, 0);
+    });
+
     $(document).on("keydown", ".kpi-tile[data-clickable], .kpi-panel[data-clickable], .kpi-substat[data-clickable]", function (e) {
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $(this).trigger("click"); }
     });
@@ -8121,10 +10088,11 @@
       if ($(e.target).hasClass("remove")) return;
       applySavedView(Number($(this).data("view-id")));
     });
-    $(document).on("click", ".saved-view .remove", function (e) {
+    $(document).on("click", ".saved-view .remove", async function (e) {
       e.stopPropagation();
       const id = Number($(this).data("remove-view"));
-      if (confirm("Delete this saved view?")) deleteSavedView(id);
+      const ok = await confirmToast("Delete this saved view?", { confirmLabel: "Delete", tone: "danger" });
+      if (ok) deleteSavedView(id);
     });
 
     const PALETTE_ICONS = {
@@ -8146,10 +10114,8 @@
       { id: "add-payment",   group: "Create", title: "Add payment",         sub: "Invoice or receivable",   icon: PALETTE_ICONS.card, run: () => openModal("payment") },
       { id: "add-payroll",   group: "Create", title: "Add salary outgoing", sub: "Payroll or bonus",        icon: PALETTE_ICONS.wallet, run: () => openModal("payroll") },
       { id: "add-bonus",     group: "Create", title: "Add bonus / one-off", sub: "Quick payroll w/ type",   icon: PALETTE_ICONS.plus, run: () => { openModal("payroll"); setTimeout(() => $("#modalBackdrop [name=type]").val("bonus"), 50); } },
-      { id: "add-salary",    group: "Create", title: "Add salary change",   sub: "Log a raise / change",    icon: PALETTE_ICONS.chart, run: () => openModal("salary") },
       { id: "go-dashboard",  group: "Navigate", title: "Go to Dashboard",     sub: "Overview",          icon: PALETTE_ICONS.home, run: () => $(`.nav-btn[data-section="dashboard"]`).click() },
       { id: "go-employees",  group: "Navigate", title: "Go to Employees",     sub: "Team roster",       icon: PALETTE_ICONS.people, run: () => $(`.nav-btn[data-section="employees"]`).click() },
-      { id: "go-salary",     group: "Navigate", title: "Go to Salary History",sub: "Raises log",        icon: PALETTE_ICONS.chart, run: () => $(`.nav-btn[data-section="salary"]`).click() },
       { id: "go-payroll",    group: "Navigate", title: "Go to Salary Outgoing", sub: "Payroll runs",   icon: PALETTE_ICONS.wallet, run: () => $(`.nav-btn[data-section="payroll"]`).click() },
       { id: "go-clients",    group: "Navigate", title: "Go to Clients",       sub: "Retainer health",   icon: PALETTE_ICONS.office, run: () => $(`.nav-btn[data-section="clients"]`).click() },
       { id: "go-payments",   group: "Navigate", title: "Go to Payments",      sub: "Invoices",          icon: PALETTE_ICONS.card, run: () => $(`.nav-btn[data-section="payments"]`).click() },
@@ -8265,14 +10231,12 @@
       };
     }
     const debouncedRenderEmployees = debounce(renderEmployees, 200);
-    const debouncedRenderSalaryHistory = debounce(renderSalaryHistory, 200);
     const debouncedRenderClients = debounce(renderClients, 200);
     const debouncedRenderPayments = debounce(renderPayments, 200);
     const debouncedRenderPayroll = debounce(renderPayroll, 200);
 
     $(document).on("input", "#employeeSearch", debouncedRenderEmployees);
     $(document).on("change", "#employeeStatusFilter, #employeeArchiveFilter", renderEmployees);
-    $(document).on("input", "#salarySearch", debouncedRenderSalaryHistory);
     $(document).on("input", "#clientSearch", debouncedRenderClients);
     $(document).on("change", "#clientStatusFilter, #clientArchiveFilter", renderClients);
     $(document).on("input", "#paymentSearch", debouncedRenderPayments);
@@ -8281,7 +10245,38 @@
     $(document).on("change", "#payrollStatusFilter, #payrollArchiveFilter", renderPayroll);
 
     $(document).on("click", "[data-open]", function () { openModal($(this).data("open")); });
-    $(document).on("click", "[data-edit]", function () { openModal($(this).data("edit"), $(this).data("id")); });
+    $(document).on("click", "[data-edit]", function (e) { e.stopPropagation(); openModal($(this).data("edit"), $(this).data("id")); });
+    $(document).on("click", "[data-card-edit]", function (e) {
+      if ($(e.target).closest("button, a, .action-group, .hover-actions, input, select, textarea").length) return;
+      openModal($(this).data("card-edit"), $(this).data("id"));
+    });
+
+    $(document).on("click", "[data-emp-history-add]", function (e) {
+      e.preventDefault();
+      const empId = Number($(this).data("emp-history-add"));
+      const emp = db.employees.find(x => Number(x.id) === empId);
+      pushAndOpen("salary", null, {
+        employeeId: empId,
+        employeeName: emp?.name || "",
+        previousSalary: emp?.monthlySalary || 0
+      });
+    });
+    $(document).on("click", "[data-emp-history-edit]", function (e) {
+      e.preventDefault();
+      pushAndOpen("salary", Number($(this).data("emp-history-edit")));
+    });
+    $(document).on("click", "[data-emp-history-delete]", async function (e) {
+      e.preventDefault();
+      const id = Number($(this).data("emp-history-delete"));
+      const ok = await confirmToast("Delete this salary change?", { confirmLabel: "Delete", tone: "danger" });
+      if (!ok) return;
+      const before = db.salaryHistory.find(r => Number(r.id) === id);
+      db.salaryHistory = db.salaryHistory.filter(r => Number(r.id) !== id);
+      addLog("Salary history deleted", `${before?.employeeName || "Salary change"} was deleted.`);
+      saveData();
+      showToast("Salary change deleted.");
+      refreshEmployeeHistory();
+    });
     $(document).on("click", "[data-delete]", function () { deleteRecord($(this).data("delete"), $(this).data("id")); });
     $(document).on("click", "[data-archive]", function () { archiveRecord($(this).data("archive"), $(this).data("id")); });
     $(document).on("click", "[data-restore]", function () { restoreRecord($(this).data("restore"), $(this).data("id")); });
@@ -8340,7 +10335,7 @@
     });
     $(document).on("click", "[data-export]", function () { exportCsv($(this).data("export")); });
 
-    $("#closeModal").on("click", closeModal);
+    $("#closeModal").on("click", function () { modalStack = []; closeModal(); });
     $(document).on("click", "#cancelForm", closeModal);
 
     $("#recordForm").on("submit", function (event) {
@@ -8391,6 +10386,64 @@
       const current = Number($amount.val() || 0);
       if (!current && Number(emp.monthlySalary || 0) > 0) {
         $amount.val((Number(emp.monthlySalary) / 2).toFixed(2));
+      }
+    });
+
+    function updateSalaryDeltaChip() {
+      const $chip = $("#recordForm [data-salary-chip]");
+      if (!$chip.length) return;
+      const prev = Number($("#recordForm [data-salary-prev]").val() || 0);
+      const next = Number($("#recordForm [data-salary-new]").val() || 0);
+      if (!prev || !next) { $chip.attr("class", "salary-delta-chip neutral").text("—"); return; }
+      const diff = next - prev;
+      const pct = (diff / Math.abs(prev)) * 100;
+      const tone = Math.abs(pct) < 0.05 ? "neutral" : pct > 0 ? "good" : "bad";
+      const arrow = tone === "neutral" ? "—" : tone === "good" ? "▲" : "▼";
+      $chip.attr("class", `salary-delta-chip ${tone}`).text(`${arrow} ${pct >= 0 ? "+" : ""}${pct.toFixed(1)}% · ${diff >= 0 ? "+" : ""}${currency(diff)}`);
+    }
+    $(document).on("input change", "#recordForm [data-salary-prev], #recordForm [data-salary-new]", updateSalaryDeltaChip);
+
+    // When the employee select changes inside a salary form, prefill previousSalary
+    $(document).on("change", "#recordForm select[name='employeeId']", function () {
+      if (editing?.type !== "salary" || editing?.id) return;
+      const empId = Number($(this).val());
+      const emp = (db.employees || []).find(e => Number(e.id) === empId);
+      if (!emp) return;
+      const $prev = $("#recordForm [data-salary-prev]");
+      if (!Number($prev.val() || 0)) $prev.val(emp.monthlySalary || "");
+      updateSalaryDeltaChip();
+    });
+
+    // Quick-pick percentage buttons
+    $(document).on("click", "#recordForm [data-salary-preset]", function (e) {
+      e.preventDefault();
+      const pct = Number($(this).data("salary-preset"));
+      const $prev = $("#recordForm [data-salary-prev]");
+      const $next = $("#recordForm [data-salary-new]");
+      const prev = Number($prev.val() || $("#recordForm .salary-form").data("prev-default") || 0);
+      if (!prev) { showToast("Set a previous salary first."); return; }
+      const newVal = Math.round(prev * (1 + pct / 100));
+      $prev.val(prev);
+      $next.val(newVal);
+      updateSalaryDeltaChip();
+    });
+
+    // Reason dropdown ↔ custom input
+    $(document).on("change", "#recordForm [data-salary-reason-preset]", function () {
+      const val = $(this).val();
+      const $custom = $("#recordForm [data-salary-reason-custom]");
+      const $hidden = $("#recordForm input[type=hidden][name=reason]");
+      if (val === "Other") {
+        $custom.prop("hidden", false);
+        $hidden.remove();
+        $custom.find("input").trigger("focus");
+      } else {
+        $custom.prop("hidden", true);
+        $custom.find("input").val("");
+        if (!$hidden.length) {
+          $("#recordForm [data-salary-reason-preset]").after(`<input type="hidden" name="reason" />`);
+        }
+        $("#recordForm input[type=hidden][name=reason]").val(val);
       }
     });
 
@@ -8463,8 +10516,9 @@
       };
       reader.readAsText(file);
     });
-    $("#clearActivityLog").on("click", function () {
-      if (!confirm("Clear the local activity log?")) return;
+    $("#clearActivityLog").on("click", async function () {
+      const ok = await confirmToast("Clear the local activity log?", { confirmLabel: "Clear", tone: "warn" });
+      if (!ok) return;
       db.activityLogs = [];
       saveData();
       showToast("Activity log cleared.");
