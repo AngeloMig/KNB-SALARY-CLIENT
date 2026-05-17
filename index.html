@@ -6,25 +6,27 @@
   <title>Salary & Client Payment Dashboard</title>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     :root {
-      --bg: #ececec;
+      --bg: #f4f4f5;
       --shell: #f5f5f5;
       --sidebar: #f8f8f8;
       --card: #ffffff;
-      --text: #111111;
-      --muted: #6b6b6b;
+      --text: #0a0a0a;
+      --muted: #6b7280;
+      --micro: #9ca3af;
       --line: #e3e3e3;
       --line-strong: #cfcfcf;
       --dark: #0f0f0f;
       --soft: #f3f3f3;
       --soft-hover: #ececec;
       --active: #e3f2ef;
-      --accent: #3a3f5c;
+      --accent: #16a34a;
       --accent-soft: #eef0f6;
       --accent-hover: #2a2e47;
       --good: #166534;
-      --good-bg: #eaf7ee;
+      --good-bg: #ecfdf5;
       --warn: #8a5a00;
       --warn-bg: #fff6df;
       --bad: #9f1d1d;
@@ -35,6 +37,11 @@
       --radius-md: 10px;
       --radius-lg: 14px;
       --radius: 10px;
+      --dashboard-card-radius: 6px;
+      --dashboard-card-padding: 14px;
+      --dashboard-bento-gap: 10px;
+      --dashboard-shadow: 0 1px 2px rgba(17,17,17,0.04), 0 4px 16px rgba(17,17,17,0.05);
+      --dashboard-shadow-hover: 0 2px 5px rgba(17,17,17,0.05), 0 8px 22px rgba(17,17,17,0.07);
       --shadow: 0 1px 0 rgba(17, 17, 17, 0.04), 0 2px 6px rgba(17, 17, 17, 0.03);
       --shadow-soft: 0 1px 0 rgba(17, 17, 17, 0.04);
       --shadow-lift: 0 6px 18px rgba(17, 17, 17, 0.06), 0 1px 2px rgba(17, 17, 17, 0.03);
@@ -52,7 +59,7 @@
     .palette-item:focus-visible,
     button:focus-visible,
     a:focus-visible {
-      outline: 2px solid var(--accent);
+      outline: 2px solid #0a0a0a;
       outline-offset: 2px;
     }
 
@@ -180,15 +187,15 @@
     .nav-btn span { flex: 1; }
 
     .nav-btn:hover {
-      background: #efefef;
+      background: #f9fafb;
       color: #111111;
     }
 
     .nav-btn:hover .nav-icon { color: #404040; }
 
     .nav-btn.active {
-      background: var(--accent-soft);
-      color: var(--accent);
+      background: #f3f4f6;
+      color: var(--text);
       border-color: transparent;
       position: relative;
       padding-left: 14px;
@@ -202,10 +209,10 @@
       bottom: 8px;
       width: 3px;
       border-radius: 2px;
-      background: var(--accent);
+      background: var(--text);
     }
 
-    .nav-btn.active .nav-icon { color: var(--accent); }
+    .nav-btn.active .nav-icon { color: var(--text); }
 
     .nav-badge {
       display: inline-flex;
@@ -1019,54 +1026,188 @@
       grid-column: 1 / 13;
       margin-top: 8px;
       background: #ffffff;
-      border: 1px solid var(--accent);
-      border-radius: var(--radius-lg);
+      border: 0;
+      border-radius: var(--dashboard-card-radius);
       padding: 14px 16px;
-      box-shadow: var(--shadow-soft);
+      box-shadow: var(--dashboard-shadow);
     }
     .drill-panel[hidden] { display: none; }
     .drill-panel .drill-header {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
+      align-items: flex-start;
+      gap: 10px;
       margin-bottom: 10px;
+    }
+    .drill-panel .drill-header-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
     .drill-panel .drill-title {
       font-size: 13px;
       font-weight: 720;
       letter-spacing: -0.01em;
+      color: var(--text);
+    }
+    .drill-panel .drill-subtitle {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
     .drill-panel .drill-close {
       background: transparent;
       border: 0;
       color: var(--muted);
-      font-size: 13px;
       cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 160ms ease, color 160ms ease;
     }
-    .drill-panel .drill-close:hover { background: #f0f0f0; color: var(--text); }
+    .drill-panel .drill-close:hover { background: #f3f4f6; color: var(--text); }
+
+    .drill-panel .drill-table {
+      display: flex;
+      flex-direction: column;
+    }
     .drill-panel .drill-rows {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      max-height: 240px;
+      max-height: 280px;
       overflow-y: auto;
     }
     .drill-panel .drill-row {
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(140px, 1.4fr) minmax(0, 0.9fr) minmax(0, 1.2fr) minmax(0, 0.7fr) minmax(90px, 0.8fr);
       align-items: center;
       gap: 10px;
-      padding: 8px 10px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
+      padding: 9px 4px;
+      border-top: 1px solid #f1f1f3;
       font-size: 12px;
     }
-    .drill-panel .drill-row .drill-row-main { flex: 1; min-width: 0; }
-    .drill-panel .drill-row strong { font-weight: 720; }
-    .drill-panel .drill-row .drill-amount { font-variant-numeric: tabular-nums; font-weight: 720; }
+    .drill-panel .drill-row:first-child { border-top: 0; }
+    .drill-panel .drill-row-head {
+      border-top: 0;
+      padding: 6px 4px;
+      color: var(--micro);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .drill-panel .drill-row-head .drill-amount { font-weight: 700; color: var(--micro); }
+    .drill-panel .drill-row-total {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 10px;
+      color: var(--text);
+      font-weight: 720;
+    }
+    .drill-panel .drill-total-label {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: right;
+    }
+
+    .drill-panel .drill-cell {
+      min-width: 0;
+      color: var(--text);
+    }
+    .drill-panel .drill-cell-client {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .drill-panel .drill-cell-client strong {
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .drill-panel .drill-cell-date,
+    .drill-panel .drill-cell-ref {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .drill-panel .drill-hint {
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .drill-panel .drill-amount {
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      text-align: right;
+      white-space: nowrap;
+    }
+    .drill-panel .drill-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      background: #f3f4f6;
+      color: #374151;
+      text-transform: capitalize;
+    }
+    .drill-panel .drill-status::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+    .drill-panel .drill-status.good {
+      background: #ecfdf5;
+      color: #166534;
+    }
+    .drill-panel .drill-status.bad {
+      background: #fef2f2;
+      color: #9f1d1d;
+    }
+    .drill-panel .drill-status.warn {
+      background: #fff7ed;
+      color: #8a5a00;
+    }
+    .drill-panel .drill-status.info {
+      background: #eef2ff;
+      color: #3730a3;
+    }
     .drill-panel .drill-empty {
       padding: 14px; text-align: center; color: var(--muted); font-size: 12px;
+    }
+
+    @media (max-width: 760px) {
+      .drill-panel .drill-row {
+        grid-template-columns: 1fr auto;
+        row-gap: 4px;
+      }
+      .drill-panel .drill-row-head { display: none; }
+      .drill-panel .drill-cell-date,
+      .drill-panel .drill-cell-ref,
+      .drill-panel .drill-cell-status {
+        grid-column: 1 / 2;
+        font-size: 11px;
+      }
+      .drill-panel .drill-amount {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+      }
     }
 
     .compare-toggle {
@@ -2062,6 +2203,197 @@
       box-shadow: var(--shadow);
     }
 
+    .employee-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .employee-summary-item {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      box-shadow: var(--shadow-soft);
+      min-width: 0;
+    }
+
+    .employee-summary-label {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 760;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    .employee-summary-value {
+      color: var(--text);
+      font-size: 24px;
+      font-weight: 780;
+      letter-spacing: 0;
+      line-height: 1.05;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .employee-summary-note {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .employee-directory {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 10px;
+    }
+
+    .employee-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+      min-width: 0;
+      display: grid;
+      gap: 13px;
+    }
+
+    .employee-card.archived {
+      opacity: 0.62;
+      background: #fafafa;
+    }
+
+    .employee-card-head {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .employee-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: #0a0a0a;
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      flex: 0 0 auto;
+    }
+
+    .employee-identity {
+      min-width: 0;
+    }
+
+    .employee-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+
+    .employee-name {
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.15;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .employee-role {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      margin-top: 4px;
+      overflow-wrap: anywhere;
+    }
+
+    .employee-salary {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .employee-salary strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.15;
+    }
+
+    .employee-salary span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 3px;
+    }
+
+    .employee-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      padding: 11px 0;
+      border-top: 1px solid #f1f1f3;
+      border-bottom: 1px solid #f1f1f3;
+    }
+
+    .employee-meta {
+      min-width: 0;
+    }
+
+    .employee-meta-label {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 760;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .employee-meta-value {
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .employee-meta-sub {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .employee-card-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .employee-notes {
+      color: var(--muted);
+      font-size: 12px;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1 1 180px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -2090,6 +2422,364 @@
 
     tr:last-child td { border-bottom: 0; }
     tbody tr:hover { background: #fafafa; }
+
+    td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .row-sub { color: var(--muted); font-size: 11px; font-weight: 500; margin-top: 2px; }
+
+    /* Color-coded row left border by status */
+    [data-payroll-row] td:first-child { border-left: 3px solid transparent; }
+    [data-payroll-row][data-row-status="paid"]      td:first-child { border-left-color: #16a34a; }
+    [data-payroll-row][data-row-status="scheduled"] td:first-child { border-left-color: #9ca3af; }
+    [data-payroll-row][data-row-status="pending"]   td:first-child { border-left-color: #d97706; }
+    [data-payroll-row][data-row-status="cancelled"] td:first-child { border-left-color: #dc2626; }
+    [data-payroll-row][data-archived="1"]           td { opacity: 0.55; }
+
+    /* Checkbox column */
+    th.payroll-pick-cell, td.payroll-pick-cell { width: 36px; padding: 12px 8px 12px 12px; }
+    .row-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 2px;
+    }
+    .row-check input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+      accent-color: #0a0a0a;
+    }
+
+    /* Sticky bulk action bar */
+    .bulk-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      margin: 0 0 10px;
+      background: #0a0a0a;
+      color: #ffffff;
+      border-radius: 8px;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      box-shadow: 0 4px 14px rgba(17,17,17,0.18);
+    }
+    .bulk-bar[hidden] { display: none; }
+    .bulk-bar-text { display: flex; align-items: baseline; gap: 6px; font-size: 13px; }
+    .bulk-bar-text strong { font-weight: 700; }
+    .bulk-bar-total { color: #d4d4d8; font-variant-numeric: tabular-nums; }
+    .bulk-bar-actions { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+    .bulk-bar .btn.small {
+      background: rgba(255,255,255,0.10);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+    .bulk-bar .btn.small.good { background: #16a34a; border-color: #16a34a; color: #fff; }
+    .bulk-bar .btn.small.warn { background: #d97706; border-color: #d97706; color: #fff; }
+    .bulk-bar .btn.small:hover { background: rgba(255,255,255,0.18); }
+    .bulk-bar .btn.small.good:hover { background: #15803d; }
+    .bulk-bar .btn.small.warn:hover { background: #b45309; }
+
+    /* Payroll period controls in the topbar */
+    .payroll-controls {
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .payroll-controls .period-controls {
+      padding: 3px 4px;
+      gap: 4px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      box-shadow: var(--shadow-soft);
+    }
+    .payroll-controls .period-controls select {
+      min-width: 78px;
+      padding: 4px 6px;
+      font-size: 12px;
+      border-radius: 999px;
+      border: 0;
+      background: transparent;
+      font-weight: 700;
+      box-shadow: none;
+    }
+
+    /* Quick filter chips above the payroll table */
+    .payroll-quick-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin: 0 0 10px;
+    }
+    .payroll-quick-filters .chip-group {
+      display: inline-flex;
+      gap: 4px;
+      padding: 3px;
+      background: #f3f4f6;
+      border-radius: 999px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 11px;
+      background: transparent;
+      color: var(--muted);
+      border: 0;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+    }
+    .chip:hover { color: var(--text); }
+    .chip.active {
+      background: #ffffff;
+      color: var(--text);
+      box-shadow: 0 1px 2px rgba(17,17,17,0.08), 0 3px 8px rgba(17,17,17,0.04);
+    }
+    .chip-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      padding: 0 5px;
+      height: 16px;
+      border-radius: 999px;
+      background: rgba(17,17,17,0.08);
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .chip.active .chip-count { background: rgba(17,17,17,0.10); color: var(--text); }
+    .chip.chip-clear {
+      background: transparent;
+      color: var(--muted);
+      padding: 5px 10px;
+      font-weight: 700;
+    }
+    .chip.chip-clear:hover { color: #9f1d1d; background: #fef2f2; }
+
+    /* Inline-edit amount cell */
+    .amount-edit {
+      display: inline-block;
+      padding: 3px 6px;
+      border-radius: 4px;
+      cursor: text;
+      transition: background 120ms ease, box-shadow 120ms ease;
+    }
+    .amount-edit:hover {
+      background: #f9fafb;
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .amount-edit:focus { outline: 2px solid #0a0a0a; outline-offset: 2px; }
+    .amount-edit-input {
+      width: 100%;
+      max-width: 140px;
+      padding: 4px 6px;
+      border: 1px solid #0a0a0a;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(10,10,10,0.08);
+    }
+
+    /* Modal form sections */
+    .form-section {
+      padding: 12px 0;
+      border-top: 1px solid #f1f1f3;
+    }
+    .form-section:first-of-type { padding-top: 0; border-top: 0; }
+    .form-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--micro);
+      margin-bottom: 10px;
+    }
+
+    /* Release batch header rows */
+    .payroll-group-header td {
+      padding: 10px 14px;
+      background: #f9fafb;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .payroll-group-header:first-child td { border-top: 0; }
+    .payroll-group-header:hover td { background: #f9fafb; }
+    .release-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .release-header-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .release-label {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .release-meta {
+      color: var(--muted);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+    .release-meta strong { color: var(--text); font-weight: 720; }
+    .release-actions {
+      display: inline-flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    /* Status dropdown inline in row */
+    .payroll-status-select {
+      padding: 5px 24px 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: capitalize;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+    }
+    .payroll-status-select.status-paid { background-color: #ecfdf5; color: #166534; border-color: #ecfdf5; }
+    .payroll-status-select.status-scheduled { background-color: #f3f4f6; color: #374151; border-color: #f3f4f6; }
+    .payroll-status-select.status-pending { background-color: #fff7ed; color: #8a5a00; border-color: #fff7ed; }
+    .payroll-status-select.status-cancelled { background-color: #fef2f2; color: #9f1d1d; border-color: #fef2f2; }
+
+    /* Payslip print view */
+    .payslip-print-area { display: none; }
+    body.printing-payslips .payslip-print-area { display: block; }
+    @media print {
+      body.printing-payslips * { visibility: hidden !important; }
+      body.printing-payslips .payslip-print-area,
+      body.printing-payslips .payslip-print-area * { visibility: visible !important; }
+      body.printing-payslips .payslip-print-area {
+        position: absolute; left: 0; top: 0; width: 100%; padding: 0; margin: 0;
+      }
+    }
+    .payslip {
+      background: #ffffff;
+      color: #0a0a0a;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+      padding: 36px 40px;
+      width: 210mm;
+      min-height: 297mm;
+      box-sizing: border-box;
+    }
+    .payslip-head {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid #0a0a0a;
+    }
+    .payslip-company { font-size: 14px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #6b7280; }
+    .payslip-title { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+    .payslip-sub { font-size: 12px; color: #6b7280; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+    .payslip-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px 24px;
+      margin-bottom: 24px;
+    }
+    .payslip-grid > div { display: flex; flex-direction: column; gap: 2px; }
+    .payslip-label {
+      color: #9ca3af;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .payslip-grid strong { font-size: 14px; font-weight: 700; }
+    .payslip-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    .payslip-table th {
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      text-align: left;
+      border: 0;
+    }
+    .payslip-table th.num,
+    .payslip-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .payslip-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f1f1f3;
+      font-size: 13px;
+      background: #ffffff;
+    }
+    .payslip-table .payslip-subtotal td {
+      font-weight: 700;
+      background: #fafafa;
+    }
+    .payslip-table .payslip-total td {
+      font-size: 16px;
+      font-weight: 800;
+      padding: 14px 12px;
+      border-top: 2px solid #0a0a0a;
+      border-bottom: 0;
+      background: #ffffff;
+    }
+    .payslip-table tfoot td { background: #ffffff; }
+    .payslip-table .muted { color: #9ca3af; }
+    .payslip-notes {
+      padding: 12px 14px;
+      background: #f9fafb;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #4b5563;
+      margin-bottom: 24px;
+    }
+    .payslip-notes .payslip-label { display: block; margin-bottom: 4px; }
+    .payslip-foot {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 40px;
+    }
+    .payslip-sign {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: #6b7280;
+    }
+    .payslip-line {
+      width: 100%;
+      border-bottom: 1px solid #0a0a0a;
+      margin-bottom: 4px;
+      height: 32px;
+    }
 
     .step-label {
       display: inline-flex;
@@ -2369,6 +3059,924 @@
     .pin-card h2 { margin-bottom: 6px; }
     .pin-card p { margin-top: 0; color: var(--muted); }
 
+    #dashboard {
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    #dashboard .greeting-strip {
+      min-height: 30px;
+      margin: -8px 0 10px;
+      padding: 0 2px 8px;
+      border: 0;
+      border-bottom: 1px solid #e5e7eb;
+      background: transparent;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    #dashboard .greeting-strip .greeting-text strong {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    #dashboard .greeting-strip .greeting-text span,
+    #dashboard .greeting-strip .greeting-meta {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    #dashboard .greeting-strip .pulse-dot {
+      width: 6px;
+      height: 6px;
+      background: #16a34a;
+      box-shadow: none;
+      animation: none;
+    }
+
+    #dashboard .cmdk-hint {
+      border: 0;
+      background: #f3f4f6;
+      color: var(--muted);
+      padding: 3px 8px;
+      box-shadow: none;
+    }
+
+    #dashboard .cmdk-hint:hover {
+      background: #f3f4f6;
+      color: var(--text);
+    }
+
+    #dashboard .cmdk-hint kbd {
+      border: 0;
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(17, 17, 17, 0.06);
+    }
+
+    #dashboard .topbar-sticky {
+      margin: 0 0 12px;
+      padding: 2px 0 6px;
+      background: rgba(244, 244, 245, 0.82);
+      border-bottom: 0;
+    }
+
+    #dashboard .topbar-sticky.is-stuck {
+      border-bottom-color: transparent;
+      box-shadow: 0 8px 18px rgba(17, 17, 17, 0.05);
+    }
+
+    #dashboard .topbar {
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 18px;
+    }
+
+    #dashboard .topbar > div:first-child {
+      min-width: 220px;
+      flex: 1;
+    }
+
+    #dashboard h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    #dashboard .subtitle {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    #dashboard h2,
+    #dashboard .card-header h2,
+    #dashboard .bento-hero h2 {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    #dashboard .button-group.dashboard-controls {
+      gap: 8px;
+      flex-wrap: nowrap;
+    }
+
+    #dashboard .period-presets,
+    #dashboard .tabs,
+    #dashboard .series-toggle,
+    #dashboard .compare-toggle {
+      gap: 2px;
+      padding: 3px;
+      background: #f3f4f6;
+      border: 0;
+      border-radius: 999px;
+      box-shadow: none;
+    }
+
+    #dashboard .preset-pill,
+    #dashboard .tab-pill,
+    #dashboard .series-pill,
+    #dashboard .compare-pill {
+      color: var(--muted);
+      background: transparent;
+      border: 0;
+      transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+    }
+
+    #dashboard .preset-pill {
+      padding: 6px 11px;
+      font-size: 10.5px;
+      font-weight: 700;
+    }
+
+    #dashboard .preset-pill:hover,
+    #dashboard .tab-pill:hover,
+    #dashboard .series-pill:hover,
+    #dashboard .compare-pill:hover {
+      color: var(--text);
+      background: transparent;
+    }
+
+    #dashboard .preset-pill.active,
+    #dashboard .tab-pill.active,
+    #dashboard .series-pill.active,
+    #dashboard .compare-pill.active {
+      background: #ffffff;
+      color: var(--text);
+      box-shadow: 0 1px 2px rgba(17, 17, 17, 0.08), 0 3px 8px rgba(17, 17, 17, 0.04);
+    }
+
+    #dashboard .dashboard-controls .period-controls {
+      position: relative;
+      gap: 0;
+      padding: 4px 10px;
+      background: #ffffff;
+      border: 0;
+      border-radius: 999px;
+      box-shadow: var(--dashboard-shadow);
+    }
+
+    #dashboard .dashboard-controls .period-controls select {
+      min-width: auto;
+      width: auto;
+      padding: 4px 7px;
+      border: 0;
+      background: transparent;
+      border-radius: 999px;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: none;
+    }
+
+    #dashboard .period-separator {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: #d1d5db;
+      margin: 0 2px;
+      flex: 0 0 auto;
+    }
+
+    #dashboard .topbar-actions {
+      gap: 2px;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    #dashboard .topbar-actions .save-view-btn,
+    #dashboard .icon-btn {
+      min-height: 28px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 999px;
+      transition: background 160ms ease, color 160ms ease;
+    }
+
+    #dashboard .topbar-actions .save-view-btn {
+      padding: 5px 9px;
+    }
+
+    #dashboard .topbar-actions .save-view-btn:hover,
+    #dashboard .icon-btn:hover {
+      background: #f9fafb;
+      color: var(--text);
+    }
+
+    #dashboard .period-empty {
+      border: 0;
+      background: #ffffff;
+      box-shadow: var(--dashboard-shadow);
+      border-radius: var(--dashboard-card-radius);
+      padding: 14px 16px;
+    }
+
+    #dashboard .bento {
+      gap: var(--dashboard-bento-gap);
+    }
+
+    #dashboard .bento-kpis {
+      grid-column: 1 / 13;
+      order: 1;
+    }
+
+    #dashboard .bento-hero {
+      grid-column: 1 / 13;
+      order: 2;
+    }
+
+    #dashboard .bento-breakdown {
+      grid-column: 1 / 7;
+      order: 3;
+    }
+
+    #dashboard .bento-comingup {
+      grid-column: 7 / 13;
+      order: 4;
+    }
+
+    #dashboard .card,
+    #dashboard .kpi-tile,
+    #dashboard .runway-card {
+      border: 0;
+      border-radius: var(--dashboard-card-radius);
+      background: #ffffff;
+      box-shadow: var(--dashboard-shadow);
+      transition: box-shadow 160ms ease;
+    }
+
+    #dashboard .card:hover,
+    #dashboard .kpi-tile:hover,
+    #dashboard .runway-card:hover {
+      box-shadow: var(--dashboard-shadow-hover);
+      transform: none;
+    }
+
+    #dashboard .card {
+      padding: var(--dashboard-card-padding);
+    }
+
+    #dashboard .card-header {
+      margin-bottom: 8px;
+      align-items: flex-start;
+    }
+
+    #dashboard .card-header p {
+      color: var(--muted);
+      font-size: 11.5px;
+      margin: 0;
+    }
+
+    #dashboard .kpi-grid {
+      display: block;
+    }
+
+    #dashboard .kpi-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 18px 18px 14px;
+      background: #ffffff;
+      border: 0;
+      border-radius: var(--dashboard-card-radius);
+      box-shadow: var(--dashboard-shadow);
+      cursor: pointer;
+      transition: box-shadow 160ms ease;
+    }
+
+    #dashboard .kpi-panel:hover {
+      box-shadow: var(--dashboard-shadow-hover);
+    }
+
+    #dashboard .kpi-panel.kpi-tile-active {
+      box-shadow: inset 0 0 0 2px #0a0a0a, var(--dashboard-shadow);
+    }
+
+    #dashboard .kpi-panel-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: stretch;
+      gap: 24px;
+    }
+
+    #dashboard .kpi-panel-hero-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+      align-self: flex-start;
+    }
+
+    #dashboard .kpi-milestones {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 240px;
+      max-width: 360px;
+      padding-left: 20px;
+      border-left: 1px solid #f1f1f3;
+    }
+
+    #dashboard .kpi-milestones-title {
+      color: var(--micro);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    #dashboard .kpi-milestones-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px 14px;
+    }
+
+    #dashboard .kpi-milestone {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      min-width: 0;
+      padding: 2px 0;
+    }
+
+    #dashboard .kpi-milestone-label {
+      color: var(--micro);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    #dashboard .kpi-milestone-value {
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.25;
+    }
+
+    #dashboard .kpi-milestone-value.good { color: #166534; }
+    #dashboard .kpi-milestone-value.bad { color: #9f1d1d; }
+
+    #dashboard .kpi-milestone-hint {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 500;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 1100px) {
+      #dashboard .kpi-panel-hero {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      #dashboard .kpi-milestones {
+        padding-left: 0;
+        padding-top: 14px;
+        border-left: 0;
+        border-top: 1px solid #f1f1f3;
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      #dashboard .kpi-milestones-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    #dashboard .kpi-panel-label {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    #dashboard .kpi-panel-value {
+      font-size: 32px;
+      font-weight: 720;
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    #dashboard .kpi-panel.negative .kpi-panel-value {
+      color: #9f1d1d;
+    }
+
+    #dashboard .kpi-panel-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    #dashboard .kpi-panel-meta .kpi-delta {
+      padding: 3px 9px;
+      font-size: 11px;
+    }
+
+    #dashboard .kpi-panel-status {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    #dashboard .kpi-panel-status.good { color: #166534; }
+    #dashboard .kpi-panel-status.bad { color: #9f1d1d; }
+    #dashboard .kpi-panel-status.warn { color: #8a5a00; }
+
+    #dashboard .kpi-panel-substats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0;
+      padding-top: 14px;
+      border-top: 1px solid #f1f1f3;
+    }
+
+    #dashboard .kpi-substat {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 4px 14px;
+      border-left: 1px solid #f1f1f3;
+      cursor: pointer;
+      transition: background 160ms ease;
+      min-width: 0;
+    }
+
+    #dashboard .kpi-substat:first-child {
+      border-left: 0;
+      padding-left: 0;
+    }
+
+    #dashboard .kpi-substat:last-child {
+      padding-right: 0;
+    }
+
+    #dashboard .kpi-substat:hover {
+      background: #fafafa;
+    }
+
+    #dashboard .kpi-substat.kpi-tile-active {
+      background: #fafafa;
+      box-shadow: inset 0 0 0 1.5px #0a0a0a;
+      border-radius: 6px;
+      border-left-color: transparent;
+    }
+
+    #dashboard .kpi-substat-label {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #dashboard .kpi-substat-value {
+      font-size: 17px;
+      font-weight: 720;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    #dashboard .kpi-substat-status {
+      color: var(--muted);
+      font-size: 10.5px;
+      font-weight: 700;
+      align-self: flex-start;
+    }
+
+    #dashboard .kpi-substat-status.good { color: #166534; }
+    #dashboard .kpi-substat-status.bad { color: #9f1d1d; }
+    #dashboard .kpi-substat-status.warn { color: #8a5a00; }
+
+    #dashboard .kpi-substat-spark {
+      height: 18px;
+      margin-top: 4px;
+      opacity: 0.55;
+    }
+
+    @media (max-width: 760px) {
+      #dashboard .kpi-panel-substats {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      #dashboard .kpi-substat {
+        border-left: 0;
+        border-top: 1px solid #f1f1f3;
+        padding: 8px 0 0;
+      }
+      #dashboard .kpi-substat:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+    }
+
+    #dashboard .kpi-tile .kpi-label,
+    #dashboard .team-stats .stat-block .stat-label,
+    #dashboard .forecast-month,
+    #dashboard .card-title {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    #dashboard .kpi-tile .kpi-value {
+      font-size: 18px;
+      font-weight: 720;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    #dashboard .kpi-tile[data-key="net"] .kpi-value {
+      font-size: 22px;
+      font-weight: 720;
+      letter-spacing: -0.025em;
+    }
+
+    #dashboard .kpi-row {
+      gap: 6px;
+      margin-top: 0;
+    }
+
+    #dashboard .kpi-status,
+    #dashboard .kpi-delta,
+    #dashboard .runway-card .runway-status,
+    #dashboard .forecast-confidence {
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: none;
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    #dashboard .kpi-status::before {
+      width: 5px;
+      height: 5px;
+    }
+
+    #dashboard .kpi-status.good,
+    #dashboard .runway-card .runway-status.good,
+    #dashboard .forecast-confidence.good {
+      background: #ecfdf5;
+      color: #166534;
+    }
+
+    #dashboard .kpi-status.warn,
+    #dashboard .kpi-status.bad,
+    #dashboard .kpi-status.neutral,
+    #dashboard .kpi-delta.up,
+    #dashboard .kpi-delta.down,
+    #dashboard .kpi-delta.flat,
+    #dashboard .forecast-confidence.warn,
+    #dashboard .forecast-confidence.low,
+    #dashboard .runway-card .runway-status.warn,
+    #dashboard .runway-card .runway-status.bad,
+    #dashboard .runway-card .runway-status.neutral {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    #dashboard .kpi-spark {
+      height: 14px;
+      margin-top: auto;
+    }
+
+    #dashboard .runway-card {
+      display: grid;
+      grid-template-columns: 1fr;
+      align-self: start;
+      align-items: stretch;
+      gap: 14px;
+      padding: var(--dashboard-card-padding);
+      margin-bottom: 0;
+    }
+
+    #dashboard .runway-card .runway-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: #f3f4f6;
+      color: var(--text);
+    }
+
+    #dashboard .runway-card .runway-label {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+
+    #dashboard .runway-card .runway-headline {
+      font-size: 14px;
+      font-weight: 720;
+      letter-spacing: -0.02em;
+    }
+
+    #dashboard .runway-card .runway-meta {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    #dashboard .runway-card .runway-bar-wrap {
+      max-width: none;
+      min-width: 120px;
+    }
+
+    #dashboard .runway-card .runway-bar {
+      height: 4px;
+      background: #f3f4f6;
+    }
+
+    #dashboard .runway-card .runway-bar span,
+    #dashboard .runway-card.warn .runway-bar span,
+    #dashboard .runway-card.bad .runway-bar span,
+    #dashboard .runway-card.neutral .runway-bar span {
+      background: #0a0a0a;
+    }
+
+    #dashboard .bento-hero {
+      min-height: 0;
+      overflow: visible;
+      padding: 18px 18px 14px;
+      background: #ffffff;
+      color: var(--text);
+      box-shadow: var(--dashboard-shadow);
+    }
+
+    #dashboard .bento-hero::before {
+      display: none;
+    }
+
+    #dashboard .bento-hero .card-header {
+      padding-top: 0;
+      margin-bottom: 14px;
+      padding-bottom: 0;
+      border-bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    #dashboard .bento-hero h2 {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    #dashboard .chart-meta {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    #dashboard .hero-row {
+      display: grid;
+      grid-template-columns: minmax(220px, 0.95fr) minmax(0, 1.45fr);
+      gap: 24px;
+      align-items: center;
+    }
+
+    #dashboard .hero-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    #dashboard .hero-meta {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    #dashboard .hero-value {
+      font-size: 32px;
+      font-weight: 720;
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    #dashboard .hero-delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 11px;
+      font-weight: 700;
+      align-self: flex-start;
+      margin-top: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #dashboard .hero-delta.good {
+      background: #ecfdf5;
+      color: #166534;
+    }
+
+    #dashboard .hero-delta.bad {
+      background: #fef2f2;
+      color: #9f1d1d;
+    }
+
+    #dashboard .hero-substats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid #f1f1f3;
+    }
+
+    #dashboard .substat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    #dashboard .substat-label {
+      color: var(--micro);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    #dashboard .substat strong {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #dashboard .hero-right {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    #dashboard .hero-right .chart-canvas-wrap {
+      min-height: 130px;
+      height: 140px;
+      margin-top: 0;
+      background: transparent;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    #dashboard .hero-trend-meta {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: right;
+      padding-right: 2px;
+    }
+
+    @media (max-width: 1100px) {
+      #dashboard .hero-row {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      #dashboard .hero-trend-meta {
+        text-align: left;
+      }
+    }
+
+    #dashboard .team-stats {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+    }
+
+    #dashboard .team-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #dashboard .bento-breakdown .card-header {
+      align-items: center;
+    }
+
+    #dashboard .bento-breakdown .team-footer {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    #dashboard .team-row,
+    #dashboard .dept-row,
+    #dashboard .mini-item {
+      font-size: 12px;
+    }
+
+    #dashboard .mini-list,
+    #dashboard .activity-list {
+      gap: 8px;
+    }
+
+    #dashboard .mini-item,
+    #dashboard .activity-item {
+      padding: 9px 10px;
+      border-radius: 8px;
+    }
+
+    #dashboard .team-row {
+      gap: 8px;
+    }
+
+    #dashboard .team-row .avatar {
+      width: 26px;
+      height: 26px;
+      font-size: 10px;
+    }
+
+    #dashboard .team-row .body .top {
+      margin-bottom: 2px;
+    }
+
+    #dashboard .team-row .body .name,
+    #dashboard .team-row .body .amount,
+    #dashboard .dept-row .dept-name,
+    #dashboard .dept-row .dept-stats strong {
+      font-size: 12px;
+    }
+
+    #dashboard .team-row .body .role,
+    #dashboard .dept-row .dept-stats,
+    #dashboard .team-stats .stat-block .stat-sub,
+    #dashboard .forecast-meta-note {
+      font-size: 10.5px;
+    }
+
+    #dashboard .team-row .body .bar,
+    #dashboard .dept-row .dept-bar {
+      height: 4px;
+    }
+
+    #dashboard .team-row .avatar {
+      background: #f3f4f6;
+      color: var(--text);
+    }
+
+    #dashboard .team-row .body .bar,
+    #dashboard .dept-row .dept-bar {
+      background: #f3f4f6;
+    }
+
+    #dashboard .team-row .body .bar > span,
+    #dashboard .dept-row .dept-bar span {
+      background: #0a0a0a;
+    }
+
+    #dashboard .team-footer {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
     .table-heading {
       display: flex;
       justify-content: space-between;
@@ -2483,6 +4091,7 @@
       .period-controls { width: 100%; }
       .cards { grid-template-columns: 1fr; }
       .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .employee-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .warning-list { grid-template-columns: 1fr; }
       .form-grid { grid-template-columns: 1fr; }
       .mobile-note { display: block; }
@@ -2501,12 +4110,89 @@
 
     @media (max-width: 480px) {
       .kpi-grid { grid-template-columns: 1fr; }
+      .employee-summary-grid,
+      .employee-directory,
+      .employee-meta-grid { grid-template-columns: 1fr; }
+      .employee-card-head { grid-template-columns: auto minmax(0, 1fr); }
+      .employee-salary {
+        grid-column: 1 / -1;
+        text-align: left;
+      }
       .period-controls { width: 100%; }
       .btn { width: 100%; }
       .action-group .btn { width: auto; }
       .toolbar { align-items: stretch; }
       .filters,
       .button-group { width: 100%; }
+    }
+
+    @media (max-width: 1100px) {
+      #dashboard .topbar {
+        flex-wrap: wrap;
+      }
+      #dashboard .button-group.dashboard-controls {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+      }
+      #dashboard .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      #dashboard .bento-hero,
+      #dashboard .bento-breakdown {
+        grid-column: 1 / 13;
+        grid-row: auto;
+      }
+      #dashboard .bento-runway,
+      #dashboard .bento-calendar {
+        grid-column: 1 / 7;
+      }
+      #dashboard .bento-forecast,
+      #dashboard .bento-comingup {
+        grid-column: 7 / 13;
+      }
+      #dashboard .runway-card {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+      }
+    }
+
+    @media (max-width: 760px) {
+      #dashboard .topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      #dashboard .button-group.dashboard-controls,
+      #dashboard .period-presets,
+      #dashboard .dashboard-controls .period-controls {
+        width: 100%;
+      }
+      #dashboard .button-group.dashboard-controls,
+      #dashboard .dashboard-controls .period-controls {
+        flex-direction: row;
+      }
+      #dashboard .period-presets {
+        overflow-x: auto;
+      }
+      #dashboard .dashboard-controls .period-controls select {
+        flex: 1;
+      }
+      #dashboard .kpi-grid,
+      #dashboard .chart-story,
+      #dashboard .team-stats {
+        grid-template-columns: 1fr;
+      }
+      #dashboard .bento-hero,
+      #dashboard .bento-runway,
+      #dashboard .bento-calendar,
+      #dashboard .bento-forecast,
+      #dashboard .bento-comingup,
+      #dashboard .bento-breakdown {
+        grid-column: 1 / 13;
+      }
+      #dashboard .team-rows {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -2540,7 +4226,6 @@
         <div class="topbar topbar-sticky">
           <div>
             <h1>Dashboard</h1>
-            <p class="subtitle">Payroll, payments, and cash flow for the selected period.</p>
           </div>
           <div class="button-group dashboard-controls">
             <div class="period-presets" id="periodPresets">
@@ -2551,10 +4236,14 @@
             </div>
             <div class="period-controls">
               <select id="dashboardMonth" aria-label="Month"></select>
+              <span class="period-separator" aria-hidden="true"></span>
               <select id="dashboardYear" aria-label="Year"></select>
             </div>
             <div class="topbar-actions">
-              <button class="save-view-btn" id="saveViewBtn" data-print-hide title="Save current period as a view">★ Save view</button>
+              <button class="save-view-btn" id="saveViewBtn" data-print-hide title="Save current period as a view">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg>
+                Save view
+              </button>
               <button class="icon-btn" id="printDashboard" data-print-hide title="Print current view (⌘P)" aria-label="Print dashboard">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="9" rx="2"/><path d="M6 15h12v6H6z"/></svg>
               </button>
@@ -2571,56 +4260,22 @@
             <div class="drill-panel" id="drillPanel" hidden></div>
           </div>
 
-          <!-- Runway strip -->
-          <div class="bento-runway runway-card" id="runwayCard"></div>
-
-          <!-- Hero: cash flow chart -->
+          <!-- Hero: cash flow -->
           <div class="card bento-hero">
             <div class="card-header">
-              <div>
-                <h2>Cash flow</h2>
-                <p id="cashFlowSubtitle">Income and payroll by month, with net balance line.</p>
-              </div>
-              <div class="card-header-right">
-                <div class="chart-legend" id="cashFlowLegend">
-                  <span class="legend-item"><span class="legend-swatch" style="background:#166534;width:10px;height:10px;border-radius:2px"></span>Income</span>
-                  <span class="legend-item"><span class="legend-swatch" style="background:#999;width:10px;height:10px;border-radius:2px"></span>Payroll</span>
-                  <span class="legend-item"><span class="legend-swatch" style="background:#111"></span>Net</span>
-                </div>
+              <h2>Cash flow</h2>
+              <span class="chart-meta" id="cashFlowMeta">12-month net trend</span>
+            </div>
+            <div class="hero-row">
+              <div class="hero-left" id="cashFlowHero"></div>
+              <div class="hero-right">
+                <div class="chart-canvas-wrap"><canvas id="cashFlowChart"></canvas></div>
+                <div class="hero-trend-meta" id="cashFlowTrendMeta"></div>
               </div>
             </div>
-            <div class="chart-story" id="cashFlowStory"></div>
-            <div class="chart-canvas-wrap"><canvas id="cashFlowChart"></canvas></div>
-            <div class="chart-caption" id="cashFlowCaption"></div>
           </div>
 
-          <!-- Calendar -->
-          <div class="card bento-calendar">
-            <div class="card-header">
-              <div>
-                <h2>Cash calendar</h2>
-                <p id="calendarSubtitle">Income and payroll events for the month.</p>
-              </div>
-              <div class="cal-legend">
-                <span class="legend-mark income"><span class="dot"></span>Income</span>
-                <span class="legend-mark payroll"><span class="dot"></span>Payroll</span>
-              </div>
-            </div>
-            <div class="calendar-grid" id="calendarGrid"></div>
-          </div>
-
-          <!-- Forecast -->
-          <div class="card bento-forecast">
-            <div class="card-header">
-              <div>
-                <h2>3-month forecast</h2>
-                <p>Projection based on current roster and recurring client retainers.</p>
-              </div>
-            </div>
-            <div class="forecast-grid" id="forecastGrid"></div>
-          </div>
-
-          <!-- Payroll breakdown (People / Departments) -->
+          <!-- Hidden for now: Payroll breakdown + Coming up cards. Re-enable when ready.
           <div class="card bento-breakdown team-card">
             <div class="card-header">
               <div>
@@ -2642,7 +4297,6 @@
             </div>
           </div>
 
-          <!-- Coming up -->
           <div class="card bento-comingup">
             <div class="card-header">
               <h2>Coming up</h2>
@@ -2654,6 +4308,7 @@
             <div class="mini-list" id="upcomingPayments" role="tabpanel"></div>
             <div class="mini-list" id="upcomingReviews" role="tabpanel" hidden></div>
           </div>
+          -->
 
           <!-- Hidden placeholder for cross-section warning aria-live -->
           <div id="dashboardWarnings" role="status" aria-live="polite" class="visually-hidden"></div>
@@ -2687,6 +4342,8 @@
             </select>
             <select class="filter-select" id="employeeSort">
               <option value="name">Sort: Name</option>
+              <option value="tenureLong">Sort: Longest tenure</option>
+              <option value="tenureShort">Sort: Shortest tenure</option>
               <option value="salaryDesc">Sort: Salary high to low</option>
               <option value="salaryAsc">Sort: Salary low to high</option>
               <option value="startDate">Sort: Start date</option>
@@ -2696,7 +4353,8 @@
           </div>
           <button class="btn secondary" data-export="employees">Export CSV</button>
         </div>
-        <div class="table-wrap"><table id="employeesTable"></table></div>
+        <div class="employee-summary-grid" id="employeeSummaryGrid"></div>
+        <div class="employee-directory" id="employeesTable"></div>
       </section>
 
       <section id="salary" class="section">
@@ -2719,12 +4377,24 @@
         <div class="topbar">
           <div>
             <h1>Salary Outgoing</h1>
-            <div class="step-label">4 Payroll Runs</div>
-            <p class="subtitle">Track actual outgoing salary payments by employee, period, status, and payment date.</p>
+            <p class="subtitle">Track outgoing salary payments by employee, period, status, and payment date.</p>
           </div>
-          <div class="button-group">
+          <div class="button-group payroll-controls">
+            <div class="period-presets" id="payrollPeriodPresets">
+              <button class="preset-pill" data-preset="thisMonth">This month</button>
+              <button class="preset-pill" data-preset="lastMonth">Last month</button>
+              <button class="preset-pill" data-preset="thisQuarter">This quarter</button>
+              <button class="preset-pill" data-preset="thisYear">This year</button>
+            </div>
+            <div class="period-controls">
+              <select id="payrollMonth" aria-label="Month"></select>
+              <span class="period-separator" aria-hidden="true"></span>
+              <select id="payrollYear" aria-label="Year"></select>
+            </div>
             <button class="btn secondary" id="generatePayrollForMonth">Generate From Employees</button>
-            <button class="btn" data-open="payroll">+ Add Salary Outgoing</button>
+            <button class="btn secondary" id="importPasahodBtn" title="Import a Pasahod-format .xlsx and merge new entries">⤓ Import Pasahod</button>
+            <input type="file" id="importPasahodFile" accept=".xlsx,.xls" hidden />
+            <button class="btn" data-open="payroll">+ Add</button>
           </div>
         </div>
         <div class="toolbar">
@@ -2742,17 +4412,26 @@
               <option value="archived">Archived only</option>
               <option value="all">All records</option>
             </select>
-            <div class="period-controls">
-              <label>Month</label>
-              <select id="payrollMonth"></select>
-              <label>Year</label>
-              <select id="payrollYear"></select>
-            </div>
             <button class="btn secondary" id="clearPayrollFilters">Clear Filters</button>
           </div>
           <button class="btn secondary" data-export="payrollRuns">Export CSV</button>
         </div>
         <div class="grid cards" id="payrollCards"></div>
+        <div class="payroll-quick-filters" id="payrollQuickFilters"></div>
+        <div class="bulk-bar" id="payrollBulkBar" hidden>
+          <div class="bulk-bar-text">
+            <strong><span data-bulk-count>0</span> selected</strong>
+            <span class="bulk-bar-total">·  <span data-bulk-total>—</span></span>
+          </div>
+          <div class="bulk-bar-actions">
+            <button class="btn small good" data-payroll-bulk="paid">Mark paid</button>
+            <button class="btn small secondary" data-payroll-bulk="scheduled">Mark scheduled</button>
+            <button class="btn small warn" data-payroll-bulk="pending">Mark pending</button>
+            <button class="btn small secondary" data-payroll-bulk="print">🖨 Print payslips</button>
+            <button class="btn small secondary" data-payroll-bulk="archive">Archive</button>
+            <button class="btn small secondary" data-payroll-bulk="clear">Clear</button>
+          </div>
+        </div>
         <div class="table-wrap"><table id="payrollTable"></table></div>
       </section>
 
@@ -3377,6 +5056,41 @@
       return new Date(`${dateString}T00:00:00`);
     }
 
+    // Next occurrence of the same month/day as startIso, strictly after `ref`.
+    // Used to auto-set an employee's nextReview when they're saved without one.
+    function nextAnniversary(startIso, ref = today) {
+      if (!startIso) return "";
+      const start = dateValue(startIso);
+      if (!start || isNaN(start)) return "";
+      let y = ref.getFullYear();
+      let candidate = new Date(y, start.getMonth(), start.getDate());
+      if (candidate <= ref) {
+        candidate = new Date(y + 1, start.getMonth(), start.getDate());
+      }
+      // Use local date components so timezone doesn't shift the day (toISOString uses UTC).
+      return ymd(candidate.getFullYear(), candidate.getMonth(), candidate.getDate());
+    }
+
+    // Pretty-print a YYYY-MM-DD start date and the tenure since then.
+    // Examples: "Started Mar 29, 2022 · 4 yrs 2 mo", "Started Jan 16, 2026 · 4 mo".
+    function formatTenure(startIso, ref = today) {
+      if (!startIso) return { date: "—", tenure: "" };
+      const start = dateValue(startIso);
+      if (!start || isNaN(start)) return { date: startIso, tenure: "" };
+      const dateLabel = start.toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" });
+      if (start > ref) return { date: dateLabel, tenure: "starts soon" };
+      let years = ref.getFullYear() - start.getFullYear();
+      let months = ref.getMonth() - start.getMonth();
+      if (ref.getDate() < start.getDate()) months--;
+      if (months < 0) { years--; months += 12; }
+      let tenure;
+      if (years === 0 && months === 0) tenure = "this month";
+      else if (years === 0) tenure = `${months} mo`;
+      else if (months === 0) tenure = `${years} ${years === 1 ? "yr" : "yrs"}`;
+      else tenure = `${years} ${years === 1 ? "yr" : "yrs"} ${months} mo`;
+      return { date: dateLabel, tenure };
+    }
+
     function dateIso(date) {
       return date.toISOString().slice(0, 10);
     }
@@ -3421,12 +5135,74 @@
       return item.paymentDate || item.scheduledDate || item.periodStart;
     }
 
+    function payrollReleaseDate(item) {
+      // Salary Outgoing table/grouping is release-schedule based. Keep this
+      // separate from payrollCashDate(), which powers cash-flow reports.
+      return item.scheduledDate || item.paymentDate || item.periodStart;
+    }
+
     function isPayrollInPeriod(item, period) {
-      return isSameMonthYear(payrollCashDate(item), period);
+      const scope = period?.scope || "month";
+      if (scope === "month") return isSameMonthYear(payrollCashDate(item), period);
+      // scope-aware: any month inside the scope's periodList matches
+      const months = periodList(period);
+      return months.some(m => isSameMonthYear(payrollCashDate(item), m));
+    }
+
+    function isPayrollReleaseInPeriod(item, period) {
+      const scope = period?.scope || "month";
+      if (scope === "month") return isSameMonthYear(payrollReleaseDate(item), period);
+      const months = periodList(period);
+      return months.some(m => isSameMonthYear(payrollReleaseDate(item), m));
+    }
+
+    function applyPayrollPreset(name) {
+      const now = new Date();
+      if (name === "thisMonth") {
+        selectedPayroll.scope = "month";
+        selectedPayroll.month = now.getMonth();
+        selectedPayroll.year = now.getFullYear();
+      } else if (name === "lastMonth") {
+        selectedPayroll.scope = "month";
+        const lm = now.getMonth() - 1;
+        selectedPayroll.month = lm < 0 ? 11 : lm;
+        selectedPayroll.year = lm < 0 ? now.getFullYear() - 1 : now.getFullYear();
+      } else if (name === "thisQuarter") {
+        selectedPayroll.scope = "quarter";
+        selectedPayroll.month = Math.floor(now.getMonth() / 3) * 3;
+        selectedPayroll.year = now.getFullYear();
+      } else if (name === "thisYear") {
+        selectedPayroll.scope = "year";
+        selectedPayroll.year = now.getFullYear();
+        selectedPayroll.month = now.getMonth();
+      }
+      $("#payrollMonth").val(selectedPayroll.month);
+      $("#payrollYear").val(selectedPayroll.year);
+    }
+
+    function renderPayrollPresetState() {
+      const now = new Date();
+      const scope = selectedPayroll.scope || "month";
+      const m = selectedPayroll.month, y = selectedPayroll.year;
+      let active = "";
+      if (scope === "year" && y === now.getFullYear()) active = "thisYear";
+      else if (scope === "quarter" && y === now.getFullYear() && Math.floor(m / 3) === Math.floor(now.getMonth() / 3)) active = "thisQuarter";
+      else if (scope === "month") {
+        if (m === now.getMonth() && y === now.getFullYear()) active = "thisMonth";
+        else {
+          const lm = now.getMonth() - 1;
+          const lmMonth = lm < 0 ? 11 : lm;
+          const lmYear = lm < 0 ? now.getFullYear() - 1 : now.getFullYear();
+          if (m === lmMonth && y === lmYear) active = "lastMonth";
+        }
+      }
+      $("#payrollPeriodPresets .preset-pill").each(function () {
+        $(this).toggleClass("active", $(this).data("preset") === active);
+      });
     }
 
     function payrollReleaseMatches(item, scheduledDate) {
-      return item.scheduledDate === scheduledDate || (!item.scheduledDate && payrollCashDate(item) === scheduledDate);
+      return payrollReleaseDate(item) === scheduledDate;
     }
 
     function isLegacyGeneratedMonthlyPayroll(item, period) {
@@ -3839,7 +5615,9 @@
           return true;
         }).map(p => ({
           title: p.clientName,
-          sub: `${p.dueDate} · ${p.status} · ${p.invoiceReference || "—"}`,
+          date: p.dueDate,
+          reference: p.invoiceReference || "",
+          status: p.status,
           amount: p.amount,
           tone: p.status === "paid" ? "good" : p.status === "overdue" ? "bad" : "warn"
         }));
@@ -3848,16 +5626,18 @@
         return (db.salaryOutgoings || []).filter(o => !o.archived && matchesPeriod(payrollCashDate(o)))
           .map(o => ({
             title: o.employeeName,
-            sub: `${o.periodStart} → ${o.periodEnd} · ${o.status} · ${o.type || "salary"}`,
+            date: payrollCashDate(o) || o.periodEnd,
+            reference: o.type || "salary",
+            status: o.status,
             amount: o.amount,
             tone: o.status === "paid" ? "good" : o.status === "scheduled" ? "info" : "warn"
           }));
       }
       if (key === "net") {
-        return [{ title: "Net = Income − Payroll", sub: "Click Reports for the full breakdown.", amount: null }];
+        return [{ title: "Net = Income − Payroll", date: "", reference: "", status: "", amount: null, hint: "Click Reports for the full breakdown." }];
       }
       if (key === "netTotal") {
-        return [{ title: "Net YTD", sub: "Paid income − paid payroll, Jan 1 through selected month.", amount: null }];
+        return [{ title: "Net YTD", date: "", reference: "", status: "", amount: null, hint: "Paid income − paid payroll, Jan 1 through selected month." }];
       }
       return [];
     }
@@ -3865,207 +5645,223 @@
     function openDrillPanel(key) {
       drillTarget = key;
       const titles = {
-        income: "Income — invoices for this month",
-        collected: "Collected — paid invoices",
-        open: "Outstanding — pending + overdue",
-        payroll: "Payroll — outgoing this month",
+        income: "Income",
+        collected: "Collected",
+        open: "Outstanding",
+        payroll: "Payroll",
         net: "Net",
         netTotal: "Net YTD"
       };
+      const subtitles = {
+        income: "Invoices for this period",
+        collected: "Paid invoices",
+        open: "Pending + overdue invoices",
+        payroll: "Salary outgoing this period",
+        net: "Net balance",
+        netTotal: "Year-to-date net"
+      };
       const rows = drillRowsFor(key);
+      const total = rows.reduce((s, r) => s + (Number(r.amount) || 0), 0);
+      const hasAmounts = rows.some(r => r.amount != null);
+      const closeIcon = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>';
+
+      const rowsHtml = rows.length ? rows.map(r => `
+        <div class="drill-row">
+          <div class="drill-cell drill-cell-client">
+            <strong>${escapeHtml(r.title)}</strong>
+            ${r.hint ? `<span class="drill-hint">${escapeHtml(r.hint)}</span>` : ""}
+          </div>
+          <div class="drill-cell drill-cell-date">${escapeHtml(r.date || "")}</div>
+          <div class="drill-cell drill-cell-ref">${escapeHtml(r.reference || "")}</div>
+          <div class="drill-cell drill-cell-status">
+            ${r.status ? `<span class="drill-status ${r.tone || ""}">${escapeHtml(r.status)}</span>` : ""}
+          </div>
+          <div class="drill-cell drill-amount">${r.amount != null ? currency(r.amount) : ""}</div>
+        </div>
+      `).join("") : `<div class="drill-empty">No records for this metric this period.</div>`;
+
       $("#drillPanel").prop("hidden", false).html(`
         <div class="drill-header">
-          <div class="drill-title">${escapeHtml(titles[key] || "Details")}</div>
-          <button class="drill-close" id="drillClose" aria-label="Close details">✕ Close</button>
+          <div class="drill-header-text">
+            <div class="drill-title">${escapeHtml(titles[key] || "Details")}</div>
+            <div class="drill-subtitle">${escapeHtml(subtitles[key] || "")}</div>
+          </div>
+          <button class="drill-close" id="drillClose" aria-label="Close details">${closeIcon}</button>
         </div>
-        <div class="drill-rows">
-          ${rows.length ? rows.map(r => `
-            <div class="drill-row">
-              <div class="drill-row-main"><strong>${escapeHtml(r.title)}</strong><div class="muted" style="font-size:11px">${escapeHtml(r.sub || "")}</div></div>
-              ${r.amount != null ? `<div class="drill-amount">${currency(r.amount)}</div>` : ""}
+        ${rows.length ? `
+          <div class="drill-table">
+            <div class="drill-row drill-row-head">
+              <div class="drill-cell drill-cell-client">Client</div>
+              <div class="drill-cell drill-cell-date">Date</div>
+              <div class="drill-cell drill-cell-ref">Reference</div>
+              <div class="drill-cell drill-cell-status">Status</div>
+              <div class="drill-cell drill-amount">Amount</div>
             </div>
-          `).join("") : `<div class="drill-empty">No records for this metric this period.</div>`}
-        </div>
+            <div class="drill-rows">${rowsHtml}</div>
+            ${hasAmounts ? `
+              <div class="drill-row drill-row-total">
+                <div class="drill-cell drill-cell-client">${rows.length} ${rows.length === 1 ? "record" : "records"}</div>
+                <div class="drill-cell drill-cell-date"></div>
+                <div class="drill-cell drill-cell-ref"></div>
+                <div class="drill-cell drill-cell-status drill-total-label">Total</div>
+                <div class="drill-cell drill-amount">${currency(total)}</div>
+              </div>
+            ` : ""}
+          </div>
+        ` : rowsHtml}
       `);
       // Highlight the active tile
-      $(".kpi-tile").removeClass("kpi-tile-active");
-      $(`.kpi-tile[data-key="${key}"]`).addClass("kpi-tile-active");
+      $(".kpi-tile, .kpi-panel, .kpi-substat").removeClass("kpi-tile-active");
+      $(`.kpi-tile[data-key="${key}"], .kpi-panel[data-key="${key}"], .kpi-substat[data-key="${key}"]`).addClass("kpi-tile-active");
     }
 
     function closeDrillPanel() {
       drillTarget = null;
       $("#drillPanel").prop("hidden", true).html("");
-      $(".kpi-tile").removeClass("kpi-tile-active");
+      $(".kpi-tile, .kpi-panel, .kpi-substat").removeClass("kpi-tile-active");
     }
 
     $(document).on("click", "#drillClose", closeDrillPanel);
 
-    function renderCashFlowStory() {
-      const data = monthlyChartData(selectedDashboard.year);
-      const previous = monthlyChartData(selectedDashboard.year - 1);
-      const meta = SERIES_META[selectedCashFlowSeries];
-      const values = data.map(item => meta.key(item));
-      if (selectedDashboard.year === today.getFullYear()) {
-        for (let i = today.getMonth() + 1; i < values.length; i++) values[i] = null;
+    function computeMilestones() {
+      const payments = (db.payments || []).filter(p => !p.archived);
+      const outgoings = (db.salaryOutgoings || []).filter(o => !o.archived);
+
+      const allIncome = payments
+        .filter(p => p.status === "paid")
+        .reduce((s, p) => s + Number(p.amount || 0), 0);
+
+      const allSalary = outgoings
+        .filter(o => o.status === "paid")
+        .reduce((s, o) => s + Number(o.amount || 0), 0);
+
+      const allNet = allIncome - allSalary;
+
+      const currentYear = today.getFullYear();
+      const ytdIncome = payments
+        .filter(p => p.status === "paid")
+        .filter(p => {
+          const d = dateValue(p.paymentDate || p.dueDate);
+          return d && d.getFullYear() === currentYear;
+        })
+        .reduce((s, p) => s + Number(p.amount || 0), 0);
+
+      // Earliest record across employees / payments / outgoings → "active since"
+      const dates = [];
+      (db.employees || []).forEach(e => { if (e.startDate) dates.push(dateValue(e.startDate)); });
+      payments.forEach(p => {
+        if (p.paymentDate) dates.push(dateValue(p.paymentDate));
+        if (p.dueDate) dates.push(dateValue(p.dueDate));
+      });
+      outgoings.forEach(o => {
+        if (o.periodStart) dates.push(dateValue(o.periodStart));
+      });
+      const validDates = dates.filter(d => d && !isNaN(d));
+      const earliest = validDates.length
+        ? new Date(Math.min(...validDates.map(d => d.getTime())))
+        : null;
+      let yearsActiveLabel = "—";
+      let earliestLabel = "";
+      if (earliest) {
+        const ms = today - earliest;
+        const years = ms / (1000 * 60 * 60 * 24 * 365.25);
+        yearsActiveLabel = years < 1
+          ? `${Math.max(1, Math.round(years * 12))} mo`
+          : `${years.toFixed(1)} yrs`;
+        earliestLabel = `Since ${earliest.toLocaleDateString("en-PH", { month: "short", year: "numeric" })}`;
       }
-      const monthIndex = Number(selectedDashboard.month || 0);
-      const currentValue = values[monthIndex] ?? 0;
-      const previousValue = previous[monthIndex] ? meta.key(previous[monthIndex]) : 0;
-      const valid = data
-        .map((item, index) => ({ month: item.month, value: values[index] }))
-        .filter(item => item.value !== null && item.value !== undefined);
-      const best = valid.length
-        ? valid.reduce((a, b) => Number(a.value || 0) >= Number(b.value || 0) ? a : b)
-        : { month: "-", value: 0 };
-      const weakest = valid.length
-        ? valid.reduce((a, b) => Number(a.value || 0) <= Number(b.value || 0) ? a : b)
-        : { month: "-", value: 0 };
-      const delta = currentValue - previousValue;
-      const deltaTone = delta >= 0 ? "good" : "bad";
-      const scopeNote = (selectedDashboard.scope || "month") === "month"
-        ? `${months[monthIndex]} ${selectedDashboard.year}`
-        : `${selectedDashboard.year} monthly trend for the selected metric`;
 
-      $("#cashFlowStory").html(`
-        <div class="chart-story-item">
-          <span>Selected</span>
-          <strong>${compactCurrency(currentValue)}</strong>
-        </div>
-        <div class="chart-story-item">
-          <span>Same month last year</span>
-          <strong>${compactCurrency(previousValue)}</strong>
-        </div>
-        <div class="chart-story-item">
-          <span>Year change</span>
-          <strong class="${deltaTone}">${delta >= 0 ? "+" : ""}${compactCurrency(delta)}</strong>
-        </div>
-        <div class="chart-story-item">
-          <span>Best / lowest</span>
-          <strong>${escapeHtml(best.month)} ${compactCurrency(best.value)} / ${escapeHtml(weakest.month)} ${compactCurrency(weakest.value)}</strong>
-        </div>
-      `);
+      // Best client (lifetime paid amount)
+      const byClient = {};
+      payments.filter(p => p.status === "paid").forEach(p => {
+        const k = p.clientName || "Unknown";
+        byClient[k] = (byClient[k] || 0) + Number(p.amount || 0);
+      });
+      const bestClient = Object.entries(byClient)
+        .sort((a, b) => b[1] - a[1])[0];
 
-      $("#cashFlowCaption").html(`
-        <strong>${escapeHtml(meta.label)}</strong> shown as a monthly trend. ${escapeHtml(scopeNote)} is compared against the same month last year, while future months in the current year stay blank until records exist.
-      `);
-    }
-
-    function renderCashCalendar() {
-      // Calendar always shows a single month. For broader scopes, show the most
-      // recent month in the scope range (or current month if "all time").
-      const sel = selectedDashboard;
-      const list = periodList(sel);
-      const anchor = list[list.length - 1] || { month: sel.month, year: sel.year };
-      const period = { month: anchor.month, year: anchor.year };
-      const firstDay = new Date(period.year, period.month, 1);
-      $("#calendarSubtitle").text(
-        (sel.scope || "month") === "month"
-          ? "Income and payroll events for the month."
-          : `Showing ${months[period.month]} ${period.year} (latest month in scope).`
-      );
-      const startOffset = firstDay.getDay(); // 0=Sun
-      const daysInMonth = new Date(period.year, period.month + 1, 0).getDate();
-      const totalCells = Math.ceil((startOffset + daysInMonth) / 7) * 7;
-      const todayIso = ymd(today.getFullYear(), today.getMonth(), today.getDate());
-
-      // Collect events per day
-      const byDay = {};
-      const add = (iso, type, amount, label) => {
-        if (!iso) return;
-        const d = dateValue(iso);
-        if (!d || d.getMonth() !== period.month || d.getFullYear() !== period.year) return;
-        const key = d.getDate();
-        byDay[key] = byDay[key] || { income: 0, payroll: 0, events: [] };
-        byDay[key][type] += Number(amount || 0);
-        byDay[key].events.push({ type, amount, label });
+      return {
+        allIncome,
+        allSalary,
+        allNet,
+        ytdIncome,
+        yearsActiveLabel,
+        earliestLabel,
+        bestClient: bestClient ? { name: bestClient[0], amount: bestClient[1] } : null,
+        currentYear
       };
-      for (const p of (db.payments || [])) {
-        if (p.archived) continue;
-        add(p.paymentDate || p.dueDate, "income", p.amount, `${p.clientName} · ${p.status}`);
-      }
-      for (const o of (db.salaryOutgoings || [])) {
-        if (o.archived) continue;
-        add(payrollCashDate(o) || o.periodEnd, "payroll", o.amount, `${o.employeeName} · ${o.status}`);
-      }
-
-      const heads = ["S", "M", "T", "W", "T", "F", "S"].map(d => `<div class="cal-head">${d}</div>`).join("");
-      let cells = "";
-      for (let i = 0; i < totalCells; i++) {
-        const dayNum = i - startOffset + 1;
-        if (dayNum < 1 || dayNum > daysInMonth) {
-          cells += `<div class="cal-cell muted"></div>`;
-          continue;
-        }
-        const cellIso = ymd(period.year, period.month, dayNum);
-        const data = byDay[dayNum];
-        const classes = ["cal-cell"];
-        if (data) classes.push("has-events");
-        if (cellIso === todayIso) classes.push("today");
-        let dots = "";
-        if (data) {
-          if (data.income) dots += `<span class="cal-dot income" title="${currency(data.income)} income"></span>`;
-          if (data.payroll) dots += `<span class="cal-dot payroll" title="${currency(data.payroll)} payroll"></span>`;
-        }
-        const net = data ? Number(data.income || 0) - Number(data.payroll || 0) : 0;
-        const amounts = data ? `
-          <div class="cal-amounts">
-            ${data.income ? `<span class="cal-amount income">+${compactCurrency(data.income)}</span>` : ""}
-            ${data.payroll ? `<span class="cal-amount payroll">-${compactCurrency(data.payroll)}</span>` : ""}
-            ${(data.income && data.payroll) ? `<span class="cal-net ${net >= 0 ? "good" : "bad"}">Net ${compactCurrency(net)}</span>` : ""}
-          </div>
-        ` : "";
-        const tooltip = data
-          ? `Day ${dayNum}\n` + data.events.slice(0, 5).map(e => `${e.type === "income" ? "+" : "-"} ${currency(e.amount)} · ${e.label}`).join("\n")
-          : "";
-        cells += `<div class="${classes.join(" ")}" title="${escapeHtml(tooltip)}" data-day="${dayNum}">
-          <div class="cal-day">${dayNum}</div>
-          <div class="cal-dots">${dots}</div>
-          ${amounts}
-        </div>`;
-      }
-      $("#calendarGrid").html(`${heads}${cells}`);
     }
 
-    function renderForecast() {
-      const now = new Date();
-      const projectedPayroll = monthlyPayroll();
-      const activeClients = (db.clients || []).filter(c => !c.archived && c.status === "active");
-      const projectedIncome = activeClients.reduce((sum, c) => sum + Number(c.defaultAmount || 0), 0);
-
-      // Confidence: based on % of active clients with a recurring frequency + headcount stability.
-      const recurringClients = activeClients.filter(c => (c.frequency || "Monthly") === "Monthly");
-      const recurringShare = activeClients.length ? recurringClients.length / activeClients.length : 0;
-      let confidence = "low", confidenceLabel = "Low";
-      if (recurringShare >= 0.9 && projectedPayroll > 0) { confidence = "good"; confidenceLabel = "High"; }
-      else if (recurringShare >= 0.6) { confidence = "warn"; confidenceLabel = "Medium"; }
-      const confidenceNote = `${recurringClients.length}/${activeClients.length} clients on monthly retainer`;
-
-      let cumulative = 0;
-      const cells = [];
-      for (let i = 1; i <= 3; i++) {
-        const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
-        const label = `${months[d.getMonth()].slice(0, 3)} ${d.getFullYear()}`;
-        const net = projectedIncome - projectedPayroll;
-        cumulative += net;
-        cells.push({ label, income: projectedIncome, payroll: projectedPayroll, net, cumulative });
+    function rolling12MonthsNet(period) {
+      const series = [];
+      let m = Number(period.month || 0);
+      let y = Number(period.year || today.getFullYear());
+      for (let i = 0; i < 12; i++) {
+        const p = { month: m, year: y };
+        const income = expectedMonthlyIncome(p);
+        const payroll = salaryOutgoingAmount(p, ["paid", "scheduled", "pending"]);
+        series.unshift({
+          label: months[m].slice(0, 3),
+          fullLabel: `${months[m].slice(0, 3)} ${y}`,
+          year: y,
+          month: m,
+          income,
+          payroll,
+          value: income - payroll
+        });
+        m -= 1;
+        if (m < 0) { m = 11; y -= 1; }
       }
-      $("#forecastGrid").html(`
-        <div class="forecast-meta">
-          <span class="forecast-confidence ${confidence}" title="${escapeHtml(confidenceNote)}">${confidenceLabel} confidence</span>
-          <span class="forecast-meta-note">${escapeHtml(confidenceNote)}</span>
-        </div>
-        ${cells.map(c => `
-          <div class="forecast-cell">
-            <div class="forecast-month">${escapeHtml(c.label)}</div>
-            <div class="forecast-rows">
-              <div class="forecast-row"><span>Income</span><strong>${currency(c.income)}</strong></div>
-              <div class="forecast-row"><span>Payroll</span><strong>${currency(c.payroll)}</strong></div>
-              <div class="forecast-row net ${c.net >= 0 ? "good" : "bad"}"><span>Net</span><strong>${currency(c.net)}</strong></div>
-              <div class="forecast-row"><span>Cumulative</span><strong>${currency(c.cumulative)}</strong></div>
-            </div>
+      return series;
+    }
+
+    function renderCashFlowStory() {
+      const period = { month: Number(selectedDashboard.month || 0), year: Number(selectedDashboard.year || today.getFullYear()) };
+      const series = rolling12MonthsNet(period);
+
+      const income = expectedMonthlyIncome(period);
+      const payroll = salaryOutgoingAmount(period, ["paid", "scheduled", "pending"]);
+      const collected = paidMonthlyIncome(period);
+      const net = income - payroll;
+
+      const prev = previousPeriod(period);
+      const prevNet = expectedMonthlyIncome(prev) - salaryOutgoingAmount(prev, ["paid", "scheduled", "pending"]);
+      const delta = net - prevNet;
+      const deltaDir = Math.abs(delta) < 0.5 ? "flat" : delta > 0 ? "up" : "down";
+      const arrow = deltaDir === "up" ? "▲" : deltaDir === "down" ? "▼" : "—";
+      const deltaTone = deltaDir === "down" ? "bad" : deltaDir === "up" ? "good" : "neutral";
+      const deltaText = !prevNet && net
+        ? "new"
+        : `${delta >= 0 ? "+" : ""}${compactCurrency(delta)} vs last month`;
+
+      const label = `Net · ${months[period.month]} ${period.year}`;
+
+      $("#cashFlowHero").html(`
+        <div class="hero-meta">${escapeHtml(label)}</div>
+        <div class="hero-value">${currency(net)}</div>
+        <div class="hero-delta ${deltaTone}">${arrow} ${escapeHtml(deltaText)}</div>
+        <div class="hero-substats">
+          <div class="substat">
+            <span class="substat-label">Income</span>
+            <strong>${compactCurrency(income)}</strong>
           </div>
-        `).join("")}
+          <div class="substat">
+            <span class="substat-label">Payroll</span>
+            <strong>${compactCurrency(payroll)}</strong>
+          </div>
+          <div class="substat">
+            <span class="substat-label">Collected</span>
+            <strong>${compactCurrency(collected)}</strong>
+          </div>
+        </div>
       `);
+
+      const first = series[0]?.fullLabel || "";
+      const last = series[series.length - 1]?.fullLabel || "";
+      $("#cashFlowTrendMeta").text(first && last ? `${first} → ${last}` : "");
+
+      // Stash the series so drawCharts can render the sparkline without recomputing.
+      window._cashFlowSeries = series;
     }
 
     function renderPeriodEmpty() {
@@ -4078,64 +5874,6 @@
       $el.prop("hidden", false).html(`
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
         <div><strong>No records for ${escapeHtml(label)}</strong> — tiles below are showing zeros because nothing has been entered for this period yet.</div>
-      `);
-    }
-
-    function renderCashRunway() {
-      const period = selectedDashboard;
-      // Need at least one paid payroll record in the YTD range to compute a meaningful runway.
-      const paidPayrollCount = (db.salaryOutgoings || []).filter(o =>
-        !o.archived && o.status === "paid" && dateValue(payrollCashDate(o)) &&
-        dateValue(payrollCashDate(o)).getFullYear() === period.year &&
-        dateValue(payrollCashDate(o)).getMonth() <= period.month
-      ).length;
-      const insufficient = paidPayrollCount < 1;
-
-      const cash = ytdPaidIncome(period.year, period.month) - ytdPaidPayroll(period.year, period.month);
-      const payroll = monthlyPayroll();
-      const monthsRunway = payroll > 0 ? cash / payroll : Infinity;
-      let tone, icon, headline, meta, statusLabel, barPct;
-      if (insufficient) {
-        tone = "neutral"; icon = "i";
-        headline = "Insufficient data for runway";
-        meta = `Add paid payroll records for ${period.year} to compute runway.`;
-        statusLabel = "No data";
-        barPct = 0;
-      } else {
-        tone = "good"; icon = "✓";
-        if (monthsRunway < 3) { tone = "bad"; icon = "!"; }
-        else if (monthsRunway < 6) { tone = "warn"; icon = "•"; }
-        if (cash < 0) {
-          headline = `Cash deficit of ${currency(Math.abs(cash))}`;
-          meta = `${currency(payroll)}/mo burn · YTD spend exceeds collected income.`;
-        } else if (isFinite(monthsRunway)) {
-          headline = `${monthsRunway.toFixed(1)} months of runway`;
-          meta = `${currency(cash)} cash · ${currency(payroll)}/mo burn`;
-        } else {
-          headline = "No payroll on record";
-          meta = "Add payroll to compute runway.";
-        }
-        barPct = !isFinite(monthsRunway) ? 0 : Math.max(0, Math.min(100, (monthsRunway / 12) * 100));
-        statusLabel = !isFinite(monthsRunway) ? "—" : (tone === "good" ? "Healthy" : tone === "warn" ? "Monitor" : "Critical");
-      }
-      $("#runwayCard").attr("class", `bento-runway runway-card ${tone}`).html(`
-        <div class="runway-left">
-          <div class="runway-icon">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 17l6-6 4 4 8-8"/>
-              <path d="M14 7h7v7"/>
-            </svg>
-          </div>
-          <div>
-            <div class="runway-label">Cash runway</div>
-            <div class="runway-headline">${escapeHtml(headline)}</div>
-            <div class="runway-meta">${escapeHtml(meta)}</div>
-          </div>
-        </div>
-        <div class="runway-bar-wrap">
-          <div class="runway-bar"><span style="width:${barPct.toFixed(1)}%"></span></div>
-        </div>
-        <span class="runway-status ${tone}">${icon} ${statusLabel}</span>
       `);
     }
 
@@ -4374,18 +6112,65 @@
         return `<div class="kpi-goal-bar ${tone}"><span style="width:${pct.toFixed(1)}%"></span></div>`;
       };
 
+      const heroTile = tiles.find(t => t.key === "net");
+      const subTiles = tiles.filter(t => t.key !== "net");
+      const heroPanelTone = heroTile.rawValue < 0 ? "negative" : heroTile.rawValue > 0 ? "positive" : "neutral";
+      const heroStatusTone = heroTile.status?.tone || "neutral";
+
+      const milestones = computeMilestones();
+      const milestoneItems = [
+        { label: `${milestones.currentYear} Income`, value: compactCurrency(milestones.ytdIncome), hint: "Paid this year" },
+        { label: "All-time Income", value: compactCurrency(milestones.allIncome) },
+        { label: "All-time Salary", value: compactCurrency(milestones.allSalary) },
+        { label: "All-time Net", value: compactCurrency(milestones.allNet), tone: milestones.allNet >= 0 ? "good" : "bad" },
+        { label: "KNB age", value: milestones.yearsActiveLabel, hint: milestones.earliestLabel }
+      ];
+      if (milestones.bestClient) {
+        milestoneItems.push({
+          label: "Top client",
+          value: milestones.bestClient.name,
+          hint: compactCurrency(milestones.bestClient.amount)
+        });
+      }
+
       $("#kpiGrid").html(`
-        ${tiles.map(t => `
-          <div class="kpi-tile" data-clickable data-go="${t.link.section}" data-status="${t.link.statusFilter || ""}" data-key="${t.key}" tabindex="0" role="button" aria-label="${escapeHtml(t.label)}${t.badge ? " " + t.badge : ""}: ${escapeHtml(t.value)}. Click to view ${escapeHtml(t.link.label)}.">
-            <div class="kpi-label">${escapeHtml(t.label)}${t.badge ? `<span class="kpi-badge">${escapeHtml(t.badge)}</span>` : ""}</div>
-            <div class="kpi-value" data-target="${t.rawValue}" data-currency="1">${t.value}</div>
-            <div class="kpi-row">${t.delta}<span class="kpi-status ${t.status.tone}">${escapeHtml(t.status.label)}</span></div>
-            <div class="kpi-spark"><canvas id="spark-${t.key}"></canvas></div>
+        <div class="kpi-panel ${heroPanelTone}" data-clickable data-go="${heroTile.link.section}" data-status="" data-key="${heroTile.key}" tabindex="0" role="button" aria-label="${escapeHtml(heroTile.label)}: ${escapeHtml(heroTile.value)}. Click to view ${escapeHtml(heroTile.link.label)}.">
+          <div class="kpi-panel-hero">
+            <div class="kpi-panel-hero-text">
+              <span class="kpi-panel-label">${escapeHtml(heroTile.label)} · ${escapeHtml(periodLabelText)}</span>
+              <div class="kpi-panel-value" data-target="${heroTile.rawValue}" data-currency="1">${heroTile.value}</div>
+              <div class="kpi-panel-meta">
+                ${heroTile.delta || ""}
+                <span class="kpi-panel-status ${heroStatusTone}">${escapeHtml(heroTile.status?.label || "")}</span>
+              </div>
+            </div>
+            <div class="kpi-milestones" aria-label="Milestones">
+              <span class="kpi-milestones-title">Milestones</span>
+              <div class="kpi-milestones-list">
+                ${milestoneItems.map(m => `
+                  <div class="kpi-milestone">
+                    <span class="kpi-milestone-label">${escapeHtml(m.label)}</span>
+                    <strong class="kpi-milestone-value ${m.tone || ""}">${escapeHtml(m.value)}</strong>
+                    ${m.hint ? `<span class="kpi-milestone-hint">${escapeHtml(m.hint)}</span>` : ""}
+                  </div>
+                `).join("")}
+              </div>
+            </div>
           </div>
-        `).join("")}
+          <div class="kpi-panel-substats">
+            ${subTiles.map(t => `
+              <div class="kpi-substat ${t.status?.tone || ""}" data-clickable data-go="${t.link.section}" data-status="${t.link.statusFilter || ""}" data-key="${t.key}" tabindex="0" role="button" aria-label="${escapeHtml(t.label)}: ${escapeHtml(t.value)}. Click to view ${escapeHtml(t.link.label)}.">
+                <span class="kpi-substat-label">${escapeHtml(t.label)}</span>
+                <div class="kpi-substat-value" data-target="${t.rawValue}" data-currency="1">${t.value}</div>
+                <span class="kpi-substat-status ${t.status?.tone || ""}">${escapeHtml(t.status?.label || "")}</span>
+                <div class="kpi-substat-spark"><canvas id="spark-${t.key}"></canvas></div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
       `);
 
-      $("#kpiGrid .kpi-value").each(function () {
+      $("#kpiGrid .kpi-panel-value, #kpiGrid .kpi-substat-value").each(function () {
         const target = Number($(this).data("target")) || 0;
         animateCountUp(this, target);
       });
@@ -4394,14 +6179,11 @@
       renderPresetState();
       renderPaymentsBadge();
       renderPeriodEmpty();
-      renderCashRunway();
       renderTeamPanel();
       renderDeptBreakdown();
       renderCashFlowStory();
-      renderCashCalendar();
       renderDashboardWarnings(net);
       renderUpcomingLists();
-      renderForecast();
     }
 
     function renderTeamPanel() {
@@ -4570,11 +6352,24 @@
 
     function sortEmployees(rows) {
       const sort = $("#employeeSort").val() || "name";
+      const farFuture = new Date(8640000000000000);
       return [...rows].sort((a, b) => {
         if (sort === "salaryDesc") return Number(b.monthlySalary || 0) - Number(a.monthlySalary || 0);
         if (sort === "salaryAsc") return Number(a.monthlySalary || 0) - Number(b.monthlySalary || 0);
         if (sort === "startDate") return (dateValue(a.startDate) || 0) - (dateValue(b.startDate) || 0);
-        if (sort === "reviewDate") return (dateValue(a.nextReview) || new Date(8640000000000000)) - (dateValue(b.nextReview) || new Date(8640000000000000));
+        if (sort === "reviewDate") return (dateValue(a.nextReview) || farFuture) - (dateValue(b.nextReview) || farFuture);
+        if (sort === "tenureLong") {
+          // Longest tenure first = earliest startDate first; blanks at the bottom.
+          const da = dateValue(a.startDate) || farFuture;
+          const db = dateValue(b.startDate) || farFuture;
+          return da - db;
+        }
+        if (sort === "tenureShort") {
+          // Shortest tenure first = latest startDate first; blanks at the bottom.
+          const da = dateValue(a.startDate) || new Date(-8640000000000000);
+          const db = dateValue(b.startDate) || new Date(-8640000000000000);
+          return db - da;
+        }
         return String(a.name || "").localeCompare(String(b.name || ""));
       });
     }
@@ -4651,27 +6446,80 @@
         return text.includes(search) && (!status || e.status === status) && archiveMatches(e, archiveFilter);
       }));
 
-      $("#employeesTable").html(`
-        <thead><tr><th>Name</th><th>Role</th><th>Department</th><th>Monthly</th><th>Yearly</th><th>Status</th><th>Review</th><th>Actions</th></tr></thead>
-        <tbody>
-          ${rows.length ? rows.map(e => `
-            <tr>
-              <td><strong>${escapeHtml(e.name)}</strong><div class="muted">Started ${escapeHtml(e.startDate)}</div></td>
-              <td>${escapeHtml(e.position)}</td>
-              <td>${escapeHtml(e.department)}</td>
-              <td>${currency(e.monthlySalary)}</td>
-              <td>${currency(Number(e.monthlySalary) * 12)}</td>
-              <td>${badge(e.status, e.archived)}</td>
-              <td>${escapeHtml(e.nextReview || "-")}</td>
-              <td><div class="action-group">
+      const liveRows = rows.filter(e => !e.archived);
+      const activeRows = liveRows.filter(e => ["active", "probation"].includes(e.status));
+      const totalMonthly = activeRows.reduce((sum, e) => sum + Number(e.monthlySalary || 0), 0);
+      const departments = new Set(activeRows.map(e => String(e.department || "").trim()).filter(Boolean)).size;
+      const nextReview = activeRows
+        .map(e => ({ name: e.name, date: dateValue(e.nextReview) }))
+        .filter(x => x.date)
+        .sort((a, b) => a.date - b.date)[0];
+
+      $("#employeeSummaryGrid").html([
+        ["Visible employees", rows.length, `${activeRows.length} active/probation in this view`],
+        ["Monthly payroll", currency(totalMonthly), `${currency(totalMonthly * 12)} yearly run rate`],
+        ["Departments", departments, "Active/probation departments"],
+        ["Next review", nextReview ? nextReview.date.toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" }) : "-", nextReview ? nextReview.name : "No review date set"]
+      ].map(item => `
+        <div class="employee-summary-item">
+          <div class="employee-summary-label">${escapeHtml(item[0])}</div>
+          <div class="employee-summary-value">${escapeHtml(item[1])}</div>
+          <div class="employee-summary-note">${escapeHtml(item[2])}</div>
+        </div>
+      `).join(""));
+
+      const initials = (name) => String(name || "?")
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(part => part.charAt(0).toUpperCase())
+        .join("") || "?";
+
+      $("#employeesTable").html(rows.length ? rows.map(e => {
+        const t = formatTenure(e.startDate);
+        const reviewDate = e.nextReview ? escapeHtml(e.nextReview) : "-";
+        return `
+          <article class="employee-card ${e.archived ? "archived" : ""}">
+            <div class="employee-card-head">
+              <div class="employee-avatar">${escapeHtml(initials(e.name))}</div>
+              <div class="employee-identity">
+                <div class="employee-name-row">
+                  <div class="employee-name">${escapeHtml(e.name)}</div>
+                  ${badge(e.status, e.archived)}
+                </div>
+                <div class="employee-role">${escapeHtml(e.position || "No role set")}</div>
+              </div>
+              <div class="employee-salary">
+                <strong>${currency(e.monthlySalary)}</strong>
+                <span>monthly</span>
+              </div>
+            </div>
+            <div class="employee-meta-grid">
+              <div class="employee-meta">
+                <div class="employee-meta-label">Department</div>
+                <div class="employee-meta-value">${escapeHtml(e.department || "-")}</div>
+              </div>
+              <div class="employee-meta">
+                <div class="employee-meta-label">Started</div>
+                <div class="employee-meta-value">${escapeHtml(t.date || "-")}</div>
+                ${t.tenure ? `<div class="employee-meta-sub">${escapeHtml(t.tenure)}</div>` : ""}
+              </div>
+              <div class="employee-meta">
+                <div class="employee-meta-label">Review</div>
+                <div class="employee-meta-value">${reviewDate}</div>
+              </div>
+            </div>
+            <div class="employee-card-actions">
+              <div class="employee-notes">${escapeHtml(e.notes || `${currency(Number(e.monthlySalary || 0) * 12)} yearly cost`)}</div>
+              <div class="action-group">
                 <button class="btn small secondary" data-edit="employee" data-id="${e.id}">Edit</button>
                 ${e.archived ? `<button class="btn small blue" data-restore="employee" data-id="${e.id}">Restore</button>` : `<button class="btn small warn" data-archive="employee" data-id="${e.id}">Archive</button>`}
                 <button class="btn small danger" data-delete="employee" data-id="${e.id}">Delete</button>
-              </div></td>
-            </tr>
-          `).join("") : `<tr><td colspan="8" class="table-empty">No employees found.</td></tr>`}
-        </tbody>
-      `);
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("") : `<div class="table-empty">No employees found.</div>`);
     }
 
     function renderSalaryHistory() {
@@ -4812,8 +6660,8 @@
       const archiveFilter = $("#payrollArchiveFilter").val() || "live";
       const rows = (db.salaryOutgoings || []).filter(item => {
         const text = `${item.employeeName} ${item.reference} ${item.method} ${item.notes}`.toLowerCase();
-        return text.includes(search) && (!status || item.status === status) && archiveMatches(item, archiveFilter) && isPayrollInPeriod(item, selectedPayroll);
-      }).sort((a, b) => (dateValue(payrollCashDate(a)) || 0) - (dateValue(payrollCashDate(b)) || 0));
+        return text.includes(search) && (!status || item.status === status) && archiveMatches(item, archiveFilter) && isPayrollReleaseInPeriod(item, selectedPayroll);
+      }).sort((a, b) => (dateValue(payrollReleaseDate(a)) || 0) - (dateValue(payrollReleaseDate(b)) || 0));
 
       const total = rows.filter(item => !item.archived && ["paid", "scheduled", "pending"].includes(item.status)).reduce((sum, item) => sum + Number(item.amount || 0), 0);
       const paid = rows.filter(item => !item.archived && item.status === "paid").reduce((sum, item) => sum + Number(item.amount || 0), 0);
@@ -4822,7 +6670,6 @@
 
       $("#payrollCards").html([
         ["Planned Payroll", currency(planned), "Monthly total; generated as 5th + 20th releases"],
-        ["Tracked Outgoing", currency(total), "Paid + scheduled + pending"],
         ["Paid Salary", currency(paid), "Already released"],
         ["Still Pending", currency(pending), "Scheduled or pending release"]
       ].map(card => `
@@ -4833,31 +6680,137 @@
         </div>
       `).join(""));
 
+      // Group rows by release date so the 5th batch and 20th batch
+      // are visually separated, with bulk actions per group.
+      const groups = {};
+      rows.forEach(item => {
+        const key = payrollReleaseDate(item) || item.periodEnd || "unknown";
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(item);
+      });
+      const groupKeys = Object.keys(groups).sort((a, b) => (dateValue(a) || 0) - (dateValue(b) || 0));
+
+      const renderRow = (item) => `
+        <tr data-payroll-row data-id="${item.id}" data-row-status="${item.status || ""}" ${item.archived ? 'data-archived="1"' : ""}>
+          <td class="payroll-pick-cell"><label class="row-check"><input type="checkbox" class="payroll-check" data-id="${item.id}" /></label></td>
+          <td><strong>${escapeHtml(item.employeeName)}</strong>${item.reference ? `<div class="row-sub">${escapeHtml(item.reference)}</div>` : ""}</td>
+          <td>${payrollTypeChip(item.type)}</td>
+          <td class="num"><span class="amount-edit" data-payroll-amount data-id="${item.id}" tabindex="0" title="Click to edit">${currency(item.amount)}</span></td>
+          <td>
+            <select class="payroll-status-select status-${item.status || ""}" data-payroll-status-select data-id="${item.id}" ${item.archived ? "disabled" : ""}>
+              <option value="scheduled" ${item.status === "scheduled" ? "selected" : ""}>Scheduled</option>
+              <option value="paid" ${item.status === "paid" ? "selected" : ""}>Paid</option>
+              <option value="pending" ${item.status === "pending" ? "selected" : ""}>Pending</option>
+              <option value="cancelled" ${item.status === "cancelled" ? "selected" : ""}>Cancelled</option>
+            </select>
+          </td>
+          <td><span class="muted">${item.paymentDate ? `Paid ${escapeHtml(item.paymentDate)}` : "—"}</span></td>
+          <td><div class="action-group">
+            <button class="btn small secondary" data-edit="payroll" data-id="${item.id}">Edit</button>
+            ${item.archived
+              ? `<button class="btn small blue" data-restore="payroll" data-id="${item.id}">Restore</button>`
+              : `<button class="btn small secondary" data-archive="payroll" data-id="${item.id}" title="Archive">⌫</button>`}
+            <button class="btn small danger" data-delete="payroll" data-id="${item.id}" title="Delete">×</button>
+          </div></td>
+        </tr>
+      `;
+
+      const renderGroup = (key) => {
+        const items = groups[key];
+        const liveItems = items.filter(i => !i.archived);
+        const groupTotal = liveItems.reduce((s, i) => s + Number(i.amount || 0), 0);
+        const paidCount = liveItems.filter(i => i.status === "paid").length;
+        const total = liveItems.length;
+        const allPaid = total > 0 && paidCount === total;
+        const day = dateValue(key)?.getDate();
+        let label;
+        if (day === SALARY_RELEASE_DAYS[0]) label = `5th Release`;
+        else if (day === SALARY_RELEASE_DAYS[1]) label = `20th Release`;
+        else label = "Other release";
+        const dateLabel = dateValue(key)
+          ? dateValue(key).toLocaleDateString("en-PH", { month: "long", day: "numeric", year: "numeric" })
+          : key;
+        return `
+          <tr class="payroll-group-header" data-release-key="${escapeHtml(key)}">
+            <td colspan="7">
+              <div class="release-header">
+                <div class="release-header-text">
+                  <div class="release-label">${escapeHtml(label)}</div>
+                  <div class="release-meta">${escapeHtml(dateLabel)} · ${total} ${total === 1 ? "record" : "records"} · ${currency(groupTotal)} · <strong>${paidCount}/${total} paid</strong></div>
+                </div>
+                <div class="release-actions" data-print-hide>
+                  ${total > 0 ? `<button class="btn small secondary" data-print-payslips="${escapeHtml(key)}">🖨 Payslips</button>` : ""}
+                  ${total > 0 && !allPaid ? `<button class="btn small good" data-bulk-paid="${escapeHtml(key)}">Mark all paid</button>` : ""}
+                  ${total > 0 && allPaid ? `<button class="btn small secondary" data-bulk-scheduled="${escapeHtml(key)}">Reset to scheduled</button>` : ""}
+                </div>
+              </div>
+            </td>
+          </tr>
+          ${items.map(renderRow).join("")}
+        `;
+      };
+
       $("#payrollTable").html(`
-        <thead><tr><th>Employee</th><th>Type</th><th>Amount</th><th>Pay Period</th><th>Release / Paid Date</th><th>Status</th><th>Method</th><th>Reference</th><th>Actions</th></tr></thead>
+        <thead><tr><th class="payroll-pick-cell"><label class="row-check"><input type="checkbox" id="payrollCheckAll" aria-label="Select all" /></label></th><th>Employee</th><th>Type</th><th class="num">Amount</th><th>Status</th><th>Paid</th><th>Actions</th></tr></thead>
         <tbody>
-          ${rows.length ? rows.map(item => `
-            <tr>
-              <td><strong>${escapeHtml(item.employeeName)}</strong></td>
-              <td>${payrollTypeChip(item.type)}</td>
-              <td>${currency(item.amount)}</td>
-              <td>${escapeHtml(item.periodStart)} to ${escapeHtml(item.periodEnd)}</td>
-              <td><strong>${escapeHtml(item.scheduledDate || "-")}</strong><div class="muted">${item.paymentDate ? `Paid ${escapeHtml(item.paymentDate)}` : "Scheduled release"}</div></td>
-              <td>${badge(item.status, item.archived)}</td>
-              <td>${escapeHtml(item.method || "-")}</td>
-              <td>${escapeHtml(item.reference || "-")}</td>
-              <td><div class="action-group">
-                <button class="btn small secondary" data-edit="payroll" data-id="${item.id}">Edit</button>
-                <button class="btn small good" data-payroll-status="paid" data-id="${item.id}">Paid</button>
-                <button class="btn small secondary" data-payroll-status="scheduled" data-id="${item.id}">Scheduled</button>
-                <button class="btn small warn" data-payroll-status="pending" data-id="${item.id}">Pending</button>
-                <button class="btn small danger" data-payroll-status="cancelled" data-id="${item.id}">Cancel</button>
-                ${item.archived ? `<button class="btn small blue" data-restore="payroll" data-id="${item.id}">Restore</button>` : `<button class="btn small warn" data-archive="payroll" data-id="${item.id}">Archive</button>`}
-                <button class="btn small danger" data-delete="payroll" data-id="${item.id}">Delete</button>
-              </div></td>
-            </tr>
-          `).join("") : `<tr><td colspan="9" class="table-empty">No salary outgoing records found. Click “Generate From Employees” to create payroll rows for this month.</td></tr>`}
+          ${rows.length
+            ? groupKeys.map(renderGroup).join("")
+            : `<tr><td colspan="7" class="table-empty">No salary outgoing records found. Click "Generate From Employees" to create payroll rows for this month.</td></tr>`}
         </tbody>
+      `);
+      renderPayrollBulkBar();
+      renderPayrollPresetState();
+      renderPayrollQuickFilters();
+    }
+
+    function renderPayrollQuickFilters() {
+      // Show clickable chips for employees + statuses visible in the unfiltered period set.
+      // Filtering by chip uses the existing search/status filter inputs.
+      const archiveFilter = $("#payrollArchiveFilter").val() || "live";
+      const all = (db.salaryOutgoings || []).filter(item =>
+        archiveMatches(item, archiveFilter) && isPayrollReleaseInPeriod(item, selectedPayroll)
+      );
+      // Aggregate by employee name (count + total)
+      const byEmp = {};
+      all.forEach(item => {
+        const k = item.employeeName || "Unknown";
+        if (!byEmp[k]) byEmp[k] = { count: 0, total: 0 };
+        byEmp[k].count++;
+        byEmp[k].total += Number(item.amount || 0);
+      });
+      const empChips = Object.entries(byEmp)
+        .sort((a, b) => b[1].total - a[1].total)
+        .slice(0, 12);
+
+      const statuses = [
+        { key: "", label: "All statuses" },
+        { key: "paid", label: "Paid" },
+        { key: "scheduled", label: "Scheduled" },
+        { key: "pending", label: "Pending" },
+        { key: "cancelled", label: "Cancelled" }
+      ];
+      const activeStatus = $("#payrollStatusFilter").val() || "";
+      const activeSearch = ($("#payrollSearch").val() || "").trim().toLowerCase();
+
+      const statusChipsHtml = statuses.map(s => `
+        <button class="chip ${activeStatus === s.key ? "active" : ""}" data-chip-status="${s.key}">${escapeHtml(s.label)}</button>
+      `).join("");
+
+      const empChipsHtml = empChips.map(([name, info]) => `
+        <button class="chip emp-chip ${activeSearch === name.toLowerCase() ? "active" : ""}" data-chip-employee="${escapeHtml(name)}">${escapeHtml(name)}<span class="chip-count">${info.count}</span></button>
+      `).join("");
+
+      const hasActive = activeStatus || activeSearch;
+      const clearChip = hasActive ? `<button class="chip chip-clear" data-chip-clear>× Clear filters</button>` : "";
+
+      $("#payrollQuickFilters").html(`
+        <div class="chip-group" role="group" aria-label="Status filters">
+          ${statusChipsHtml}
+        </div>
+        ${empChips.length ? `<div class="chip-group" role="group" aria-label="Employee filters">
+          ${empChipsHtml}
+        </div>` : ""}
+        ${clearChip}
       `);
     }
 
@@ -5015,63 +6968,44 @@
         }
       };
 
-      const dashboardData = monthlyChartData(selectedDashboard.year);
-      const prevYearData = monthlyChartData(selectedDashboard.year - 1);
-      // For the current calendar year, null-out months past today so the line stops at the present.
-      const nowY = new Date().getFullYear();
-      const nowM = new Date().getMonth();
-      if (selectedDashboard.year === nowY) {
-        for (let i = nowM + 1; i < 12; i++) {
-          dashboardData[i].payroll = null;
-          dashboardData[i].expectedIncome = null;
-          dashboardData[i].paidIncome = null;
-          dashboardData[i].pendingIncome = null;
-        }
-      }
       const cashFlowCanvas = document.getElementById("cashFlowChart");
       if (cashFlowCanvas) {
-        const incomeSeries = dashboardData.map(d => d.expectedIncome);
-        const payrollSeries = dashboardData.map(d => d.payroll);
-        const netSeries = dashboardData.map(d => (d.expectedIncome == null || d.payroll == null) ? null : d.expectedIncome - d.payroll);
+        const series = (window._cashFlowSeries && window._cashFlowSeries.length)
+          ? window._cashFlowSeries
+          : rolling12MonthsNet({ month: Number(selectedDashboard.month || 0), year: Number(selectedDashboard.year || today.getFullYear()) });
+        const values = series.map(p => p.value);
+        const labels = series.map(p => p.label);
+        const lastIdx = values.length - 1;
+        const pointRadii = values.map((_, i) => i === lastIdx ? 4 : 0);
+        const pointBgs = values.map((_, i) => i === lastIdx ? "#0a0a0a" : "transparent");
+        const pointBorders = values.map((_, i) => i === lastIdx ? "#ffffff" : "transparent");
+        const ctx = cashFlowCanvas.getContext("2d");
+        const gradient = ctx.createLinearGradient(0, 0, 0, 220);
+        gradient.addColorStop(0, "rgba(10,10,10,0.10)");
+        gradient.addColorStop(1, "rgba(10,10,10,0)");
 
         charts.cashFlow = new Chart(cashFlowCanvas, {
-          type: "bar",
+          type: "line",
           data: {
-            labels: dashboardData.map(item => item.month),
-            datasets: [
-              {
-                type: "bar",
-                label: "Income",
-                data: incomeSeries,
-                backgroundColor: "rgba(22, 101, 52, 0.85)",
-                borderRadius: 4,
-                maxBarThickness: 22
-              },
-              {
-                type: "bar",
-                label: "Payroll",
-                data: payrollSeries,
-                backgroundColor: "rgba(153, 153, 153, 0.85)",
-                borderRadius: 4,
-                maxBarThickness: 22
-              },
-              {
-                type: "line",
-                label: "Net",
-                data: netSeries,
-                borderColor: "#111111",
-                backgroundColor: "transparent",
-                borderWidth: 2.5,
-                tension: 0.35,
-                fill: false,
-                spanGaps: false,
-                pointRadius: 3,
-                pointBackgroundColor: "#111111",
-                pointBorderColor: "#ffffff",
-                pointBorderWidth: 1.5,
-                pointHoverRadius: 5
-              }
-            ]
+            labels,
+            datasets: [{
+              label: "Net",
+              data: values,
+              borderColor: "#0a0a0a",
+              backgroundColor: gradient,
+              borderWidth: 2,
+              tension: 0.36,
+              fill: true,
+              spanGaps: false,
+              pointRadius: pointRadii,
+              pointBackgroundColor: pointBgs,
+              pointBorderColor: pointBorders,
+              pointBorderWidth: 1.5,
+              pointHoverRadius: 4,
+              pointHoverBackgroundColor: "#0a0a0a",
+              pointHoverBorderColor: "#ffffff",
+              pointHoverBorderWidth: 1.5
+            }]
           },
           options: {
             responsive: true,
@@ -5085,30 +7019,29 @@
                 bodyColor: "#ffffff",
                 padding: 10,
                 cornerRadius: 8,
-                displayColors: true,
+                displayColors: false,
                 callbacks: {
-                  title: (items) => items.length ? `${items[0].label} ${selectedDashboard.year}` : "",
-                  label: (item) => `${item.dataset.label}: ${currency(item.parsed.y)}`
+                  title: (items) => {
+                    const idx = items[0]?.dataIndex ?? 0;
+                    return series[idx]?.fullLabel || items[0]?.label || "";
+                  },
+                  label: (item) => `Net: ${currency(item.parsed.y)}`
                 }
               }
             },
             scales: {
-              x: { ticks: { color: chartText, font: { size: 11 } }, grid: { display: false } },
-              y: { beginAtZero: true, ticks: { color: chartText, font: { size: 11 }, callback: (v) => compactCurrency(v) }, grid: { color: chartGrid, drawBorder: false } }
+              x: { ticks: { color: "#9ca3af", font: { size: 10 }, maxRotation: 0, autoSkipPadding: 12 }, grid: { display: false }, border: { display: false } },
+              y: { display: false, beginAtZero: false }
             }
           }
         });
       }
 
-      // Sparkline mini-charts inside KPI tiles
+      // Sparkline mini-charts inside KPI substats (calm, thin, light gray)
       (dashboardSpark || []).forEach(s => {
         const el = document.getElementById(`spark-${s.key}`);
         if (!el) return;
-        const color = s.tone === "down" ? "#9f1d1d" : "#166534";
-        const sctx = el.getContext("2d");
-        const sgrad = sctx.createLinearGradient(0, 0, 0, 44);
-        sgrad.addColorStop(0, s.tone === "down" ? "rgba(159, 29, 29, 0.18)" : "rgba(22, 101, 52, 0.18)");
-        sgrad.addColorStop(1, "rgba(0,0,0,0)");
+        const color = "#9ca3af";
         charts[`spark_${s.key}`] = new Chart(el, {
           type: "line",
           data: {
@@ -5116,10 +7049,10 @@
             datasets: [{
               data: s.spark.map(p => p.value),
               borderColor: color,
-              backgroundColor: sgrad,
-              borderWidth: 1.8,
+              backgroundColor: "transparent",
+              borderWidth: 1.25,
               tension: 0.4,
-              fill: true,
+              fill: false,
               pointRadius: 0,
               pointHoverRadius: 3,
               pointHoverBackgroundColor: color
@@ -5250,19 +7183,33 @@
       }
 
       if (type === "payroll") {
+        const lastDay = new Date(selectedPayroll.year, selectedPayroll.month + 1, 0).getDate();
         return `
-          <div class="form-grid">
-            ${employeeSelect(record.employeeId)}
-            ${selectField("type", "Type", ["salary", "bonus", "13th-month", "one-off", "reimbursement"], record.type || "salary")}
-            ${field("amount", "Amount", record.amount, "number")}
-            ${field("periodStart", "Pay Period Start", record.periodStart || ymd(selectedPayroll.year, selectedPayroll.month, 1), "date")}
-            ${field("periodEnd", "Pay Period End", record.periodEnd || ymd(selectedPayroll.year, selectedPayroll.month, new Date(selectedPayroll.year, selectedPayroll.month + 1, 0).getDate()), "date")}
-            ${field("scheduledDate", "Scheduled Release Date", record.scheduledDate || ymd(selectedPayroll.year, selectedPayroll.month, 20), "date")}
-            ${field("paymentDate", "Actual Paid Date", record.paymentDate, "date")}
-            ${selectField("status", "Status", ["scheduled", "paid", "pending", "cancelled"], record.status || "scheduled")}
-            ${field("method", "Payment Method", record.method || "Bank transfer")}
-            ${field("reference", "Reference", record.reference)}
-            ${textareaField("notes", "Notes", record.notes)}
+          <div class="form-section">
+            <div class="form-section-title">Employee &amp; amount</div>
+            <div class="form-grid">
+              ${employeeSelect(record.employeeId)}
+              ${selectField("type", "Type", ["salary", "bonus", "13th-month", "one-off", "reimbursement"], record.type || "salary")}
+              ${field("amount", "Amount", record.amount, "number")}
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title">Pay period</div>
+            <div class="form-grid">
+              ${field("periodStart", "Pay period start", record.periodStart || ymd(selectedPayroll.year, selectedPayroll.month, 1), "date")}
+              ${field("periodEnd", "Pay period end", record.periodEnd || ymd(selectedPayroll.year, selectedPayroll.month, lastDay), "date")}
+              ${field("scheduledDate", "Scheduled release date", record.scheduledDate || ymd(selectedPayroll.year, selectedPayroll.month, 20), "date")}
+              ${field("paymentDate", "Actual paid date", record.paymentDate, "date")}
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title">Payment details</div>
+            <div class="form-grid">
+              ${selectField("status", "Status", ["scheduled", "paid", "pending", "cancelled"], record.status || "scheduled")}
+              ${field("method", "Payment method", record.method || "Bank transfer")}
+              ${field("reference", "Reference", record.reference)}
+              ${textareaField("notes", "Notes", record.notes)}
+            </div>
           </div>${formActions()}`;
       }
 
@@ -5372,6 +7319,10 @@
 
       if (type === "employee") {
         data.monthlySalary = Number(data.monthlySalary || 0);
+        // Auto-set next review to the start-date anniversary when blank.
+        if (!data.nextReview && data.startDate) {
+          data.nextReview = nextAnniversary(data.startDate);
+        }
         if (editing.id) {
           db.employees = db.employees.map(e => Number(e.id) === Number(editing.id) ? { ...e, ...data } : e);
           addLog("Employee edited", `${data.name} was updated.`);
@@ -5502,6 +7453,41 @@
       showToast(`Payment marked as ${status}.`);
     }
 
+    function updatePayrollAmount(id, newAmount) {
+      const item = db.salaryOutgoings.find(row => Number(row.id) === Number(id));
+      if (!item) return;
+      const value = Number(newAmount);
+      if (!Number.isFinite(value) || value < 0) { showToast("Amount must be a positive number."); renderPayroll(); return; }
+      const before = Number(item.amount || 0);
+      if (Math.abs(before - value) < 0.005) return; // no change
+      item.amount = Math.round(value * 100) / 100;
+      addLog("Salary outgoing amount edited", `${item.employeeName}: ${currency(before)} → ${currency(item.amount)}.`);
+      saveData();
+      showToast(`Amount updated to ${currency(item.amount)}.`);
+    }
+
+    function startInlineAmountEdit($cell) {
+      if ($cell.find("input").length) return; // already editing
+      const id = $cell.data("id");
+      const item = db.salaryOutgoings.find(row => Number(row.id) === Number(id));
+      if (!item) return;
+      const current = Number(item.amount || 0);
+      const $input = $(`<input type="number" step="0.01" class="amount-edit-input" />`).val(current.toFixed(2));
+      $cell.html("").append($input);
+      $input.focus().select();
+      let committed = false;
+      const commit = () => {
+        if (committed) return; committed = true;
+        const val = $input.val();
+        updatePayrollAmount(id, val);
+      };
+      $input.on("blur", commit);
+      $input.on("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); commit(); }
+        if (e.key === "Escape") { committed = true; renderPayroll(); }
+      });
+    }
+
     function updatePayrollStatus(id, status) {
       const item = db.salaryOutgoings.find(row => Number(row.id) === Number(id));
       if (!item) return;
@@ -5511,6 +7497,325 @@
       addLog("Salary outgoing status changed", `${item.employeeName} payroll ${item.reference || ""} marked as ${status}.`);
       saveData();
       showToast(`Salary outgoing marked as ${status}.`);
+    }
+
+    function getSelectedPayrollIds() {
+      return $("#payrollTable .payroll-check:checked").map(function () { return Number($(this).data("id")); }).get();
+    }
+
+    function renderPayrollBulkBar() {
+      const ids = getSelectedPayrollIds();
+      const $bar = $("#payrollBulkBar");
+      if (!ids.length) { $bar.removeClass("active").attr("hidden", true); return; }
+      const items = (db.salaryOutgoings || []).filter(o => ids.includes(Number(o.id)));
+      const total = items.reduce((s, i) => s + Number(i.amount || 0), 0);
+      $bar.removeAttr("hidden").addClass("active");
+      $bar.find("[data-bulk-count]").text(ids.length);
+      $bar.find("[data-bulk-total]").text(currency(total));
+    }
+
+    function bulkPayrollStatusForSelected(status) {
+      const ids = getSelectedPayrollIds();
+      if (!ids.length) return;
+      if (!confirm(`Set ${ids.length} record(s) to ${status}?`)) return;
+      const today_iso = dateIso(today);
+      const items = (db.salaryOutgoings || []).filter(o => ids.includes(Number(o.id)));
+      items.forEach(item => {
+        item.status = status;
+        if (status === "paid") {
+          if (!item.paymentDate) item.paymentDate = today_iso;
+        } else {
+          item.paymentDate = "";
+        }
+      });
+      addLog("Payroll bulk status update", `${items.length} selected record(s) set to ${status}.`);
+      saveData();
+      showToast(`${items.length} record(s) set to ${status}.`);
+    }
+
+    function bulkPayrollArchive() {
+      const ids = getSelectedPayrollIds();
+      if (!ids.length) return;
+      if (!confirm(`Archive ${ids.length} record(s)? They can be restored later.`)) return;
+      const items = (db.salaryOutgoings || []).filter(o => ids.includes(Number(o.id)));
+      items.forEach(item => { item.archived = true; });
+      addLog("Payroll bulk archive", `${items.length} record(s) archived.`);
+      saveData();
+      showToast(`${items.length} record(s) archived.`);
+    }
+
+    function bulkPayrollPrint() {
+      const ids = getSelectedPayrollIds();
+      if (!ids.length) return;
+      const items = (db.salaryOutgoings || []).filter(o => ids.includes(Number(o.id)) && !o.archived);
+      if (!items.length) { showToast("No printable selected records."); return; }
+      printPayslipsForItems(items, `Selected payslips (${items.length})`);
+    }
+
+    function bulkPayrollStatusForRelease(releaseKey, status) {
+      const items = (db.salaryOutgoings || []).filter(item =>
+        !item.archived && payrollReleaseDate(item) === releaseKey
+      );
+      if (!items.length) return;
+      const action = status === "paid" ? "mark as paid" : `reset to ${status}`;
+      if (!confirm(`${action.charAt(0).toUpperCase() + action.slice(1)} all ${items.length} records in this release?`)) return;
+      const today_iso = dateIso(today);
+      items.forEach(item => {
+        item.status = status;
+        if (status === "paid") {
+          if (!item.paymentDate) item.paymentDate = today_iso;
+        } else {
+          item.paymentDate = "";
+        }
+      });
+      addLog("Payroll bulk status update", `${items.length} record(s) in release ${releaseKey} ${status === "paid" ? "marked as paid" : `reset to ${status}`}.`);
+      saveData();
+      showToast(`${items.length} record(s) ${status === "paid" ? "marked as paid" : `reset to ${status}`}.`);
+    }
+
+    function printPayslipsForRelease(releaseKey) {
+      const items = (db.salaryOutgoings || []).filter(item =>
+        !item.archived && payrollReleaseDate(item) === releaseKey
+      );
+      if (!items.length) {
+        showToast("No payslips to print for this release.");
+        return;
+      }
+      const releaseDate = dateValue(releaseKey);
+      const releaseLabel = releaseDate
+        ? releaseDate.toLocaleDateString("en-PH", { month: "long", day: "numeric", year: "numeric" })
+        : releaseKey;
+      const day = releaseDate?.getDate();
+      let batchLabel = "Salary Release";
+      if (day === SALARY_RELEASE_DAYS[0]) batchLabel = "1st-Half Release (5th)";
+      else if (day === SALARY_RELEASE_DAYS[1]) batchLabel = "2nd-Half Release (20th)";
+      printPayslipsForItems(items, `${batchLabel} · ${releaseLabel}`);
+    }
+
+    function printPayslipsForItems(items, batchSubtitle) {
+      if (!items.length) return;
+      const company = db.settings?.companyName || "KNB Web Solutions";
+      const employees = db.employees || [];
+
+      const payslipHtml = items.map((item, idx) => {
+        const emp = employees.find(e => Number(e.id) === Number(item.employeeId)) || {};
+        const monthly = Number(emp.monthlySalary || 0);
+        const half = monthly ? monthly / 2 : Number(item.amount || 0);
+        const amount = Number(item.amount || 0);
+        const bonus = item.type !== "salary" || amount > half + 0.5 ? Math.max(0, amount - (monthly ? half : 0)) : 0;
+        const basic = monthly ? Math.min(amount, half) : amount;
+        const typeLabel = (PAYROLL_TYPES[item.type || "salary"] || PAYROLL_TYPES.salary).label;
+        return `
+          <section class="payslip" ${idx > 0 ? 'style="page-break-before: always;"' : ""}>
+            <header class="payslip-head">
+              <div class="payslip-company">${escapeHtml(company)}</div>
+              <div class="payslip-title">PAYSLIP</div>
+              <div class="payslip-sub">${escapeHtml(batchSubtitle || "")}</div>
+            </header>
+            <div class="payslip-grid">
+              <div><span class="payslip-label">Employee</span><strong>${escapeHtml(item.employeeName)}</strong></div>
+              <div><span class="payslip-label">Position</span>${escapeHtml(emp.position || "—")}</div>
+              <div><span class="payslip-label">Department</span>${escapeHtml(emp.department || "—")}</div>
+              <div><span class="payslip-label">Period covered</span>${escapeHtml(item.periodStart || "—")} → ${escapeHtml(item.periodEnd || "—")}</div>
+              <div><span class="payslip-label">Pay date</span>${escapeHtml(item.paymentDate || item.scheduledDate || "—")}</div>
+              <div><span class="payslip-label">Reference</span>${escapeHtml(item.reference || "—")}</div>
+            </div>
+            <table class="payslip-table">
+              <thead><tr><th>Earnings</th><th class="num">Amount</th></tr></thead>
+              <tbody>
+                <tr><td>${escapeHtml(typeLabel)}${monthly ? ` (½ of ${currency(monthly)})` : ""}</td><td class="num">${currency(basic)}</td></tr>
+                ${bonus > 0 ? `<tr><td>Bonus / additional</td><td class="num">${currency(bonus)}</td></tr>` : ""}
+                <tr class="payslip-subtotal"><td>Gross pay</td><td class="num">${currency(amount)}</td></tr>
+              </tbody>
+              <thead><tr><th>Deductions</th><th class="num">Amount</th></tr></thead>
+              <tbody>
+                <tr><td class="muted">No deductions</td><td class="num">—</td></tr>
+              </tbody>
+              <tfoot>
+                <tr class="payslip-total"><td>NET PAY</td><td class="num">${currency(amount)}</td></tr>
+              </tfoot>
+            </table>
+            ${item.notes ? `<div class="payslip-notes"><span class="payslip-label">Notes</span>${escapeHtml(item.notes)}</div>` : ""}
+            <footer class="payslip-foot">
+              <div class="payslip-sign">
+                <span class="payslip-line"></span>
+                <span>Employee signature</span>
+              </div>
+              <div class="payslip-sign">
+                <span class="payslip-line"></span>
+                <span>Authorized signatory</span>
+              </div>
+            </footer>
+          </section>
+        `;
+      }).join("");
+
+      const $area = $("#payslipPrintArea");
+      if (!$area.length) {
+        $("body").append('<div id="payslipPrintArea" class="payslip-print-area"></div>');
+      }
+      $("#payslipPrintArea").html(payslipHtml);
+      $("body").addClass("printing-payslips");
+      // Allow layout to settle, then print
+      setTimeout(() => {
+        window.print();
+        // Cleanup after print dialog closes
+        setTimeout(() => { $("body").removeClass("printing-payslips"); $("#payslipPrintArea").html(""); }, 500);
+      }, 100);
+    }
+
+    // Sheet name -> employee. Tries exact-match against the current roster first;
+    // falls back to a hard-coded map for known historical Pasahod sheet names.
+    const PASAHOD_SHEET_ALIASES = {
+      "Ange": "ANGELO MIGUEL",
+      "Noel": "NOEL",
+      "Kier": "KIER",
+      "Alo": "ALO",
+      "Maki": "MACKY",
+      "Pokyo": "POKS",
+      "Sophia": "PHIA",
+      "Kyle": "KAJEBE",      // Kyle is KAJEBE's Pasahod sheet alias
+      "Kajebe": "KAJEBE",
+      "Kilvz": "KILVZ"
+    };
+
+    function resolvePasahodEmployee(sheetName) {
+      const alias = PASAHOD_SHEET_ALIASES[sheetName] || sheetName.toUpperCase();
+      const match = (db.employees || []).find(e => e.name.toUpperCase() === alias.toUpperCase());
+      if (match) return { id: match.id, name: match.name };
+      return { id: null, name: alias };
+    }
+
+    function releaseKeyFor(d) {
+      const day = d.getDate();
+      const y = d.getFullYear(), m = d.getMonth();
+      const last = new Date(y, m + 1, 0).getDate();
+      if (day <= 15) {
+        return {
+          scheduledDate: ymd(y, m, 20),
+          periodStart: ymd(y, m, 1),
+          periodEnd: ymd(y, m, 15),
+          label: "20th"
+        };
+      }
+      const ny = m === 11 ? y + 1 : y;
+      const nm = m === 11 ? 0 : m + 1;
+      return {
+        scheduledDate: ymd(ny, nm, 5),
+        periodStart: ymd(y, m, 16),
+        periodEnd: ymd(y, m, last),
+        label: "5th"
+      };
+    }
+
+    async function importPasahodFile(file) {
+      if (!file) return;
+      if (typeof XLSX === "undefined") {
+        showToast("Spreadsheet library failed to load. Reload the page and try again.");
+        return;
+      }
+      const buf = await file.arrayBuffer();
+      const wb = XLSX.read(buf, { type: "array", cellDates: true });
+      const rows = [];
+      wb.SheetNames.forEach(sheetName => {
+        if (sheetName === "Sheet9" || sheetName === "Kickback") return; // not staff sheets
+        const sheet = wb.Sheets[sheetName];
+        const data = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: null, raw: false, blankrows: false, cellDates: true });
+        if (!data.length) return;
+
+        if (sheetName === "Freelancers") {
+          // Freelancers: cols are Date | Name | ... Total PHP at col 8 (0-based)
+          for (let i = 1; i < data.length; i++) {
+            const row = data[i];
+            const date_v = row[0];
+            const name = row[1];
+            const totalPhp = row[8];
+            if (!date_v || !(date_v instanceof Date) || !name || totalPhp == null) continue;
+            const total = Number(totalPhp);
+            if (!Number.isFinite(total) || total <= 0) continue;
+            rows.push({
+              date: date_v,
+              empId: null,
+              empName: `FREELANCE - ${String(name).trim().toUpperCase()}`,
+              service: "Freelance",
+              total
+            });
+          }
+          return;
+        }
+
+        const emp = resolvePasahodEmployee(sheetName);
+        for (let i = 1; i < data.length; i++) {
+          const row = data[i];
+          const date_v = row[0];
+          if (!date_v || !(date_v instanceof Date)) continue;
+          const service = row[1];
+          const totalV = row[5];
+          if (totalV == null) continue;
+          const total = Number(totalV);
+          if (!Number.isFinite(total) || total <= 0) continue;
+          rows.push({
+            date: date_v,
+            empId: emp.id,
+            empName: emp.name,
+            service: service != null ? String(service).trim() : "",
+            total
+          });
+        }
+      });
+
+      if (!rows.length) {
+        showToast("No usable rows found in that file.");
+        return;
+      }
+
+      // Aggregate into (empName, scheduledDate)
+      const buckets = {};
+      rows.forEach(r => {
+        const k = releaseKeyFor(r.date);
+        const key = `${r.empName}__${k.scheduledDate}`;
+        const b = buckets[key] || (buckets[key] = {
+          empId: r.empId, empName: r.empName,
+          scheduledDate: k.scheduledDate, periodStart: k.periodStart, periodEnd: k.periodEnd,
+          label: k.label, amount: 0, lines: []
+        });
+        b.amount += r.total;
+        b.lines.push(`${r.date.toISOString().slice(0,10)} ${r.service || ""} ${currency(r.total)}`);
+      });
+
+      // Merge: skip if an existing record with same employeeName + scheduledDate already exists.
+      let created = 0, skipped = 0;
+      Object.values(buckets).forEach(b => {
+        const exists = (db.salaryOutgoings || []).some(item =>
+          !item.archived &&
+          item.scheduledDate === b.scheduledDate &&
+          (item.employeeName || "").toUpperCase() === b.empName.toUpperCase()
+        );
+        if (exists) { skipped++; return; }
+        const sample = b.lines.slice(0, 3);
+        const more = b.lines.length > 3 ? ` (+${b.lines.length - 3} more)` : "";
+        db.salaryOutgoings.push({
+          id: nextId(db.salaryOutgoings),
+          employeeId: b.empId,
+          employeeName: b.empName,
+          type: "salary",
+          amount: Math.round(b.amount * 100) / 100,
+          periodStart: b.periodStart,
+          periodEnd: b.periodEnd,
+          scheduledDate: b.scheduledDate,
+          paymentDate: b.scheduledDate,
+          status: "paid",
+          method: "Bank transfer",
+          reference: `PAY-${b.scheduledDate}-${b.empName.replace(/\s+/g, "-").slice(0, 24)}`,
+          notes: `Imported from ${file.name} (${b.label} release, ${b.lines.length} entries). e.g. ${sample.join(" | ")}${more}`,
+          archived: false
+        });
+        created++;
+      });
+
+      addLog("Pasahod import", `${file.name}: ${created} new, ${skipped} duplicates skipped.`);
+      saveData();
+      alert(`Pasahod import complete:\n  ${created} new records added\n  ${skipped} duplicates skipped\n\nFile: ${file.name}`);
     }
 
     function generatePayrollForSelectedMonth() {
@@ -5737,6 +8042,8 @@
       $(this).addClass("active");
       $(".section").removeClass("active");
       $(`#${section}`).addClass("active");
+      $(".main").scrollTop(0);
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
       if (section === "dashboard" || section === "reports") setTimeout(drawCharts, 0);
     });
 
@@ -5778,10 +8085,12 @@
       $("#breakdownSubtitle").text(tab === "departments" ? "Headcount and payroll per department." : "Top contributors to monthly payroll.");
     });
 
-    $(document).on("keydown", ".kpi-tile[data-clickable]", function (e) {
+    $(document).on("keydown", ".kpi-tile[data-clickable], .kpi-panel[data-clickable], .kpi-substat[data-clickable]", function (e) {
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $(this).trigger("click"); }
     });
-    $(document).on("click", ".kpi-tile[data-clickable]", function (e) {
+    $(document).on("click", ".kpi-tile[data-clickable], .kpi-panel[data-clickable], .kpi-substat[data-clickable]", function (e) {
+      // Allow clicks inside a substat to NOT also fire on the wrapping panel.
+      if ($(this).hasClass("kpi-panel") && $(e.target).closest(".kpi-substat").length) return;
       if ($(e.target).hasClass("kpi-help")) return;
       const key = $(this).data("key");
       // Shift/Cmd-click jumps to the section; plain click opens drill panel.
@@ -5930,6 +8239,7 @@
     (function setupStickyTopbar() {
       const bar = document.querySelector(".topbar-sticky");
       if (!bar) return;
+      if (!("IntersectionObserver" in window)) return;
       const sentinel = document.createElement("div");
       sentinel.style.cssText = "position:absolute;top:0;height:1px;width:1px;";
       bar.parentNode.insertBefore(sentinel, bar);
@@ -5977,6 +8287,57 @@
     $(document).on("click", "[data-restore]", function () { restoreRecord($(this).data("restore"), $(this).data("id")); });
     $(document).on("click", "[data-payment-status]", function () { updatePaymentStatus($(this).data("id"), $(this).data("payment-status")); });
     $(document).on("click", "[data-payroll-status]", function () { updatePayrollStatus($(this).data("id"), $(this).data("payroll-status")); });
+    $(document).on("change", "[data-payroll-status-select]", function () { updatePayrollStatus($(this).data("id"), $(this).val()); });
+    $(document).on("click", "[data-bulk-paid]", function () { bulkPayrollStatusForRelease($(this).data("bulk-paid"), "paid"); });
+    $(document).on("click", "[data-bulk-scheduled]", function () { bulkPayrollStatusForRelease($(this).data("bulk-scheduled"), "scheduled"); });
+    $(document).on("click", "[data-print-payslips]", function () { printPayslipsForRelease($(this).data("print-payslips")); });
+    $(document).on("change", ".payroll-check", function () { renderPayrollBulkBar(); });
+    $(document).on("change", "#payrollCheckAll", function () {
+      const on = $(this).is(":checked");
+      $("#payrollTable .payroll-check").prop("checked", on);
+      renderPayrollBulkBar();
+    });
+    $(document).on("click", "[data-payroll-bulk]", function () {
+      const action = $(this).data("payroll-bulk");
+      if (action === "clear") {
+        $("#payrollTable .payroll-check, #payrollCheckAll").prop("checked", false);
+        renderPayrollBulkBar();
+        return;
+      }
+      if (action === "archive") return bulkPayrollArchive();
+      if (action === "print") return bulkPayrollPrint();
+      bulkPayrollStatusForSelected(action);
+    });
+    $(document).on("click", "#payrollPeriodPresets .preset-pill", function () {
+      applyPayrollPreset($(this).data("preset"));
+      renderPayroll();
+    });
+    $(document).on("click", "[data-chip-status]", function () {
+      $("#payrollStatusFilter").val($(this).data("chip-status"));
+      renderPayroll();
+    });
+    $(document).on("click", "[data-chip-employee]", function () {
+      const name = String($(this).data("chip-employee"));
+      const $search = $("#payrollSearch");
+      const wasActive = ($search.val() || "").trim().toLowerCase() === name.toLowerCase();
+      $search.val(wasActive ? "" : name);
+      renderPayroll();
+    });
+    $(document).on("click", "[data-chip-clear]", function () {
+      $("#payrollSearch").val("");
+      $("#payrollStatusFilter").val("");
+      renderPayroll();
+    });
+    $(document).on("click", "[data-payroll-amount]", function (e) {
+      e.stopPropagation();
+      startInlineAmountEdit($(this).closest("td").find("[data-payroll-amount]"));
+    });
+    $(document).on("keydown", "[data-payroll-amount]", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        startInlineAmountEdit($(this));
+      }
+    });
     $(document).on("click", "[data-export]", function () { exportCsv($(this).data("export")); });
 
     $("#closeModal").on("click", closeModal);
@@ -6012,9 +8373,25 @@
     });
 
     $(document).on("change", "#payrollMonth, #payrollYear", function () {
+      selectedPayroll.scope = "month";
       selectedPayroll.month = Number($("#payrollMonth").val());
       selectedPayroll.year = Number($("#payrollYear").val());
       renderPayroll();
+    });
+
+    // Auto-fill the Amount field in the payroll modal when an employee is picked
+    // (assumes a standard semi-monthly release: monthly salary / 2). Only when
+    // adding a new record AND the amount is empty/zero, so we don't overwrite edits.
+    $(document).on("change", "#recordForm select[name='employeeId']", function () {
+      if (editing?.type !== "payroll" || editing?.id) return;
+      const empId = Number($(this).val());
+      const emp = (db.employees || []).find(e => Number(e.id) === empId);
+      if (!emp) return;
+      const $amount = $("#recordForm input[name='amount']");
+      const current = Number($amount.val() || 0);
+      if (!current && Number(emp.monthlySalary || 0) > 0) {
+        $amount.val((Number(emp.monthlySalary) / 2).toFixed(2));
+      }
     });
 
     $(document).on("change", "#employeeSort", renderEmployees);
@@ -6027,6 +8404,15 @@
 
     $("#printReport").on("click", function () { window.print(); });
     $("#generatePayrollForMonth").on("click", generatePayrollForSelectedMonth);
+    $("#importPasahodBtn").on("click", function () { $("#importPasahodFile").trigger("click"); });
+    $("#importPasahodFile").on("change", function (e) {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = "";
+      if (file) importPasahodFile(file).catch(err => {
+        console.error(err);
+        showToast("Import failed: " + (err.message || "unknown error"));
+      });
+    });
 
     function initPinLock() {
       if (db.settings.pinCode) {
@@ -6051,7 +8437,7 @@
       if (event.key === "Enter") unlockPin();
     });
 
-    $("#resetSampleData, #resetSampleDataSettings").on("click", resetSampleData);
+    $("#resetSampleDataSettings").on("click", resetSampleData);
     $("#exportJsonBackup").on("click", exportJsonBackup);
     $("#restoreJsonBackup").on("click", function () { $("#restoreJsonFile").click(); });
     $("#restoreJsonFile").on("change", function () { restoreJsonBackup(this.files[0]); this.value = ""; });

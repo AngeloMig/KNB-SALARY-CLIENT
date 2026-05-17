@@ -1,7 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "mcp__Claude_Preview__preview_start"
+      "mcp__Claude_Preview__preview_start",
+      "Bash(git -C \"/c/Users/devil/OneDrive/Documents/GitHub/KNB-SALARY-CLIENT\" log --oneline -20)",
+      "Bash(ls \"/c/Users/devil/Downloads/Pasahod.xlsx\" 2>&1 | head -5)",
+      "Read(//c/Users/devil/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/1e059d38-6569-4901-96b4-4c63f798f83c/812795b3-4274-4bad-b814-6e54faecd3be/skills/xlsx/**)",
+      "Bash(python -c \"import pandas as pd; sheets = pd.read_excel\\('C:/Users/devil/Downloads/Pasahod.xlsx', sheet_name=None, header=None\\); print\\('Sheets:', list\\(sheets.keys\\(\\)\\)\\); [print\\(f'\\\\n=== {n} \\({df.shape}\\) ===\\\\n', df.head\\(15\\)\\) for n, df in sheets.items\\(\\)]\")",
+      "Bash(where python *)",
+      "Bash(G:/python.exe -c \"import pandas as pd; sheets = pd.read_excel\\('C:/Users/devil/Downloads/Pasahod.xlsx', sheet_name=None, header=None\\); print\\('Sheets:', list\\(sheets.keys\\(\\)\\)\\); [print\\(f'\\\\n=== {n} {df.shape} ===\\\\n', df.head\\(20\\).to_string\\(\\)\\) for n, df in sheets.items\\(\\)]\")",
+      "Bash(G:/python.exe -m pip install pandas openpyxl --quiet)",
+      "Bash(G:/python.exe \"C:/Users/devil/OneDrive/Documents/GitHub/KNB-SALARY-CLIENT/backups/_refresh_anniversaries.py\")",
+      "Bash(G:/python.exe \"C:/Users/devil/OneDrive/Documents/GitHub/KNB-SALARY-CLIENT/backups/_import_split.py\")"
     ]
   }
 }
