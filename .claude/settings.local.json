@@ -10,7 +10,8 @@
       "Bash(G:/python.exe -c \"import pandas as pd; sheets = pd.read_excel\\('C:/Users/devil/Downloads/Pasahod.xlsx', sheet_name=None, header=None\\); print\\('Sheets:', list\\(sheets.keys\\(\\)\\)\\); [print\\(f'\\\\n=== {n} {df.shape} ===\\\\n', df.head\\(20\\).to_string\\(\\)\\) for n, df in sheets.items\\(\\)]\")",
       "Bash(G:/python.exe -m pip install pandas openpyxl --quiet)",
       "Bash(G:/python.exe \"C:/Users/devil/OneDrive/Documents/GitHub/KNB-SALARY-CLIENT/backups/_refresh_anniversaries.py\")",
-      "Bash(G:/python.exe \"C:/Users/devil/OneDrive/Documents/GitHub/KNB-SALARY-CLIENT/backups/_import_split.py\")"
+      "Bash(G:/python.exe \"C:/Users/devil/OneDrive/Documents/GitHub/KNB-SALARY-CLIENT/backups/_import_split.py\")",
+      "Bash(grep -n \"scales: {\\\\s*$\\\\|x: {\\\\s*$\\\\|y: {\\\\s*$\" /Users/angelomiguel/Documents/GitHub/KNB-SALARY-CLIENT/index.html)"
     ]
   }
 }

@@ -290,10 +290,22 @@
 
     .card {
       background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      box-shadow: var(--shadow-soft);
+      border: 0;
+      border-radius: var(--dashboard-card-radius);
+      padding: var(--dashboard-card-padding);
+      box-shadow: var(--dashboard-shadow);
+    }
+    .kpi-tile.is-clickable {
+      cursor: pointer;
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+    }
+    .kpi-tile.is-clickable:hover {
+      box-shadow: var(--dashboard-shadow-hover);
+      transform: translateY(-1px);
+    }
+    .kpi-tile.is-clickable:focus-visible {
+      outline: none;
+      box-shadow: var(--dashboard-shadow-hover), 0 0 0 3px rgba(17,17,17,0.08);
     }
 
     .card-title {
@@ -2699,18 +2711,218 @@
       min-width: 0;
     }
 
-    /* Action buttons fade in on hover/focus */
+    /* Action buttons always visible for touch + keyboard accessibility */
     .employee-card .hover-actions {
-      opacity: 0;
+      opacity: 1;
       transition: opacity 0.18s ease;
     }
-    .employee-card:hover .hover-actions,
-    .employee-card:focus-within .hover-actions {
-      opacity: 1;
-    }
     .employee-card .hover-actions .btn { padding: 5px 9px; font-size: 11px; }
-    @media (hover: none) {
-      .employee-card .hover-actions { opacity: 1; }
+
+    /* Directory header controls: view toggle + count */
+    .directory-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .view-toggle {
+      display: inline-flex;
+      background: #f4f4f5;
+      border-radius: 8px;
+      padding: 2px;
+    }
+    .view-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 24px;
+      border-radius: 6px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .view-toggle-btn:hover { color: var(--text); }
+    .view-toggle-btn.active {
+      background: #ffffff;
+      color: var(--text);
+      box-shadow: 0 1px 2px rgba(17,17,17,0.06);
+    }
+
+    /* Compact list view */
+    .employee-directory.view-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .employee-directory.view-list .employee-card {
+      display: grid;
+      grid-template-columns: 28px minmax(140px, 1.4fr) auto auto minmax(0, 1.2fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: var(--dashboard-card-radius);
+    }
+    .employee-directory.view-list .employee-card-head,
+    .employee-directory.view-list .employee-card-footer {
+      display: contents;
+    }
+    .employee-directory.view-list .employee-card .badge {
+      justify-self: start;
+    }
+    .employee-directory.view-list .employee-salary-block {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0;
+      background: transparent;
+      white-space: nowrap;
+    }
+    .employee-directory.view-list .salary-main,
+    .employee-directory.view-list .salary-yearly,
+    .employee-directory.view-list .salary-total {
+      flex: 0 0 auto;
+      min-width: 0;
+      text-align: left;
+    }
+    .employee-directory.view-list .salary-divider {
+      flex: 0 0 1px;
+      height: 16px;
+    }
+    .employee-directory.view-list .hover-actions {
+      justify-self: end;
+      display: inline-flex;
+      gap: 4px;
+    }
+    .employee-directory.view-list .hover-actions .btn {
+      padding: 4px 8px;
+      font-size: 10.5px;
+    }
+    .employee-directory.view-list .employee-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      font-size: 10px;
+    }
+    .employee-directory.view-list .employee-identity {
+      min-width: 0;
+      overflow: hidden;
+    }
+    .employee-directory.view-list .employee-name { font-size: 13px; }
+    .employee-directory.view-list .employee-role { font-size: 11px; }
+    .employee-directory.view-list .employee-salary-block {
+      padding: 4px 8px;
+      background: transparent;
+      gap: 6px;
+    }
+    .employee-directory.view-list .salary-divider { height: 18px; }
+    .employee-directory.view-list .salary-label { display: none; }
+    .employee-directory.view-list .salary-value { font-size: 12px; }
+    .employee-directory.view-list .salary-value-secondary { font-size: 11px; }
+    .employee-directory.view-list .employee-chips {
+      flex-wrap: nowrap;
+      overflow: hidden;
+      max-height: 22px;
+    }
+    .employee-directory.view-list .employee-chips .emp-chip {
+      font-size: 10px;
+      padding: 2px 6px;
+      white-space: nowrap;
+    }
+    .employee-directory.view-list .employee-note,
+    .employee-directory.view-list .employee-card-footer-meta { display: none; }
+    .employee-directory.view-list .employee-card-footer {
+      padding: 0;
+      border: 0;
+      justify-content: flex-end;
+    }
+
+    /* Directory empty state */
+    .emp-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 32px 16px;
+      color: var(--muted);
+      text-align: center;
+    }
+    .emp-empty svg { color: var(--line); }
+    .emp-empty-title { color: var(--text); font-weight: 700; font-size: 14px; }
+    .emp-empty-sub { font-size: 12px; max-width: 380px; line-height: 1.45; }
+    .emp-empty .btn { margin-top: 6px; }
+
+    /* Raise projector panel */
+    .raise-projector .raise-control {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .raise-projector .raise-input {
+      flex: 1;
+      padding: 6px 10px;
+      font-size: 13px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      border-radius: 8px;
+    }
+    .raise-projector .raise-presets {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .raise-projector .raise-preset {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      font-variant-numeric: tabular-nums;
+    }
+    .raise-projector .raise-preset:hover { background: #fafafa; }
+    .raise-projector .raise-preset.active {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+    .raise-projector .raise-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 10px;
+      border-top: 1px solid #f1f1f3;
+    }
+    .raise-projector .raise-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 12px;
+    }
+    .raise-projector .raise-row .raise-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .raise-projector .raise-row .raise-value {
+      font-weight: 700;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .raise-projector .raise-row.delta .raise-value.good { color: var(--good); }
+    .raise-projector .raise-row.delta .raise-value.bad { color: var(--bad); }
+    .raise-projector .raise-foot {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.4;
     }
 
     table {
@@ -2802,6 +3014,727 @@
     .bulk-bar .btn.small.warn:hover { background: #b45309; }
 
     /* Payroll period controls in the topbar */
+    /* ===== Salary Outgoing — unified spacing rhythm ===== */
+    #payroll .topbar { margin-bottom: 20px; gap: 16px; }
+    #payroll .topbar h1 { margin-bottom: 4px; }
+    #payroll .topbar .subtitle { line-height: 1.5; }
+    #payroll .payroll-controls { gap: 12px; row-gap: 10px; }
+    #payroll .period-presets { gap: 4px; }
+    #payroll .toolbar {
+      margin-bottom: 20px;
+      padding: 12px 14px;
+      background: #ffffff;
+      border-radius: var(--dashboard-card-radius);
+      box-shadow: var(--dashboard-shadow);
+      gap: 12px;
+    }
+    #payroll .toolbar .filters { gap: 10px; flex: 1; }
+    #payroll .toolbar .search { flex: 1; min-width: 220px; }
+    #payroll .toolbar .filter-select { min-width: 140px; }
+    #payroll #payrollCards { margin-bottom: 20px; }
+    #payroll .payroll-progress-card {
+      padding: 26px 28px 22px;
+      background: #ffffff;
+      box-shadow: var(--dashboard-shadow);
+      border-color: transparent;
+      overflow: visible;
+    }
+    #payroll .payroll-progress-card::before { display: none; }
+    #payroll .ppc-head-pills {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    #payroll .payroll-progress-card .hero-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      justify-content: flex-start;
+      min-width: 0;
+    }
+    #payroll .payroll-progress-card .hero-meta {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    #payroll .payroll-progress-card .hero-value {
+      color: var(--text);
+      font-size: 32px;
+      font-weight: 720;
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+      font-variant-numeric: tabular-nums;
+    }
+    #payroll .payroll-progress-card .hero-pills {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    #payroll .payroll-progress-card .hero-delta,
+    #payroll .payroll-progress-card .margin-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      font-variant-numeric: tabular-nums;
+    }
+    #payroll .payroll-progress-card .hero-delta.good,
+    #payroll .payroll-progress-card .margin-pill.good { background: var(--good-bg); color: var(--good); }
+    #payroll .payroll-progress-card .hero-delta.bad,
+    #payroll .payroll-progress-card .margin-pill.bad { background: var(--bad-bg); color: var(--bad); }
+    #payroll .payroll-progress-card .margin-pill.info { background: #e0f2fe; color: #0c4a6e; }
+    #payroll .payroll-progress-card .margin-pill.warn { background: var(--warn-bg); color: var(--warn); }
+    #payroll .payroll-hero-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    #payroll .payroll-hero-actions .btn {
+      padding: 6px 10px;
+      font-size: 11px;
+    }
+    #payroll .payroll-checklist {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    #payroll .payroll-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--muted);
+      background: #f4f4f5;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 10.5px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    #payroll .payroll-step::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+    #payroll .payroll-step.done { color: var(--good); background: var(--good-bg); }
+    #payroll .payroll-step.warn { color: var(--warn); background: var(--warn-bg); }
+    #payroll .payroll-step.next { color: #374151; background: #f3f4f6; }
+    #payroll .payroll-progress-card .hero-substats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #f1f1f3;
+      gap: 0;
+    }
+    #payroll .payroll-progress-card .hero-substats .substat {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+      padding: 0 18px;
+      border-left: 1px solid #f1f1f3;
+    }
+    #payroll .payroll-progress-card .hero-substats .substat:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+    #payroll .payroll-progress-card .hero-substats .substat:last-child {
+      padding-right: 0;
+    }
+    #payroll .payroll-progress-card .hero-substats .substat strong {
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 720;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+    #payroll .payroll-progress-card .hero-substats .substat-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    #payroll .payroll-progress-card .hero-substats .substat-hint {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 10px;
+      text-transform: none;
+      letter-spacing: 0.02em;
+      opacity: 0.8;
+    }
+    #payroll .payroll-progress-card .substat-delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      width: fit-content;
+      padding: 1px 6px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      font-variant-numeric: tabular-nums;
+    }
+    #payroll .payroll-progress-card .substat-delta.good { color: var(--good); background: var(--good-bg); }
+    #payroll .payroll-progress-card .substat-delta.warn { color: var(--warn); background: var(--warn-bg); }
+    #payroll .payroll-progress-card .substat-delta.bad { color: var(--bad); background: var(--bad-bg); }
+    #payroll .payroll-progress-card .substat-delta.neutral { color: var(--muted); background: #f3f4f6; }
+    #payroll .payroll-progress-card .hero-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+      gap: 24px;
+      align-items: start;
+    }
+    #payroll .payroll-progress-card .milestone-panel {
+      padding-left: 22px;
+      border-left: 1px solid #f1f1f3;
+      min-width: 0;
+      max-width: 360px;
+      justify-self: end;
+      width: 100%;
+    }
+    #payroll .payroll-progress-card .milestone-title {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    #payroll .payroll-progress-card .milestone-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 18px;
+    }
+    #payroll .payroll-progress-card .milestone-item {
+      min-width: 0;
+    }
+    #payroll .payroll-progress-card .milestone-item span {
+      display: block;
+      color: var(--micro);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+    #payroll .payroll-progress-card .milestone-item strong {
+      display: block;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.25;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      font-variant-numeric: tabular-nums;
+    }
+    #payroll .payroll-progress-card .milestone-item.bad strong { color: var(--bad); }
+    #payroll .payroll-progress-card .milestone-item small {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+    #payroll .payroll-view-toggle {
+      display: inline-flex;
+      background: #f4f4f5;
+      border-radius: 8px;
+      padding: 2px;
+    }
+    #payroll .payroll-view-toggle .series-pill {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 5px 9px;
+      border-radius: 6px;
+      font-size: 10.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    #payroll .payroll-view-toggle .series-pill.active {
+      background: #ffffff;
+      color: var(--text);
+      box-shadow: 0 1px 2px rgba(17,17,17,0.06);
+    }
+    #payroll .expected-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+      font-variant-numeric: tabular-nums;
+    }
+    #payroll .expected-cell strong {
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 740;
+    }
+    #payroll .expected-cell span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+    }
+    #payroll .expected-cell .diff.good { color: var(--good); }
+    #payroll .expected-cell .diff.warn { color: var(--warn); }
+    #payroll .expected-cell .diff.bad { color: var(--bad); }
+    #payroll .batch-health {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    #payroll .batch-health.good { color: var(--good); background: var(--good-bg); }
+    #payroll .batch-health.warn { color: var(--warn); background: var(--warn-bg); }
+    #payroll .batch-health.neutral { color: var(--muted); background: #f3f4f6; }
+    #payroll .batch-health.bad { color: var(--bad); background: var(--bad-bg); }
+    #payroll .payroll-quick-filters:not(:empty) { margin-bottom: 16px; }
+    #payroll .bulk-bar { margin-bottom: 16px; padding: 12px 16px; }
+    #payroll .table-wrap { margin-top: 4px; }
+    #payroll #payrollTable thead th { padding: 12px 14px; }
+    #payroll #payrollTable tbody td { padding: 12px 14px; vertical-align: middle; }
+    #payroll #payrollTable .payroll-pick-cell { padding-left: 16px; padding-right: 6px; }
+    #payroll .payroll-employee { gap: 12px; }
+    #payroll .release-header {
+      padding: 4px 0;
+      gap: 12px;
+      row-gap: 8px;
+    }
+    #payroll .release-header-text { gap: 4px; }
+    #payroll .release-actions { gap: 8px; }
+    #payroll .payroll-group-header td { padding: 12px 14px; }
+    #payroll .action-group { gap: 6px; }
+
+    @media (max-width: 880px) {
+      #payroll .toolbar { padding: 10px 12px; }
+      #payroll .payroll-progress-card { padding: 18px 18px; }
+      #payroll .payroll-progress-card .hero-row { grid-template-columns: 1fr; gap: 18px; }
+      #payroll .payroll-progress-card .milestone-panel { padding-left: 0; padding-top: 16px; border-left: 0; border-top: 1px solid #f1f1f3; }
+      #payroll .payroll-progress-card .milestone-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #payroll .ppc-body { gap: 20px; }
+      #payroll .ppc-right { padding-left: 0; padding-top: 16px; border-left: 0; border-top: 1px solid #f1f1f3; }
+      #payroll .payroll-progress-card .hero-substats { grid-template-columns: 1fr; gap: 12px; }
+      #payroll .payroll-progress-card .hero-substats .substat {
+        padding: 0;
+        border-left: 0;
+      }
+    }
+    /* ===== /Salary Outgoing spacing ===== */
+
+    /* Period nav arrows */
+    .period-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .period-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    .period-nav-btn:hover {
+      background: #f4f4f5;
+      color: var(--text);
+      border-color: #d4d4d8;
+    }
+    .period-nav-btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
+    }
+
+    /* Progress card head sub-elements */
+    .ppc-head-left,
+    .ppc-head-right {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .ppc-yoy {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #f4f4f5;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .ppc-yoy.good { color: var(--good); background: var(--good-bg); }
+    .ppc-yoy.bad { color: var(--bad); background: var(--bad-bg); }
+
+    .ppc-variance {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--warn-bg);
+      color: var(--warn);
+      border: 0;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .ppc-variance:hover { background: #fde68a; }
+    .ppc-variance.active {
+      background: var(--warn);
+      color: #ffffff;
+    }
+
+    /* Payroll row: type chip inline with name */
+    .payroll-employee-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+    .payroll-employee-name strong {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .payroll-paid-cell .payroll-paid-date {
+      font-size: 12.5px;
+      color: var(--text);
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Salary Outgoing — progress card v3 (hero-stat layout) */
+    #payrollCards .payroll-progress-card { grid-column: 1 / -1; }
+    .payroll-progress-card {
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .ppc-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .ppc-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--micro);
+    }
+    .ppc-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #f4f4f5;
+      color: var(--muted);
+    }
+    .ppc-status .ppc-status-dot {
+      width: 6px; height: 6px; border-radius: 999px; background: currentColor;
+    }
+    .ppc-status.complete { color: var(--good); background: var(--good-bg); }
+    .ppc-status.mid { color: var(--warn); background: var(--warn-bg); }
+
+    .ppc-hero {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-top: 2px;
+    }
+    .ppc-hero-value {
+      font-size: 30px;
+      font-weight: 760;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .ppc-hero-suffix {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .ppc-sub {
+      font-size: 12.5px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ppc-bar {
+      display: flex;
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #f1f5f9;
+      margin-top: 4px;
+    }
+    .ppc-bar-seg { display: block; height: 100%; transition: width 0.3s ease; }
+    .ppc-bar-seg.paid { background: var(--good); }
+    .ppc-bar-seg.pending { background: #f59e0b; }
+    .ppc-bar-seg.remaining { background: #e5e7eb; }
+
+    .ppc-foot {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 11.5px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .ppc-foot-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ppc-foot-dot {
+      width: 6px; height: 6px; border-radius: 999px;
+    }
+    .ppc-foot-dot.pending { background: #f59e0b; }
+    .ppc-foot-dot.remaining { background: #cbd5e1; }
+
+    /* Two-column body: hero left, release breakdown right */
+    .ppc-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.9fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+    .ppc-left {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+    }
+    .ppc-right {
+      display: grid;
+      grid-auto-flow: row;
+      gap: 10px;
+      padding-left: 24px;
+      border-left: 1px solid #f1f1f3;
+      min-width: 0;
+    }
+    .ppc-release {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 0;
+    }
+    .ppc-release-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .ppc-release-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--micro);
+    }
+    .ppc-release-date {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .ppc-release-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      line-height: 1.2;
+    }
+    .ppc-release-value .muted { color: var(--muted); font-weight: 500; }
+    .ppc-release-bar {
+      display: flex;
+      height: 5px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #f1f5f9;
+    }
+    .ppc-release-bar .seg { display: block; height: 100%; transition: width 0.3s ease; }
+    .ppc-release-bar .seg.paid { background: var(--good); }
+    .ppc-release-bar .seg.pending { background: #f59e0b; }
+    .ppc-release-bar .seg.remaining { background: #cbd5e1; }
+    .ppc-release-foot {
+      font-size: 11px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .ppc-release-empty {
+      font-size: 12px;
+      color: var(--muted);
+      font-style: italic;
+      padding: 12px 0;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .ppc-body { grid-template-columns: 1fr; gap: 16px; }
+      .ppc-right { padding-left: 0; padding-top: 14px; border-left: 0; border-top: 1px solid #f1f1f3; }
+    }
+
+    /* Salary Outgoing — row enhancements */
+    .payroll-employee {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .payroll-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+    .payroll-employee-text { min-width: 0; }
+
+    .variance-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      margin-left: 8px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      cursor: help;
+    }
+    .variance-chip.warn { background: var(--warn-bg); color: var(--warn); }
+    .variance-chip.info { background: #e0f2fe; color: #0c4a6e; }
+
+    .amount-edit {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: text;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border-bottom: 1px dashed transparent;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .amount-edit:hover {
+      background: #fafafa;
+      border-bottom-color: var(--line);
+    }
+    .amount-edit:focus-visible {
+      outline: none;
+      background: #fafafa;
+      box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
+    }
+    .amount-edit-icon { opacity: 0; transition: opacity 0.15s ease; color: var(--muted); flex-shrink: 0; }
+    .amount-edit:hover .amount-edit-icon,
+    .amount-edit:focus-within .amount-edit-icon { opacity: 1; }
+
+    /* Salary Outgoing — empty state */
+    .payroll-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 40px 16px;
+      text-align: center;
+      color: var(--muted);
+    }
+    .payroll-empty svg { color: var(--line); }
+    .payroll-empty-title { color: var(--text); font-weight: 700; font-size: 14px; margin-top: 4px; }
+    .payroll-empty-sub { font-size: 12px; max-width: 420px; line-height: 1.45; }
+    .payroll-empty-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; justify-content: center; }
+
+    /* Overflow ⋯ menu */
+    .overflow-menu {
+      position: relative;
+      display: inline-flex;
+    }
+    .overflow-trigger { padding: 8px 12px; font-size: 16px; line-height: 1; }
+    .overflow-panel {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      min-width: 200px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      box-shadow: 0 12px 32px rgba(17,17,17,0.12);
+      padding: 4px;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+    }
+    .overflow-panel[hidden] { display: none; }
+    .overflow-panel button {
+      text-align: left;
+      background: transparent;
+      border: 0;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .overflow-panel button:hover { background: #f4f4f5; }
+
     .payroll-controls {
       flex-wrap: wrap;
       gap: 8px;
@@ -4773,14 +5706,27 @@
     }
 
     #dashboard .hero-value {
-      font-size: 32px;
-      font-weight: 720;
-      letter-spacing: -0.035em;
-      line-height: 1.05;
+      font-size: 40px;
+      font-weight: 760;
+      letter-spacing: -0.04em;
+      line-height: 1.02;
       color: var(--text);
       font-variant-numeric: tabular-nums;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+      outline: none;
+      border-radius: 6px;
     }
+    #dashboard .hero-value:hover { opacity: 0.72; }
+    #dashboard .hero-value:focus-visible { box-shadow: 0 0 0 3px rgba(17,17,17,0.08); }
 
+    #dashboard .hero-pills {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
     #dashboard .hero-delta {
       display: inline-flex;
       align-items: center;
@@ -4791,9 +5737,33 @@
       color: #374151;
       font-size: 11px;
       font-weight: 700;
-      align-self: flex-start;
-      margin-top: 6px;
       font-variant-numeric: tabular-nums;
+    }
+    #dashboard .margin-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      background: #f3f4f6;
+      color: #374151;
+    }
+    #dashboard .margin-pill.good { background: var(--good-bg); color: var(--good); }
+    #dashboard .margin-pill.info { background: #e0f2fe; color: #0c4a6e; }
+    #dashboard .margin-pill.warn { background: var(--warn-bg); color: var(--warn); }
+    #dashboard .margin-pill.bad  { background: var(--bad-bg);  color: var(--bad); }
+
+    #dashboard .substat-hint {
+      font-size: 8.5px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--micro);
+      margin-left: 4px;
+      opacity: 0.7;
     }
 
     #dashboard .hero-delta.good {
@@ -5305,7 +6275,7 @@
           <!-- Hero: cash flow -->
           <div class="card bento-hero">
             <div class="card-header">
-              <h2>Cash flow</h2>
+              <h2>Cash flow &amp; salary</h2>
               <div class="chart-heading-tools">
                 <span class="chart-meta" id="cashFlowMeta">Yearly salary spend since 2022</span>
                 <div class="series-toggle salary-spend-toggle" id="salarySpendMode" data-print-hide>
@@ -5443,6 +6413,27 @@
               </div>
               <div class="insights-list" id="employeeInsights"></div>
             </div>
+            <div class="card raise-projector">
+              <div class="card-header">
+                <div>
+                  <h2>What-if raise</h2>
+                  <p>See the new payroll cost if you apply a uniform raise.</p>
+                </div>
+              </div>
+              <div class="raise-control">
+                <input type="number" step="0.5" id="raiseInput" class="raise-input" placeholder="0" value="5" aria-label="Raise percentage" />
+                <span class="muted" style="font-size:12px;font-weight:700;">%</span>
+              </div>
+              <div class="raise-presets" id="raisePresets">
+                <button type="button" class="raise-preset" data-raise-preset="-5">−5%</button>
+                <button type="button" class="raise-preset" data-raise-preset="3">+3%</button>
+                <button type="button" class="raise-preset active" data-raise-preset="5">+5%</button>
+                <button type="button" class="raise-preset" data-raise-preset="10">+10%</button>
+                <button type="button" class="raise-preset" data-raise-preset="15">+15%</button>
+              </div>
+              <div class="raise-rows" id="raiseRows"></div>
+              <div class="raise-foot">Applied to active &amp; probation employees only.</div>
+            </div>
           </div>
 
           <!-- Tenure distribution + Upcoming reviews -->
@@ -5474,7 +6465,17 @@
                   <h2>Employee directory</h2>
                   <p>Click an employee row to edit. Use the filters above to narrow the list.</p>
                 </div>
-                <div class="muted" id="directoryCount" style="font-size: 12px;"></div>
+                <div class="directory-controls">
+                  <div class="muted" id="directoryCount" style="font-size: 12px;"></div>
+                  <div class="view-toggle" role="group" aria-label="Directory view">
+                    <button type="button" class="view-toggle-btn active" data-emp-view="cards" aria-label="Card view" title="Card view">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                    </button>
+                    <button type="button" class="view-toggle-btn" data-emp-view="list" aria-label="List view" title="Compact list">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>
+                    </button>
+                  </div>
+                </div>
               </div>
               <div class="employee-directory" id="employeesTable"></div>
             </div>
@@ -5495,15 +6496,28 @@
               <button class="preset-pill" data-preset="thisQuarter">This quarter</button>
               <button class="preset-pill" data-preset="thisYear">This year</button>
             </div>
-            <div class="period-controls">
-              <select id="payrollMonth" aria-label="Month"></select>
-              <span class="period-separator" aria-hidden="true"></span>
-              <select id="payrollYear" aria-label="Year"></select>
+            <div class="period-nav">
+              <button class="period-nav-btn" id="payrollPrevMonth" type="button" aria-label="Previous month" title="Previous month">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+              </button>
+              <div class="period-controls">
+                <select id="payrollMonth" aria-label="Month"></select>
+                <span class="period-separator" aria-hidden="true"></span>
+                <select id="payrollYear" aria-label="Year"></select>
+              </div>
+              <button class="period-nav-btn" id="payrollNextMonth" type="button" aria-label="Next month" title="Next month">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
             </div>
-            <button class="btn secondary" id="generatePayrollForMonth">Generate From Employees</button>
-            <button class="btn secondary" id="importPasahodBtn" title="Import a Pasahod-format .xlsx and merge new entries">⤓ Import Pasahod</button>
-            <input type="file" id="importPasahodFile" accept=".xlsx,.xls" hidden />
             <button class="btn" data-open="payroll">+ Add</button>
+            <div class="overflow-menu" id="payrollOverflowMenu">
+              <button class="btn secondary overflow-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="More actions" title="More actions">⋯</button>
+              <div class="overflow-panel" role="menu" hidden>
+                <button type="button" role="menuitem" id="generatePayrollForMonth">Generate from employees</button>
+                <button type="button" role="menuitem" id="importPasahodBtn">⤓ Import Pasahod</button>
+              </div>
+            </div>
+            <input type="file" id="importPasahodFile" accept=".xlsx,.xls" hidden />
           </div>
         </div>
         <div class="toolbar">
@@ -5516,6 +6530,9 @@
               <option value="pending">Pending</option>
               <option value="cancelled">Cancelled</option>
             </select>
+            <select class="filter-select" id="payrollEmployeeFilter">
+              <option value="">All employees</option>
+            </select>
             <select class="filter-select" id="payrollArchiveFilter">
               <option value="live">Active records</option>
               <option value="archived">Archived only</option>
@@ -5524,6 +6541,10 @@
             <button class="btn secondary" id="clearPayrollFilters">Clear Filters</button>
           </div>
           <button class="btn secondary" data-export="payrollRuns">Export CSV</button>
+          <div class="payroll-view-toggle" id="payrollReviewMode" role="group" aria-label="Payroll amount view">
+            <button type="button" class="series-pill active" data-payroll-view="actual">Actual</button>
+            <button type="button" class="series-pill" data-payroll-view="expected">Expected vs Actual</button>
+          </div>
         </div>
         <div class="grid cards" id="payrollCards"></div>
         <div class="payroll-quick-filters" id="payrollQuickFilters"></div>
@@ -5904,7 +6925,7 @@
     let selectedCashFlowSeries = "net";
     let compareMode = "none"; // none | prevMonth | prevYear | goal
     let drillTarget = null;   // null | "income" | "collected" | "open" | "payroll" | "net" | "netTotal"
-    let selectedSalarySpendMode = "year"; // year | month
+    let selectedSalarySpendMode = "month"; // year | month
     const SALARY_RELEASE_DAYS = [5, 20];
 
     // -----------------------------------------------------------------------------
@@ -7011,14 +8032,20 @@
       let m = 0;
       while (y < endYear || (y === endYear && m <= endMonth)) {
         const p = { month: m, year: y };
-        const payroll = salaryOutgoingAmount(p, ["paid", "scheduled", "pending"]);
+        const paid = salaryOutgoingAmount(p, ["paid"]);
+        const open = salaryOutgoingAmount(p, ["scheduled", "pending"]);
+        const payroll = paid + open;
+        const income = expectedMonthlyIncome(p);
         series.push({
           label: y % 12 === 0 || m === 0 ? `${months[m].slice(0, 3)} ${String(y).slice(2)}` : months[m].slice(0, 3),
           fullLabel: `${months[m]} ${y}`,
           year: y,
           month: m,
           value: payroll,
-          payroll
+          payroll,
+          paid,
+          open,
+          income
         });
         m += 1;
         if (m > 11) { m = 0; y += 1; }
@@ -7029,14 +8056,19 @@
     function salarySpendYearSeries(startYear = 2022, endYear = today.getFullYear()) {
       const rows = salarySpendSinceRows(startYear)
         .filter(row => row.year <= endYear);
-      return rows.map(row => ({
-        label: String(row.year),
-        fullLabel: String(row.year),
-        year: row.year,
-        value: row.tracked,
-        paid: row.paid,
-        open: row.open
-      }));
+      return rows.map(row => {
+        let income = 0;
+        for (let m = 0; m < 12; m++) income += expectedMonthlyIncome({ month: m, year: row.year });
+        return {
+          label: String(row.year),
+          fullLabel: String(row.year),
+          year: row.year,
+          value: row.tracked,
+          paid: row.paid,
+          open: row.open,
+          income
+        };
+      });
     }
 
     function salarySpendDisplaySeries(period, mode = selectedSalarySpendMode) {
@@ -7084,8 +8116,25 @@
       const yoyPayroll = salaryOutgoingAmount(yoyPeriod, ["paid", "scheduled", "pending"]);
       const prevIncome = expectedMonthlyIncome(prev);
       const yoyIncome = expectedMonthlyIncome(yoyPeriod);
-      const prevCollected = paidMonthlyIncome(prev);
-      const yoyCollected = paidMonthlyIncome(yoyPeriod);
+
+      // 3-month burn rate (avg monthly payroll over last 3 completed periods including current).
+      let burnSum = 0, burnCount = 0;
+      let bp = { month: period.month, year: period.year };
+      for (let i = 0; i < 3; i++) {
+        burnSum += salaryOutgoingAmount(bp, ["paid", "scheduled", "pending"]);
+        burnCount++;
+        bp = previousPeriod(bp);
+      }
+      const burn = burnCount ? burnSum / burnCount : 0;
+      // Prior 3-month burn (months -3..-5) for the MoM-style trend.
+      let prevBurnSum = 0, prevBurnCount = 0;
+      let pbp = previousPeriod(previousPeriod(previousPeriod(period)));
+      for (let i = 0; i < 3; i++) {
+        prevBurnSum += salaryOutgoingAmount(pbp, ["paid", "scheduled", "pending"]);
+        prevBurnCount++;
+        pbp = previousPeriod(pbp);
+      }
+      const prevBurn = prevBurnCount ? prevBurnSum / prevBurnCount : 0;
 
       const prevNet = prevIncome - prevPayroll;
       const delta = net - prevNet;
@@ -7098,37 +8147,55 @@
 
       const label = `Net · ${months[period.month]} ${period.year}`;
 
-      // For payroll: increases are "bad" (more cost), decreases are "good". For income/collected it's reversed.
-      const deltaChip = (current, prev, { higherIsGood = true } = {}) => {
-        if (!prev) return current ? `<span class="substat-delta neutral">new</span>` : "";
+      // Margin / coverage pill: (income − payroll) / income
+      let marginHtml = "";
+      if (income > 0) {
+        const marginPct = ((income - payroll) / income) * 100;
+        let tone = "good", marginLabel = "Healthy";
+        if (marginPct < 0) { tone = "bad"; marginLabel = "Critical"; }
+        else if (marginPct < 15) { tone = "warn"; marginLabel = "Tight"; }
+        else if (marginPct < 30) { tone = "info"; marginLabel = "OK"; }
+        marginHtml = `<span class="margin-pill ${tone}" title="(Income − Payroll) ÷ Income">${escapeHtml(marginLabel)} · ${marginPct.toFixed(0)}% margin</span>`;
+      } else if (payroll > 0) {
+        marginHtml = `<span class="margin-pill bad" title="No income recorded for this period">No income</span>`;
+      }
+
+      // Single trend chip per substat (MoM, since the hero is a monthly readout). YoY moves into tooltip.
+      const trendChip = (current, prev, yoy, opts = {}) => {
+        const higherIsGood = !!opts.higherIsGood;
+        const yoyText = yoy ? `YoY: ${(((current - yoy) / Math.abs(yoy)) * 100).toFixed(1)}%` : "";
+        if (!prev) return current ? `<span class="substat-delta neutral" title="${escapeHtml(yoyText)}">new</span>` : "";
         const pct = ((current - prev) / Math.abs(prev)) * 100;
         if (!Number.isFinite(pct)) return "";
         const rounded = Math.abs(pct) < 0.1 ? 0 : pct;
         const dir = rounded > 0 ? "up" : rounded < 0 ? "down" : "flat";
         const a = dir === "up" ? "▲" : dir === "down" ? "▼" : "—";
         const tone = dir === "flat" ? "neutral" : ((dir === "up") === higherIsGood ? "good" : "bad");
-        const txt = `${rounded > 0 ? "+" : ""}${rounded.toFixed(1)}%`;
-        return `<span class="substat-delta ${tone}">${a} ${txt}</span>`;
+        return `<span class="substat-delta ${tone}" title="${escapeHtml(yoyText)}">${a} ${rounded > 0 ? "+" : ""}${rounded.toFixed(1)}% MoM</span>`;
       };
 
       const substat = (label, value, prev, yoy, opts = {}) => `
         <div class="substat">
           <span class="substat-label">${label}</span>
           <strong>${compactCurrency(value)}</strong>
-          <div class="substat-deltas">
-            <span class="substat-delta-row">${deltaChip(value, prev, opts)}<span class="substat-delta-period">MoM</span></span>
-            <span class="substat-delta-row">${deltaChip(value, yoy, opts)}<span class="substat-delta-period">YoY</span></span>
-          </div>
+          ${trendChip(value, prev, yoy, opts)}
         </div>`;
 
       $("#cashFlowHero").html(`
         <div class="hero-meta">${escapeHtml(label)}</div>
-        <div class="hero-value">${currency(net)}</div>
-        <div class="hero-delta ${deltaTone}">${arrow} ${escapeHtml(deltaText)}</div>
+        <div class="hero-value" data-key="net" tabindex="0" role="button" aria-label="View Net breakdown">${currency(net)}</div>
+        <div class="hero-pills">
+          <span class="hero-delta ${deltaTone}">${arrow} ${escapeHtml(deltaText)}</span>
+          ${marginHtml}
+        </div>
         <div class="hero-substats">
           ${substat("Income", income, prevIncome, yoyIncome, { higherIsGood: true })}
           ${substat("Payroll", payroll, prevPayroll, yoyPayroll, { higherIsGood: false })}
-          ${substat("Collected", collected, prevCollected, yoyCollected, { higherIsGood: true })}
+          <div class="substat">
+            <span class="substat-label" title="Avg monthly payroll over the last 3 months">Burn rate <span class="substat-hint">3-mo avg</span></span>
+            <strong>${compactCurrency(burn)}</strong>
+            ${trendChip(burn, prevBurn, 0, { higherIsGood: false })}
+          </div>
         </div>
       `);
 
@@ -7139,8 +8206,23 @@
 
       const lastIdx = series.length - 1;
       const curVal = Number(series[lastIdx]?.value || 0);
-      const prevVal = lastIdx > 0 ? Number(series[lastIdx - 1]?.value || 0) : 0;
-      const priorLabel = isMonthlySpend ? "vs prev month" : "vs prev year";
+      let prevVal = lastIdx > 0 ? Number(series[lastIdx - 1]?.value || 0) : 0;
+      let priorLabel = isMonthlySpend ? "vs prev month" : "vs prev year";
+
+      // YTD-fair comparison: in year mode, if the last bar is the current incomplete year,
+      // compare Jan–currentMonth of this year against Jan–currentMonth of prev year.
+      const currentYearNow = today.getFullYear();
+      const currentMonthNow = today.getMonth();
+      if (!isMonthlySpend && series[lastIdx]?.year === currentYearNow && currentMonthNow < 11) {
+        const prevYear = currentYearNow - 1;
+        let prevYtd = 0;
+        for (let m = 0; m <= currentMonthNow; m++) {
+          prevYtd += salaryOutgoingAmount({ month: m, year: prevYear }, ["paid", "scheduled", "pending"]);
+        }
+        prevVal = prevYtd;
+        priorLabel = `vs ${months[currentMonthNow].slice(0, 3)} ${prevYear} YTD`;
+      }
+
       let deltaHtml = "";
       if (prevVal) {
         const pct = ((curVal - prevVal) / Math.abs(prevVal)) * 100;
@@ -7728,8 +8810,21 @@
     function clearPayrollFilters() {
       $("#payrollSearch").val("");
       $("#payrollStatusFilter").val("");
+      $("#payrollEmployeeFilter").val("");
       $("#payrollArchiveFilter").val("live");
+      payrollVarianceOnly = false;
       resetPeriod(selectedPayroll);
+      $("#payrollMonth").val(selectedPayroll.month);
+      $("#payrollYear").val(selectedPayroll.year);
+      renderPayroll();
+    }
+
+    function shiftPayrollMonth(delta) {
+      const m = Number(selectedPayroll.month);
+      const y = Number(selectedPayroll.year);
+      const d = new Date(y, m + delta, 1);
+      selectedPayroll.month = d.getMonth();
+      selectedPayroll.year = d.getFullYear();
       $("#payrollMonth").val(selectedPayroll.month);
       $("#payrollYear").val(selectedPayroll.year);
       renderPayroll();
@@ -7742,7 +8837,12 @@
       return (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth());
     }
 
-    function renderEmployeeBanner(rows, allEmployees) {
+    function renderEmployeeBanner(/* rows, allEmployees */) {
+      // Banner intentionally hidden — KPI strip below carries the same info.
+      $("#employeesBanner").attr("hidden", true).html("");
+      return;
+      // eslint-disable-next-line no-unreachable
+      // legacy below retained for reference
       const live = rows.filter(e => !e.archived);
       const active = live.filter(e => e.status === "active");
       const probation = live.filter(e => e.status === "probation");
@@ -7764,12 +8864,48 @@
       `);
     }
 
+    let employeeViewMode = "cards"; // cards | list
+    let raisePct = 5;
+
+    function renderRaiseProjector(rows) {
+      const eligible = rows.filter(e => !e.archived && ["active", "probation"].includes(e.status));
+      const currentMonthly = eligible.reduce((s, e) => s + Number(e.monthlySalary || 0), 0);
+      const pct = Number(raisePct || 0);
+      const projectedMonthly = currentMonthly * (1 + pct / 100);
+      const delta = projectedMonthly - currentMonthly;
+      const tone = delta > 0 ? "bad" : delta < 0 ? "good" : "";
+      const headCountText = `${eligible.length} ${eligible.length === 1 ? "person" : "people"}`;
+      $("#raiseRows").html(`
+        <div class="raise-row">
+          <span class="raise-label">Current monthly</span>
+          <span class="raise-value">${currency(currentMonthly)}</span>
+        </div>
+        <div class="raise-row">
+          <span class="raise-label">New monthly</span>
+          <span class="raise-value">${currency(projectedMonthly)}</span>
+        </div>
+        <div class="raise-row delta">
+          <span class="raise-label">Δ ${pct >= 0 ? "+" : ""}${pct}% · ${escapeHtml(headCountText)}</span>
+          <span class="raise-value ${tone}">${delta >= 0 ? "+" : ""}${currency(delta)} /mo</span>
+        </div>
+        <div class="raise-row">
+          <span class="raise-label">Annual impact</span>
+          <span class="raise-value ${tone}">${delta >= 0 ? "+" : ""}${currency(delta * 12)} /yr</span>
+        </div>
+      `);
+      $("#raisePresets .raise-preset").each(function () {
+        $(this).toggleClass("active", Number($(this).data("raise-preset")) === pct);
+      });
+    }
+
     function renderEmployeeKpis(rows) {
       const live = rows.filter(e => !e.archived);
       const active = live.filter(e => e.status === "active");
       const probation = live.filter(e => e.status === "probation");
+      const archivedCount = rows.filter(e => e.archived).length;
       const totalMonthly = [...active, ...probation].reduce((s, e) => s + Number(e.monthlySalary || 0), 0);
-      const avgSalary = active.length ? Math.round(totalMonthly / (active.length + probation.length || 1)) : 0;
+      const totalHead = active.length + probation.length;
+      const avgSalary = totalHead ? Math.round(totalMonthly / totalHead) : 0;
       const departments = new Set([...active, ...probation].map(e => String(e.department || "").trim()).filter(Boolean)).size;
 
       const tenureValues = active.map(e => tenureMonths(e.startDate)).filter(v => v != null);
@@ -7778,17 +8914,39 @@
         ? `${(avgTenureMonths / 12).toFixed(1)} yrs`
         : `${avgTenureMonths} mo`;
 
+      const deptText = departments ? `${departments} dept${departments === 1 ? "" : "s"}` : "no depts set";
       const tiles = [
-        { key: "headcount", label: "Headcount", value: String(active.length + probation.length), sub: `${active.length} active · ${probation.length} probation` },
-        { key: "monthly",   label: "Monthly Payroll", value: currency(totalMonthly), sub: `${currency(totalMonthly * 12)} / year run rate` },
-        { key: "avg",       label: "Avg Salary", value: currency(avgSalary), sub: "Per active/probation employee" },
-        { key: "depts",     label: "Departments", value: String(departments), sub: "Distinct active groupings" },
-        { key: "tenure",    label: "Avg Tenure", value: avgTenureLabel, sub: `${active.length} active counted` },
-        { key: "archived",  label: "Archived", value: String(rows.filter(e => e.archived).length), sub: "Total archived in view" }
+        {
+          key: "headcount",
+          label: "Headcount",
+          value: String(totalHead),
+          sub: `${active.length} active · ${probation.length} probation · ${deptText}`,
+          action: "filter-active"
+        },
+        {
+          key: "monthly",
+          label: "Monthly Payroll",
+          value: currency(totalMonthly),
+          sub: `${currency(totalMonthly * 12)} / year`
+        },
+        {
+          key: "avg",
+          label: "Avg Salary",
+          value: currency(avgSalary),
+          sub: `Across ${totalHead} ${totalHead === 1 ? "person" : "people"}`,
+          action: "sort-salary"
+        },
+        {
+          key: "tenure",
+          label: "Avg Tenure",
+          value: avgTenureLabel,
+          sub: `${active.length} active counted${archivedCount ? ` · ${archivedCount} archived` : ""}`,
+          action: "sort-tenure"
+        }
       ];
 
       $("#employeeKpiGrid").html(tiles.map(t => `
-        <div class="kpi-tile" title="${escapeHtml(t.sub)}" tabindex="0">
+        <div class="kpi-tile${t.action ? " is-clickable" : ""}" ${t.action ? `data-emp-kpi="${t.action}"` : ""} title="${escapeHtml(t.sub)}" ${t.action ? "tabindex=\"0\" role=\"button\"" : ""}>
           <div class="kpi-label">${escapeHtml(t.label)}</div>
           <div class="kpi-value">${escapeHtml(t.value)}</div>
           <div class="kpi-compare">${escapeHtml(t.sub)}</div>
@@ -7982,7 +9140,9 @@
       renderEmployeeTenure(rows);
       renderEmployeeInsights(rows);
       renderEmployeeUpcomingReviews(rows);
+      renderRaiseProjector(rows);
       $("#directoryCount").text(`${rows.length} ${rows.length === 1 ? "result" : "results"}`);
+      $("#employeesTable").attr("class", `employee-directory view-${employeeViewMode}`);
 
       const initials = (name) => String(name || "?")
         .split(/\s+/)
@@ -8046,6 +9206,26 @@
           </span>`;
       };
 
+      const anniversaryChip = (e) => {
+        const start = dateValue(e.startDate);
+        if (!start) return "";
+        const todayD = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const thisYr = new Date(todayD.getFullYear(), start.getMonth(), start.getDate());
+        let target = thisYr < todayD ? new Date(todayD.getFullYear() + 1, start.getMonth(), start.getDate()) : thisYr;
+        const diff = daysBetween(todayD, target);
+        // Only show within next 30 days, and skip the very first anniversary (same as start).
+        if (diff < 0 || diff > 30) return "";
+        const yrs = target.getFullYear() - start.getFullYear();
+        if (yrs <= 0) return "";
+        const dayLabel = diff === 0 ? "today" : `in ${diff} day${diff === 1 ? "" : "s"}`;
+        const tone = diff <= 7 ? "good" : "info";
+        return `
+          <span class="emp-chip ${tone}" title="Work anniversary ${escapeHtml(e.startDate)}">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V11"/><path d="M18 21V11"/><path d="M4 11h16"/><path d="M9 11V7a3 3 0 0 1 6 0v4"/><path d="M12 7V3"/></svg>
+            ${yrs}-yr ${dayLabel}
+          </span>`;
+      };
+
       const deptChip = (e) => {
         const dept = (e.department || "").trim();
         if (!dept) return `<span class="emp-chip muted">Unassigned</span>`;
@@ -8092,6 +9272,7 @@
             <div class="employee-chips">
               ${deptChip(e)}
               ${tenureChip(e)}
+              ${anniversaryChip(e)}
               ${reviewChip(e)}
             </div>
 
@@ -8107,7 +9288,20 @@
             </div>
           </article>
         `;
-      }).join("") : `<div class="table-empty">No employees found.</div>`);
+      }).join("") : `
+        <div class="emp-empty">
+          <svg viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="26" cy="22" r="8"/>
+            <path d="M10 52c0-10 7-16 16-16s16 6 16 16"/>
+            <circle cx="46" cy="20" r="5"/>
+            <path d="M42 36c6 0 11 5 12 12"/>
+            <path d="M44 44l8 8M52 44l-8 8"/>
+          </svg>
+          <div class="emp-empty-title">No employees match these filters</div>
+          <div class="emp-empty-sub">Try clearing filters, switching status, or showing archived records.</div>
+          <button type="button" class="btn secondary small" id="clearEmployeeFiltersInline">Clear filters</button>
+        </div>
+      `);
     }
 
     function renderSalaryHistory() {
@@ -8242,31 +9436,266 @@
       `);
     }
 
+    let payrollVarianceOnly = false;
+    let payrollReviewMode = "actual";
+
+    function payrollReleaseIndexFromDay(day) {
+      return SALARY_RELEASE_DAYS.findIndex(d => Number(d) === Number(day));
+    }
+
+    function expectedPayrollAmount(employeeId, releaseDate) {
+      const emp = (db.employees || []).find(e => Number(e.id) === Number(employeeId));
+      if (!emp || !Number(emp.monthlySalary || 0)) return null;
+      const releaseDay = dateValue(releaseDate)?.getDate();
+      const releaseIndex = payrollReleaseIndexFromDay(releaseDay);
+      if (releaseIndex < 0) return Number(emp.monthlySalary) / 2;
+      return splitSalaryAmount(emp.monthlySalary, releaseIndex);
+    }
+
+    function payrollVarianceForItem(item) {
+      if (item.type && item.type !== "salary") return 0;
+      const expected = expectedPayrollAmount(item.employeeId, payrollReleaseDate(item));
+      if (expected === null) return 0;
+      const diff = Number(item.amount || 0) - expected;
+      return Math.abs(diff) > 1 ? diff : 0;
+    }
+
+    function missingPayrollEmployeesForRelease(releaseIndex, period = selectedPayroll) {
+      const run = semiMonthlyPayrollRun(period.year, period.month, releaseIndex);
+      return activeEmployees().filter(employee => !(db.salaryOutgoings || []).some(item =>
+        !item.archived &&
+        item.status !== "cancelled" &&
+        Number(item.employeeId) === Number(employee.id) &&
+        payrollReleaseMatches(item, run.scheduledDate)
+      ));
+    }
+
+    function releaseBatchStats(releaseIndex, rows, period = selectedPayroll) {
+      const run = semiMonthlyPayrollRun(period.year, period.month, releaseIndex);
+      const items = (rows || []).filter(item => payrollReleaseMatches(item, run.scheduledDate) && !item.archived && item.status !== "cancelled");
+      const paid = items.filter(item => item.status === "paid").reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      const total = items.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      const pendingAmount = items.filter(item => ["scheduled", "pending"].includes(item.status)).reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      const missing = missingPayrollEmployeesForRelease(releaseIndex, period);
+      let health = "Missing records", tone = "bad";
+      if (!items.length && !missing.length) { health = "Ready"; tone = "neutral"; }
+      else if (missing.length) { health = `${missing.length} missing`; tone = "bad"; }
+      else if (items.length && items.every(item => item.status === "paid")) { health = "Complete"; tone = "good"; }
+      else if (items.some(item => item.status === "paid")) { health = "Partially paid"; tone = "warn"; }
+      else { health = "Ready"; tone = "neutral"; }
+      return { run, items, paid, total, pendingAmount, missing, health, tone };
+    }
+
+    function payrollChecklistHtml(rows, flaggedCount, missingCount, paidPct) {
+      const liveCount = (rows || []).filter(item => !item.archived && item.status !== "cancelled").length;
+      const generated = liveCount > 0;
+      const reviewed = generated && !flaggedCount && !missingCount;
+      const paid = generated && paidPct >= 100;
+      return `
+        <div class="payroll-checklist" aria-label="Payroll checklist">
+          <span class="payroll-step ${generated ? "done" : "next"}">Generated</span>
+          <span class="payroll-step ${reviewed ? "done" : generated ? "warn" : "next"}">Reviewed</span>
+          <span class="payroll-step ${paid ? "done" : generated ? "next" : ""}">Paid</span>
+          <span class="payroll-step ${paid ? "next" : ""}">Archive ready</span>
+        </div>
+      `;
+    }
+
+    function payrollMilestones(rows, period) {
+      const live = (rows || []).filter(item => !item.archived && item.status !== "cancelled");
+      const paid = live.filter(item => item.status === "paid").reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      const tracked = live.filter(item => ["paid", "scheduled", "pending"].includes(item.status)).reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      const pending = live.filter(item => ["scheduled", "pending"].includes(item.status)).reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      const releaseDates = [...new Set(live.map(item => payrollReleaseDate(item)).filter(Boolean))].sort();
+      const paidReleases = releaseDates.filter(date => live.some(item => payrollReleaseDate(item) === date && item.status === "paid")).length;
+      const expected = monthlyPayroll();
+      const nextRelease = releaseDates.find(date => live.some(item => payrollReleaseDate(item) === date && item.status !== "paid"));
+      const nextDate = nextRelease ? dateValue(nextRelease) : null;
+      const missingCount = SALARY_RELEASE_DAYS.reduce((sum, _, index) => sum + missingPayrollEmployeesForRelease(index, period).length, 0);
+      return {
+        paid,
+        tracked,
+        pending,
+        pct: Math.round((paid / (tracked || expected || 1)) * 100),
+        releaseCount: releaseDates.length,
+        paidReleases,
+        nextRelease: nextDate ? nextDate.toLocaleDateString("en-PH", { month: "short", day: "numeric" }) : "Complete",
+        missingCount,
+        periodLabel: `${months[period.month]} ${period.year}`
+      };
+    }
+
+    function payrollMilestonesHtml(rows, period) {
+      const m = payrollMilestones(rows, period);
+      return `
+        <div class="milestone-panel">
+          <div class="milestone-title">Milestones</div>
+          <div class="milestone-grid">
+            <div class="milestone-item">
+              <span>Release progress</span>
+              <strong>${m.paidReleases}/${m.releaseCount || 0}</strong>
+              <small>Paid batches</small>
+            </div>
+            <div class="milestone-item">
+              <span>Next release</span>
+              <strong>${escapeHtml(m.nextRelease)}</strong>
+              <small>${escapeHtml(m.periodLabel)}</small>
+            </div>
+            <div class="milestone-item">
+              <span>Pending</span>
+              <strong>${compactCurrency(m.pending)}</strong>
+              <small>Scheduled + pending</small>
+            </div>
+            <div class="milestone-item ${m.missingCount ? "bad" : ""}">
+              <span>Missing payroll</span>
+              <strong>${m.missingCount}</strong>
+              <small>${m.missingCount ? "Active employees" : "No gaps"}</small>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     function renderPayroll() {
       const search = $("#payrollSearch").val()?.toLowerCase() || "";
       const status = $("#payrollStatusFilter").val() || "";
+      const empFilter = $("#payrollEmployeeFilter").val() || "";
       const archiveFilter = $("#payrollArchiveFilter").val() || "live";
+
+      // Populate the employee filter once per render (keeps in sync with employees collection).
+      const empOptions = (db.employees || [])
+        .slice()
+        .sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")))
+        .map(e => `<option value="${e.id}" ${String(empFilter) === String(e.id) ? "selected" : ""}>${escapeHtml(e.name)}${e.archived ? " (archived)" : ""}</option>`)
+        .join("");
+      $("#payrollEmployeeFilter").html(`<option value="">All employees</option>${empOptions}`);
+
       const rows = (db.salaryOutgoings || []).filter(item => {
         const text = `${item.employeeName} ${item.reference} ${item.method} ${item.notes}`.toLowerCase();
-        return text.includes(search) && (!status || item.status === status) && archiveMatches(item, archiveFilter) && isPayrollReleaseInPeriod(item, selectedPayroll);
+        const matchesEmployee = !empFilter || String(item.employeeId) === String(empFilter);
+        const matchesVariance = !payrollVarianceOnly || payrollVarianceForItem(item) !== 0;
+        return text.includes(search)
+          && (!status || item.status === status)
+          && matchesEmployee
+          && matchesVariance
+          && archiveMatches(item, archiveFilter)
+          && isPayrollReleaseInPeriod(item, selectedPayroll);
       }).sort((a, b) => (dateValue(payrollReleaseDate(a)) || 0) - (dateValue(payrollReleaseDate(b)) || 0));
 
-      const total = rows.filter(item => !item.archived && ["paid", "scheduled", "pending"].includes(item.status)).reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      const tracked = rows.filter(item => !item.archived && ["paid", "scheduled", "pending"].includes(item.status)).reduce((sum, item) => sum + Number(item.amount || 0), 0);
       const paid = rows.filter(item => !item.archived && item.status === "paid").reduce((sum, item) => sum + Number(item.amount || 0), 0);
       const pending = rows.filter(item => !item.archived && ["scheduled", "pending"].includes(item.status)).reduce((sum, item) => sum + Number(item.amount || 0), 0);
       const planned = monthlyPayroll();
+      const remaining = Math.max(0, planned - tracked);
+      const denom = Math.max(planned, tracked) || 1;
+      const paidPct = Math.min(100, Math.round((paid / denom) * 100));
+      const periodLabel = `${months[selectedPayroll.month]} ${selectedPayroll.year}`;
 
-      $("#payrollCards").html([
-        ["Planned Payroll", currency(planned), "Monthly total; generated as 5th + 20th releases"],
-        ["Paid Salary", currency(paid), "Already released"],
-        ["Still Pending", currency(pending), "Scheduled or pending release"]
-      ].map(card => `
-        <div class="card">
-          <div class="card-title">${card[0]}</div>
-          <div class="card-value">${card[1]}</div>
-          <div class="card-note">${card[2]}</div>
+      const toneClass = paidPct >= 100 ? "complete" : paidPct >= 50 ? "mid" : "early";
+      const statusLabel = paidPct >= 100 ? "Complete" : paidPct >= 50 ? "On track" : "Early";
+
+      // YoY: compare tracked outgoing for the same month last year (all rows in db, not just current filtered).
+      const yoyPeriod = { month: selectedPayroll.month, year: selectedPayroll.year - 1 };
+      const yoyTracked = (db.salaryOutgoings || []).filter(item =>
+        !item.archived && ["paid", "scheduled", "pending"].includes(item.status) && isPayrollReleaseInPeriod(item, yoyPeriod)
+      ).reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      let yoyHtml = "";
+      if (yoyTracked > 0) {
+        const yoyPct = ((tracked - yoyTracked) / yoyTracked) * 100;
+        const tone = Math.abs(yoyPct) < 0.05 ? "neutral" : yoyPct > 0 ? "up" : "down";
+        const arrow = tone === "up" ? "▲" : tone === "down" ? "▼" : "—";
+        const cls = tone === "neutral" ? "neutral" : tone === "up" ? "bad" : "good";
+        yoyHtml = `<span class="ppc-yoy ${cls}" title="vs ${months[yoyPeriod.month]} ${yoyPeriod.year}: ${currency(yoyTracked)}">${arrow} ${yoyPct >= 0 ? "+" : ""}${yoyPct.toFixed(1)}% YoY</span>`;
+      }
+
+      // Variance summary: count rows in current period (before variance-only filter) with non-zero variance.
+      const allInPeriod = (db.salaryOutgoings || []).filter(item =>
+        !item.archived && archiveMatches(item, archiveFilter) && isPayrollReleaseInPeriod(item, selectedPayroll)
+      );
+      const flaggedCount = allInPeriod.filter(item => payrollVarianceForItem(item) !== 0).length;
+      const batchStats = SALARY_RELEASE_DAYS.map((_, index) => releaseBatchStats(index, allInPeriod, selectedPayroll));
+      const missingCount = batchStats.reduce((sum, stat) => sum + stat.missing.length, 0);
+      let varianceHeaderHtml = "";
+      if (flaggedCount > 0) {
+        varianceHeaderHtml = `<button type="button" class="ppc-variance ${payrollVarianceOnly ? "active" : ""}" id="payrollVarianceChip" title="Filter to rows whose amount doesn't match expected (monthly salary ÷ 2)">⚠ ${flaggedCount} flagged${payrollVarianceOnly ? " · clear" : ""}</button>`;
+      }
+
+      // Per-release breakdown (5th + 20th + anything else)
+      const liveRows = rows.filter(r => !r.archived && r.status !== "cancelled");
+      const releaseBuckets = {};
+      liveRows.forEach(item => {
+        const key = payrollReleaseDate(item) || item.periodEnd || "unknown";
+        if (!releaseBuckets[key]) releaseBuckets[key] = { paid: 0, total: 0, count: 0 };
+        const amt = Number(item.amount || 0);
+        releaseBuckets[key].total += amt;
+        releaseBuckets[key].count += 1;
+        if (item.status === "paid") releaseBuckets[key].paid += amt;
+      });
+      const releaseKeys = Object.keys(releaseBuckets).sort((a, b) => (dateValue(a) || 0) - (dateValue(b) || 0));
+      const releaseLabel = (key) => {
+        const day = dateValue(key)?.getDate();
+        if (day === SALARY_RELEASE_DAYS[0]) return "5th release";
+        if (day === SALARY_RELEASE_DAYS[1]) return "20th release";
+        return "Other";
+      };
+
+      const releaseSubstatForDay = (day, label) => {
+        const releaseIndex = payrollReleaseIndexFromDay(day);
+        const batch = releaseIndex >= 0 ? batchStats[releaseIndex] : null;
+        const key = releaseKeys.find(k => dateValue(k)?.getDate() === day);
+        const b = key ? releaseBuckets[key] : { paid: 0, total: planned ? planned / 2 : 0, count: 0 };
+        const pct = b.total > 0 ? Math.round((b.paid / b.total) * 100) : 0;
+        const tone = batch?.tone || (pct >= 100 ? "good" : pct > 0 ? "warn" : "neutral");
+        const d = key ? dateValue(key) : new Date(selectedPayroll.year, selectedPayroll.month, day);
+        const dateLbl = d ? d.toLocaleDateString("en-PH", { month: "short", day: "numeric" }) : "—";
+        return `
+          <div class="substat">
+            <span class="substat-label">${escapeHtml(label)} <span class="substat-hint">${escapeHtml(dateLbl)}</span></span>
+            <strong>${currency(b.paid)}</strong>
+            <span class="substat-delta ${tone}" title="${b.count} ${b.count === 1 ? "record" : "records"}">${escapeHtml(batch?.health || `${pct}% paid`)}</span>
+          </div>`;
+      };
+      const openPayroll = pending + remaining;
+      const reviewTone = flaggedCount ? "bad" : openPayroll ? "warn" : "good";
+      const reviewLabel = flaggedCount ? `${flaggedCount} flagged` : remaining ? "Not recorded" : pending ? "Pending" : "Clear";
+      const releaseSubstats = `
+        ${releaseSubstatForDay(SALARY_RELEASE_DAYS[0], "5th release")}
+        ${releaseSubstatForDay(SALARY_RELEASE_DAYS[1], "20th release")}
+        <div class="substat">
+          <span class="substat-label">Still unpaid <span class="substat-hint">${rows.length} rows</span></span>
+          <strong>${currency(openPayroll)}</strong>
+          <span class="substat-delta ${reviewTone}">${escapeHtml(reviewLabel)}</span>
         </div>
-      `).join(""));
+      `;
+
+      $("#payrollCards").html(`
+        <div class="card payroll-progress-card">
+          <div class="hero-row">
+            <div class="hero-left">
+              <div class="hero-meta">Payroll paid · ${escapeHtml(periodLabel)}</div>
+              <div class="hero-value">${currency(paid)}</div>
+              <div class="hero-pills">
+                ${yoyHtml ? yoyHtml.replace("ppc-yoy", "hero-delta") : ""}
+                <span class="margin-pill ${toneClass === "complete" ? "good" : toneClass === "mid" ? "info" : "warn"}" title="Paid payroll divided by planned monthly payroll">${paidPct}% complete</span>
+                ${varianceHeaderHtml}
+                <span class="ppc-status ${toneClass}">
+                  <span class="ppc-status-dot"></span>${statusLabel}
+                </span>
+              </div>
+              <div class="payroll-hero-actions">
+                <button type="button" class="btn secondary" data-payroll-generate-release="0">Generate 5th</button>
+                <button type="button" class="btn secondary" data-payroll-generate-release="1">Generate 20th</button>
+                <button type="button" class="btn good" data-payroll-mark-open-paid>Mark open paid</button>
+              </div>
+              ${payrollChecklistHtml(rows, flaggedCount, missingCount, paidPct)}
+            </div>
+            ${payrollMilestonesHtml(rows, selectedPayroll)}
+          </div>
+          <div class="hero-substats">
+            ${releaseSubstats}
+          </div>
+        </div>
+      `);
 
       // Group rows by release date so the 5th batch and 20th batch
       // are visually separated, with bulk actions per group.
@@ -8278,12 +9707,52 @@
       });
       const groupKeys = Object.keys(groups).sort((a, b) => (dateValue(a) || 0) - (dateValue(b) || 0));
 
-      const renderRow = (item) => `
+      const renderRow = (item) => {
+        const emp = (db.employees || []).find(e => Number(e.id) === Number(item.employeeId));
+        const [avBg, avFg] = nameAvatarTone(item.employeeName || emp?.name);
+        const initials = nameInitials(item.employeeName || emp?.name);
+        // Variance flag: only check default-salary rows; expected = monthlySalary / 2 for semi-monthly.
+        const isSalaryType = !item.type || item.type === "salary";
+        let varianceHtml = "";
+        const expected = isSalaryType ? expectedPayrollAmount(item.employeeId, payrollReleaseDate(item)) : null;
+        const diff = expected === null ? 0 : Number(item.amount || 0) - expected;
+        if (isSalaryType && expected !== null) {
+          if (Math.abs(diff) > 1) {
+            const tone = diff < 0 ? "warn" : "info";
+            varianceHtml = `<span class="variance-chip ${tone}" title="Expected ${currency(expected)} (monthly salary ÷ 2). Actual differs by ${diff >= 0 ? "+" : ""}${currency(diff)}.">⚠ ${diff >= 0 ? "+" : ""}${compactCurrency(diff)}</span>`;
+          }
+        }
+        const typeNorm = String(item.type || "salary").toLowerCase();
+        const showTypeChip = typeNorm && typeNorm !== "salary";
+        const amountHtml = payrollReviewMode === "expected" && expected !== null
+          ? `<div class="expected-cell">
+              <strong>${currency(item.amount)}</strong>
+              <span>Expected ${currency(expected)}</span>
+              <span class="diff ${Math.abs(diff) <= 1 ? "good" : diff > 0 ? "bad" : "warn"}">${Math.abs(diff) <= 1 ? "On target" : `${diff > 0 ? "+" : ""}${currency(diff)}`}</span>
+            </div>`
+          : `<span class="amount-edit" data-payroll-amount data-id="${item.id}" tabindex="0" role="button" aria-label="Edit amount" title="Click to edit">
+              ${currency(item.amount)}
+              <svg class="amount-edit-icon" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4l10-10-4-4L4 16v4z"/><path d="M13 6l4 4"/></svg>
+            </span>`;
+        return `
         <tr data-payroll-row data-id="${item.id}" data-row-status="${item.status || ""}" ${item.archived ? 'data-archived="1"' : ""}>
           <td class="payroll-pick-cell"><label class="row-check"><input type="checkbox" class="payroll-check" data-id="${item.id}" /></label></td>
-          <td><strong>${escapeHtml(item.employeeName)}</strong>${item.reference ? `<div class="row-sub">${escapeHtml(item.reference)}</div>` : ""}</td>
-          <td>${payrollTypeChip(item.type)}</td>
-          <td class="num"><span class="amount-edit" data-payroll-amount data-id="${item.id}" tabindex="0" title="Click to edit">${currency(item.amount)}</span></td>
+          <td>
+            <div class="payroll-employee">
+              <span class="payroll-avatar" style="background:${avBg};color:${avFg}">${escapeHtml(initials)}</span>
+              <div class="payroll-employee-text">
+                <div class="payroll-employee-name">
+                  <strong>${escapeHtml(item.employeeName)}</strong>
+                  ${showTypeChip ? payrollTypeChip(item.type) : ""}
+                </div>
+                ${item.reference ? `<div class="row-sub">${escapeHtml(item.reference)}</div>` : ""}
+              </div>
+            </div>
+          </td>
+          <td class="num">
+            ${amountHtml}
+            ${varianceHtml}
+          </td>
           <td>
             <select class="payroll-status-select status-${item.status || ""}" data-payroll-status-select data-id="${item.id}" ${item.archived ? "disabled" : ""}>
               <option value="scheduled" ${item.status === "scheduled" ? "selected" : ""}>Scheduled</option>
@@ -8292,7 +9761,7 @@
               <option value="cancelled" ${item.status === "cancelled" ? "selected" : ""}>Cancelled</option>
             </select>
           </td>
-          <td><span class="muted">${item.paymentDate ? `Paid ${escapeHtml(item.paymentDate)}` : "—"}</span></td>
+          <td class="payroll-paid-cell">${item.paymentDate ? `<span class="payroll-paid-date">${escapeHtml(item.paymentDate)}</span>` : `<span class="muted">—</span>`}</td>
           <td><div class="action-group">
             <button class="btn small secondary" data-edit="payroll" data-id="${item.id}">Edit</button>
             ${item.archived
@@ -8301,7 +9770,8 @@
             <button class="btn small danger" data-delete="payroll" data-id="${item.id}" title="Delete">×</button>
           </div></td>
         </tr>
-      `;
+        `;
+      };
 
       const renderGroup = (key) => {
         const items = groups[key];
@@ -8311,6 +9781,8 @@
         const total = liveItems.length;
         const allPaid = total > 0 && paidCount === total;
         const day = dateValue(key)?.getDate();
+        const releaseIndex = payrollReleaseIndexFromDay(day);
+        const batch = releaseIndex >= 0 ? releaseBatchStats(releaseIndex, rows, selectedPayroll) : null;
         let label;
         if (day === SALARY_RELEASE_DAYS[0]) label = `5th Release`;
         else if (day === SALARY_RELEASE_DAYS[1]) label = `20th Release`;
@@ -8320,16 +9792,22 @@
           : key;
         return `
           <tr class="payroll-group-header" data-release-key="${escapeHtml(key)}">
-            <td colspan="7">
+            <td class="payroll-pick-cell">
+              <label class="row-check" title="Select all in this release">
+                <input type="checkbox" class="payroll-group-check" data-release-key="${escapeHtml(key)}" aria-label="Select all in ${escapeHtml(label)}" />
+              </label>
+            </td>
+            <td colspan="5">
               <div class="release-header">
                 <div class="release-header-text">
                   <div class="release-label">${escapeHtml(label)}</div>
-                  <div class="release-meta">${escapeHtml(dateLabel)} · ${total} ${total === 1 ? "record" : "records"} · ${currency(groupTotal)} · <strong>${paidCount}/${total} paid</strong></div>
+                  <div class="release-meta">${escapeHtml(dateLabel)} · ${total} ${total === 1 ? "record" : "records"} · ${currency(groupTotal)} · <strong>${paidCount}/${total} paid</strong> ${batch ? `<span class="batch-health ${batch.tone}">${escapeHtml(batch.health)}</span>` : ""}</div>
                 </div>
                 <div class="release-actions" data-print-hide>
                   ${total > 0 ? `<button class="btn small secondary" data-print-payslips="${escapeHtml(key)}">🖨 Payslips</button>` : ""}
                   ${total > 0 && !allPaid ? `<button class="btn small good" data-bulk-paid="${escapeHtml(key)}">Mark all paid</button>` : ""}
                   ${total > 0 && allPaid ? `<button class="btn small secondary" data-bulk-scheduled="${escapeHtml(key)}">Reset to scheduled</button>` : ""}
+                  ${total > 0 ? `<button class="btn small secondary" data-clone-next="${escapeHtml(key)}" title="Duplicate this release to next month">⎘ Clone → next month</button>` : ""}
                 </div>
               </div>
             </td>
@@ -8338,14 +9816,31 @@
         `;
       };
 
-      $("#payrollTable").html(`
-        <thead><tr><th class="payroll-pick-cell"><label class="row-check"><input type="checkbox" id="payrollCheckAll" aria-label="Select all" /></label></th><th>Employee</th><th>Type</th><th class="num">Amount</th><th>Status</th><th>Paid</th><th>Actions</th></tr></thead>
-        <tbody>
-          ${rows.length
-            ? groupKeys.map(renderGroup).join("")
-            : `<tr><td colspan="7" class="table-empty">No salary outgoing records found. Click "Generate From Employees" to create payroll rows for this month.</td></tr>`}
-        </tbody>
-      `);
+      if (rows.length) {
+        $("#payrollTable").html(`
+          <thead><tr><th class="payroll-pick-cell"><label class="row-check"><input type="checkbox" id="payrollCheckAll" aria-label="Select all" /></label></th><th>Employee</th><th class="num">${payrollReviewMode === "expected" ? "Actual / Expected" : "Amount"}</th><th>Status</th><th>Payment date</th><th>Actions</th></tr></thead>
+          <tbody>${groupKeys.map(renderGroup).join("")}</tbody>
+        `);
+      } else {
+        $("#payrollTable").html(`
+          <tbody><tr><td>
+            <div class="payroll-empty">
+              <svg viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="10" y="14" width="44" height="38" rx="3"/>
+                <path d="M10 24h44"/>
+                <path d="M18 8v8"/><path d="M46 8v8"/>
+                <path d="M20 36h14"/><path d="M20 42h10"/>
+              </svg>
+              <div class="payroll-empty-title">No payroll for ${escapeHtml(periodLabel)}</div>
+              <div class="payroll-empty-sub">Generate the 5th + 20th releases from your active employees, or add a record manually.</div>
+              <div class="payroll-empty-actions">
+                <button type="button" class="btn" id="payrollEmptyGenerate">Generate from employees</button>
+                <button type="button" class="btn secondary" id="payrollEmptyAdd" data-open="payroll">+ Add record</button>
+              </div>
+            </div>
+          </td></tr></tbody>
+        `);
+      }
       renderPayrollBulkBar();
       renderPayrollPresetState();
       renderPayrollQuickFilters();
@@ -8412,8 +9907,30 @@
     };
 
     function payrollTypeChip(type) {
-      const t = PAYROLL_TYPES[type || ""] || PAYROLL_TYPES["salary"];
+      const norm = String(type || "salary").toLowerCase();
+      // Hide chip for default salary rows — only flag non-default types (bonus, 13th-month, etc).
+      if (norm === "salary" || norm === "") return `<span class="muted" style="font-size:11px;">—</span>`;
+      const t = PAYROLL_TYPES[norm] || PAYROLL_TYPES["salary"];
       return `<span class="health-chip ${t.tone === "neutral" ? "neutral" : t.tone}"><span class="dot"></span>${escapeHtml(t.label)}</span>`;
+    }
+
+    // Auto-flip scheduled/pending payroll rows to "paid" when their paymentDate has passed.
+    function autoMarkPaidPast() {
+      const todayIso = dateIso(today);
+      let changed = false;
+      (db.salaryOutgoings || []).forEach(o => {
+        if (o.archived) return;
+        if (!["scheduled", "pending"].includes(o.status)) return;
+        if (!o.paymentDate) return;
+        if (o.paymentDate <= todayIso) {
+          o.status = "paid";
+          changed = true;
+        }
+      });
+      if (changed) {
+        addLog("Payroll auto-marked paid", "One or more rows with past paymentDate were flipped to paid.");
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+      }
     }
 
     function salarySpendSinceRows(startYear = 2022) {
@@ -8630,35 +10147,132 @@
         const series = (window._cashFlowSeries && window._cashFlowSeries.length)
           ? window._cashFlowSeries
           : salarySpendDisplaySeries({ month: Number(selectedDashboard.month || 0), year: Number(selectedDashboard.year || today.getFullYear()) });
-        const values = series.map(p => p.value);
         const labels = series.map(p => p.label);
-        const lastIdx = values.length - 1;
-        const pointRadii = values.map((_, i) => i === lastIdx ? 4 : 0);
-        const pointBgs = values.map((_, i) => i === lastIdx ? "#0a0a0a" : "transparent");
-        const pointBorders = values.map((_, i) => i === lastIdx ? "#ffffff" : "transparent");
-        const ctx = cashFlowCanvas.getContext("2d");
-        const gradient = ctx.createLinearGradient(0, 0, 0, 220);
-        gradient.addColorStop(0, "rgba(10,10,10,0.10)");
-        gradient.addColorStop(1, "rgba(10,10,10,0)");
+        const lastIdx = series.length - 1;
+        const isYearMode = selectedSalarySpendMode === "year";
+        const currentYear = today.getFullYear();
+        const currentMonth = today.getMonth();
 
-        const barColors = values.map((_, i) => i === lastIdx ? "#0a0a0a" : "rgba(10,10,10,0.55)");
+        // Stacked datasets: paid (solid accent) + scheduled/pending (lighter gray) + forecast (translucent, year mode only).
+        const paidData     = series.map(p => Number(p.paid || 0));
+        const scheduledData = series.map(p => Number(p.open || 0));
+
+        // Per-bar coloring: current period gets brand accent, prior periods stay neutral.
+        const ACCENT = "#16a34a";
+        const ACCENT_LIGHT = "rgba(22, 163, 74, 0.28)";
+        const NEUTRAL_PAID = "#404040";
+        const NEUTRAL_OPEN = "rgba(64, 64, 64, 0.28)";
+        const paidColors      = series.map((_, i) => i === lastIdx ? ACCENT : NEUTRAL_PAID);
+        const scheduledColors = series.map((_, i) => i === lastIdx ? ACCENT_LIGHT : NEUTRAL_OPEN);
+
+        // Forecast: only in year mode, only for the current (incomplete) year.
+        let forecastData = series.map(() => 0);
+        let forecastAdditional = 0;
+        let projectedFullYear = 0;
+        if (isYearMode && series[lastIdx]?.year === currentYear) {
+          const monthsElapsed = currentMonth + 1;
+          if (monthsElapsed > 0 && monthsElapsed < 12) {
+            const ytd = series[lastIdx].value;
+            projectedFullYear = ytd * (12 / monthsElapsed);
+            forecastAdditional = Math.max(0, projectedFullYear - ytd);
+            forecastData[lastIdx] = forecastAdditional;
+          }
+        }
+
+        const datasets = [
+          {
+            label: "Paid",
+            data: paidData,
+            backgroundColor: paidColors,
+            borderWidth: 0,
+            borderRadius: 2,
+            stack: "spend",
+            maxBarThickness: isYearMode ? 26 : 8
+          },
+          {
+            label: "Scheduled / pending",
+            data: scheduledData,
+            backgroundColor: scheduledColors,
+            borderWidth: 0,
+            borderRadius: 2,
+            stack: "spend",
+            maxBarThickness: isYearMode ? 26 : 8
+          }
+        ];
+        if (forecastAdditional > 0) {
+          datasets.push({
+            label: "Projected (run rate)",
+            data: forecastData,
+            backgroundColor: "rgba(22, 163, 74, 0.16)",
+            borderColor: "rgba(22, 163, 74, 0.55)",
+            borderWidth: 1,
+            borderDash: [4, 3],
+            borderRadius: 2,
+            stack: "spend",
+            maxBarThickness: isYearMode ? 26 : 8
+          });
+        }
+
+        // Income overlay line — sits on top of stacked bars (rendered on a separate non-stacked axis).
+        const incomeData = series.map(p => Number(p.income || 0));
+        const hasIncome = incomeData.some(v => v > 0);
+        const stackedTotals = series.map((p, i) => Number(p.value || 0) + Number(forecastData[i] || 0));
+        const sharedMax = Math.max(...stackedTotals, ...incomeData, 0) * 1.08;
+        if (hasIncome) {
+          datasets.push({
+            label: "Income",
+            type: "line",
+            data: incomeData,
+            borderColor: "#0ea5e9",
+            backgroundColor: "rgba(14, 165, 233, 0.08)",
+            borderWidth: 1.75,
+            tension: 0.35,
+            pointRadius: isYearMode ? 3 : 0,
+            pointBackgroundColor: "#0ea5e9",
+            pointBorderColor: "#ffffff",
+            pointBorderWidth: 1.5,
+            pointHoverRadius: 4,
+            fill: false,
+            yAxisID: "yIncome",
+            order: 0
+          });
+        }
+
+        // Custom plugin: draw the total value on top of each bar (year mode only — too cramped monthly).
+        const valueLabelPlugin = {
+          id: "salaryValueLabels",
+          afterDatasetsDraw(chart) {
+            if (!isYearMode) return;
+            const { ctx: c, chartArea } = chart;
+            const xScale = chart.scales.x;
+            const yScale = chart.scales.y;
+            c.save();
+            c.font = "600 10px ui-sans-serif, system-ui, -apple-system, sans-serif";
+            c.textAlign = "center";
+            c.textBaseline = "bottom";
+            for (let i = 0; i < series.length; i++) {
+              const tracked = Number(series[i].value || 0);
+              const total = i === lastIdx ? tracked + (forecastData[i] || 0) : tracked;
+              if (!total) continue;
+              const x = xScale.getPixelForValue(i);
+              const y = yScale.getPixelForValue(total) - 4;
+              if (y < chartArea.top) continue;
+              c.fillStyle = i === lastIdx ? ACCENT : "#6b7280";
+              c.fillText(compactCurrency(total), x, y);
+            }
+            c.restore();
+          }
+        };
+
         charts.cashFlow = new Chart(cashFlowCanvas, {
           type: "bar",
-          data: {
-            labels,
-            datasets: [{
-              label: "Payroll",
-              data: values,
-              backgroundColor: barColors,
-              borderWidth: 0,
-              borderRadius: 2,
-              maxBarThickness: selectedSalarySpendMode === "month" ? 8 : 18
-            }]
-          },
+          data: { labels, datasets },
+          plugins: [valueLabelPlugin],
           options: {
             responsive: true,
             maintainAspectRatio: false,
             interaction: { mode: "index", intersect: false },
+            layout: { padding: { top: isYearMode ? 18 : 6 } },
             plugins: {
               legend: { display: false },
               tooltip: {
@@ -8668,27 +10282,31 @@
                 footerColor: "#d1d5db",
                 padding: 10,
                 cornerRadius: 8,
-                displayColors: false,
+                displayColors: true,
+                boxWidth: 8,
+                boxHeight: 8,
                 callbacks: {
                   title: (items) => {
                     const idx = items[0]?.dataIndex ?? 0;
                     return series[idx]?.fullLabel || items[0]?.label || "";
                   },
-                  label: (item) => `Salary spend: ${currency(item.parsed.y)}`,
+                  label: (item) => {
+                    const val = Number(item.parsed.y || 0);
+                    return `${item.dataset.label}: ${currency(val)}`;
+                  },
                   footer: (items) => {
                     const idx = items[0]?.dataIndex ?? 0;
                     const lines = [];
                     const cur = Number(series[idx]?.value || 0);
+                    if (cur) lines.push(`Total tracked: ${currency(cur)}`);
                     const prev = idx > 0 ? Number(series[idx - 1]?.value || 0) : null;
-                    const priorLabel = selectedSalarySpendMode === "month" ? "Prev month" : "Prev year";
+                    const priorLabel = isYearMode ? "Prev year" : "Prev month";
                     if (prev != null && prev !== 0) {
                       const pct = ((cur - prev) / Math.abs(prev)) * 100;
                       const arrow = pct > 0.05 ? "▲" : pct < -0.05 ? "▼" : "—";
                       lines.push(`${priorLabel}: ${arrow} ${pct >= 0 ? "+" : ""}${pct.toFixed(1)}% (${currency(cur - prev)})`);
-                    } else if (prev === 0 && cur) {
-                      lines.push(`${priorLabel}: new`);
                     }
-                    if (selectedSalarySpendMode === "month") {
+                    if (!isYearMode) {
                       const yoyIdx = idx - 12;
                       if (yoyIdx >= 0) {
                         const yoy = Number(series[yoyIdx]?.value || 0);
@@ -8699,18 +10317,35 @@
                         }
                       }
                     }
+                    if (isYearMode && idx === lastIdx && forecastAdditional > 0) {
+                      lines.push(`Projected full yr: ${currency(projectedFullYear)} (run rate)`);
+                    }
                     return lines;
                   }
                 }
               }
             },
             scales: {
-              x: { ticks: { color: "#9ca3af", font: { size: 10 }, maxRotation: 0, autoSkipPadding: selectedSalarySpendMode === "month" ? 18 : 12 }, grid: { display: false }, border: { display: false } },
+              x: {
+                stacked: true,
+                ticks: { color: "#9ca3af", font: { size: 10 }, maxRotation: 0, autoSkipPadding: isYearMode ? 12 : 18 },
+                grid: { display: false },
+                border: { display: false }
+              },
               y: {
+                stacked: true,
                 beginAtZero: true,
+                max: sharedMax || undefined,
                 ticks: { color: "#9ca3af", font: { size: 10 }, callback: (v) => compactCurrency(v) },
                 grid: { color: "rgba(229, 231, 235, 0.75)", drawBorder: false },
                 border: { display: false }
+              },
+              yIncome: {
+                position: "right",
+                display: false,
+                beginAtZero: true,
+                max: sharedMax || undefined,
+                stacked: false
               }
             }
           }
@@ -8845,6 +10480,7 @@
 
     function renderAll() {
       autoFlagOverdue();
+      autoMarkPaidPast();
       populatePeriodControls();
       renderDashboard();
       renderEmployees();
@@ -9838,6 +11474,60 @@
       showToast(`${created} generated, ${converted} converted.`);
     }
 
+    function generatePayrollReleaseForSelectedMonth(releaseIndex) {
+      const index = Number(releaseIndex);
+      const run = semiMonthlyPayrollRun(selectedPayroll.year, selectedPayroll.month, index);
+      if (!run) return;
+      let created = 0;
+      activeEmployees().forEach(employee => {
+        const exists = (db.salaryOutgoings || []).some(item =>
+          !item.archived &&
+          Number(item.employeeId) === Number(employee.id) &&
+          payrollReleaseMatches(item, run.scheduledDate)
+        );
+        if (exists) return;
+        db.salaryOutgoings.push({
+          id: nextId(db.salaryOutgoings),
+          employeeId: employee.id,
+          employeeName: employee.name,
+          type: "salary",
+          amount: splitSalaryAmount(employee.monthlySalary, index),
+          periodStart: run.periodStart,
+          periodEnd: run.periodEnd,
+          scheduledDate: run.scheduledDate,
+          paymentDate: "",
+          status: "scheduled",
+          method: "Bank transfer",
+          reference: `PAY-${selectedPayroll.year}-${pad(selectedPayroll.month + 1)}-${pad(SALARY_RELEASE_DAYS[index])}-${employee.id}`,
+          notes: `Generated ${run.label} from active employee monthly salary.`,
+          archived: false
+        });
+        created++;
+      });
+      addLog("Payroll release generated", `${created} ${run.label} record(s) generated for ${months[selectedPayroll.month]} ${selectedPayroll.year}.`);
+      saveData();
+      showToast(created ? `${created} ${run.label} record(s) generated.` : `${run.label} already generated.`);
+    }
+
+    async function markOpenPayrollForSelectedPeriodPaid() {
+      const items = (db.salaryOutgoings || []).filter(item =>
+        !item.archived &&
+        ["scheduled", "pending"].includes(item.status) &&
+        isPayrollReleaseInPeriod(item, selectedPayroll)
+      );
+      if (!items.length) { showToast("No open payroll rows for this period."); return; }
+      const ok = await confirmToast(`Mark ${items.length} open payroll record(s) as paid?`, { confirmLabel: "Mark paid", tone: "info" });
+      if (!ok) return;
+      const today_iso = dateIso(today);
+      items.forEach(item => {
+        item.status = "paid";
+        if (!item.paymentDate) item.paymentDate = today_iso;
+      });
+      addLog("Payroll marked paid", `${items.length} open payroll record(s) marked paid for ${months[selectedPayroll.month]} ${selectedPayroll.year}.`);
+      saveData();
+      showToast(`${items.length} payroll record(s) marked paid.`);
+    }
+
     function exportCsv(type) {
       const rows = getExportRows(type);
       if (!rows.length) return alert("Nothing to export.");
@@ -10052,6 +11742,12 @@
       setTimeout(drawCharts, 0);
     });
 
+    $(document).on("click", "#cashFlowHero .hero-value[data-key]", function () {
+      openDrillPanel($(this).data("key"));
+    });
+    $(document).on("keydown", "#cashFlowHero .hero-value[data-key]", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openDrillPanel($(this).data("key")); }
+    });
     $(document).on("keydown", ".kpi-tile[data-clickable], .kpi-panel[data-clickable], .kpi-substat[data-clickable]", function (e) {
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $(this).trigger("click"); }
     });
@@ -10237,12 +11933,54 @@
 
     $(document).on("input", "#employeeSearch", debouncedRenderEmployees);
     $(document).on("change", "#employeeStatusFilter, #employeeArchiveFilter", renderEmployees);
+    $(document).on("click", "[data-emp-view]", function () {
+      employeeViewMode = $(this).data("emp-view") === "list" ? "list" : "cards";
+      $(".view-toggle-btn").removeClass("active");
+      $(this).addClass("active");
+      $("#employeesTable").attr("class", `employee-directory view-${employeeViewMode}`);
+    });
+    $(document).on("input", "#raiseInput", function () {
+      raisePct = Number($(this).val() || 0);
+      renderRaiseProjector(db.employees);
+    });
+    $(document).on("click", "#raisePresets .raise-preset", function () {
+      raisePct = Number($(this).data("raise-preset"));
+      $("#raiseInput").val(raisePct);
+      renderRaiseProjector(db.employees);
+    });
+    $(document).on("click", "#clearEmployeeFiltersInline", function () {
+      clearEmployeeFilters();
+    });
+    $(document).on("click keydown", "#employeeKpiGrid [data-emp-kpi]", function (e) {
+      if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return;
+      if (e.type === "keydown") e.preventDefault();
+      const action = $(this).data("emp-kpi");
+      if (action === "filter-active") {
+        $("#employeeStatusFilter").val("active").trigger("change");
+      } else if (action === "sort-salary") {
+        $("#employeeSort").val("salaryDesc").trigger("change");
+      } else if (action === "sort-tenure") {
+        $("#employeeSort").val("tenureLong").trigger("change");
+      }
+    });
     $(document).on("input", "#clientSearch", debouncedRenderClients);
     $(document).on("change", "#clientStatusFilter, #clientArchiveFilter", renderClients);
     $(document).on("input", "#paymentSearch", debouncedRenderPayments);
     $(document).on("change", "#paymentStatusFilter, #paymentArchiveFilter", renderPayments);
     $(document).on("input", "#payrollSearch", debouncedRenderPayroll);
-    $(document).on("change", "#payrollStatusFilter, #payrollArchiveFilter", renderPayroll);
+    $(document).on("change", "#payrollStatusFilter, #payrollArchiveFilter, #payrollEmployeeFilter", renderPayroll);
+    $(document).on("click", "#payrollPrevMonth", function () { shiftPayrollMonth(-1); });
+    $(document).on("click", "#payrollNextMonth", function () { shiftPayrollMonth(1); });
+    $(document).on("click", "#payrollVarianceChip", function () {
+      payrollVarianceOnly = !payrollVarianceOnly;
+      renderPayroll();
+    });
+    $(document).on("click", "#payrollReviewMode .series-pill", function () {
+      payrollReviewMode = $(this).data("payroll-view") === "expected" ? "expected" : "actual";
+      $("#payrollReviewMode .series-pill").removeClass("active");
+      $(this).addClass("active");
+      renderPayroll();
+    });
 
     $(document).on("click", "[data-open]", function () { openModal($(this).data("open")); });
     $(document).on("click", "[data-edit]", function (e) { e.stopPropagation(); openModal($(this).data("edit"), $(this).data("id")); });
@@ -10283,6 +12021,8 @@
     $(document).on("click", "[data-payment-status]", function () { updatePaymentStatus($(this).data("id"), $(this).data("payment-status")); });
     $(document).on("click", "[data-payroll-status]", function () { updatePayrollStatus($(this).data("id"), $(this).data("payroll-status")); });
     $(document).on("change", "[data-payroll-status-select]", function () { updatePayrollStatus($(this).data("id"), $(this).val()); });
+    $(document).on("click", "[data-payroll-generate-release]", function () { generatePayrollReleaseForSelectedMonth($(this).data("payroll-generate-release")); });
+    $(document).on("click", "[data-payroll-mark-open-paid]", markOpenPayrollForSelectedPeriodPaid);
     $(document).on("click", "[data-bulk-paid]", function () { bulkPayrollStatusForRelease($(this).data("bulk-paid"), "paid"); });
     $(document).on("click", "[data-bulk-scheduled]", function () { bulkPayrollStatusForRelease($(this).data("bulk-scheduled"), "scheduled"); });
     $(document).on("click", "[data-print-payslips]", function () { printPayslipsForRelease($(this).data("print-payslips")); });
@@ -10306,6 +12046,71 @@
     $(document).on("click", "#payrollPeriodPresets .preset-pill", function () {
       applyPayrollPreset($(this).data("preset"));
       renderPayroll();
+    });
+
+    // Overflow menu (Salary Outgoing topbar)
+    $(document).on("click", "#payrollOverflowMenu .overflow-trigger", function (e) {
+      e.stopPropagation();
+      const $menu = $(this).closest(".overflow-menu");
+      const $panel = $menu.find(".overflow-panel");
+      const open = $panel.prop("hidden");
+      $(".overflow-panel").prop("hidden", true);
+      $(".overflow-trigger").attr("aria-expanded", "false");
+      $panel.prop("hidden", !open);
+      $(this).attr("aria-expanded", open ? "true" : "false");
+    });
+    $(document).on("click", function () {
+      $(".overflow-panel").prop("hidden", true);
+      $(".overflow-trigger").attr("aria-expanded", "false");
+    });
+    $(document).on("click", ".overflow-panel", function (e) { e.stopPropagation(); });
+
+    // Empty-state CTAs
+    $(document).on("click", "#payrollEmptyGenerate", function () { $("#generatePayrollForMonth").trigger("click"); });
+
+    // Group-level "select all in release" checkbox
+    $(document).on("change", ".payroll-group-check", function () {
+      const key = $(this).data("release-key");
+      const on = $(this).is(":checked");
+      $(`tr[data-payroll-row]`).each(function () {
+        const itemId = Number($(this).data("id"));
+        const item = (db.salaryOutgoings || []).find(o => Number(o.id) === itemId);
+        if (item && (payrollReleaseDate(item) || item.periodEnd || "unknown") === key) {
+          $(this).find(".payroll-check").prop("checked", on);
+        }
+      });
+      renderPayrollBulkBar();
+    });
+
+    // Clone release rows to the same release date next month
+    $(document).on("click", "[data-clone-next]", async function () {
+      const key = $(this).data("clone-next");
+      const d = dateValue(key);
+      if (!d) { showToast("Can't clone — invalid release date."); return; }
+      const ok = await confirmToast(`Clone this release to next month?`, { confirmLabel: "Clone", tone: "info" });
+      if (!ok) return;
+      const source = (db.salaryOutgoings || []).filter(o => !o.archived && (payrollReleaseDate(o) || o.periodEnd || "unknown") === key);
+      if (!source.length) { showToast("Nothing to clone."); return; }
+      const nextMonth = new Date(d.getFullYear(), d.getMonth() + 1, d.getDate());
+      const shiftIso = (iso) => {
+        const dv = dateValue(iso);
+        if (!dv) return iso;
+        const shifted = new Date(dv.getFullYear(), dv.getMonth() + 1, dv.getDate());
+        return ymd(shifted.getFullYear(), shifted.getMonth(), shifted.getDate());
+      };
+      const created = source.map(item => ({
+        ...item,
+        id: nextId(db.salaryOutgoings),
+        status: "scheduled",
+        paymentDate: "",
+        scheduledDate: ymd(nextMonth.getFullYear(), nextMonth.getMonth(), nextMonth.getDate()),
+        periodStart: shiftIso(item.periodStart),
+        periodEnd: shiftIso(item.periodEnd)
+      }));
+      created.forEach(c => db.salaryOutgoings.push(c));
+      addLog("Payroll cloned to next month", `${created.length} record(s) cloned from ${key}.`);
+      saveData();
+      showToast(`${created.length} record(s) cloned.`);
     });
     $(document).on("click", "[data-chip-status]", function () {
       $("#payrollStatusFilter").val($(this).data("chip-status"));
