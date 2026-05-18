@@ -11,7 +11,13 @@
       "Bash(G:/python.exe -m pip install pandas openpyxl --quiet)",
       "Bash(G:/python.exe \"C:/Users/devil/OneDrive/Documents/GitHub/KNB-SALARY-CLIENT/backups/_refresh_anniversaries.py\")",
       "Bash(G:/python.exe \"C:/Users/devil/OneDrive/Documents/GitHub/KNB-SALARY-CLIENT/backups/_import_split.py\")",
-      "Bash(grep -n \"scales: {\\\\s*$\\\\|x: {\\\\s*$\\\\|y: {\\\\s*$\" /Users/angelomiguel/Documents/GitHub/KNB-SALARY-CLIENT/index.html)"
+      "Bash(grep -n \"scales: {\\\\s*$\\\\|x: {\\\\s*$\\\\|y: {\\\\s*$\" /Users/angelomiguel/Documents/GitHub/KNB-SALARY-CLIENT/index.html)",
+      "Bash(curl -sL https://raw.githubusercontent.com/karpathy/llm-council/main/README.md)",
+      "Bash(curl -sL https://api.github.com/repos/karpathy/llm-council)",
+      "Bash(curl -sL https://api.github.com/repos/karpathy/llm-council/contents/)",
+      "Bash(python3 -c \"import sys, json; data = json.load\\(sys.stdin\\); [print\\(f\\\\\"{x['type']:6} {x['name']}\\\\\"\\) for x in data]\")",
+      "Bash(curl -sL https://raw.githubusercontent.com/karpathy/llm-council/master/README.md)",
+      "Bash(curl -sL https://raw.githubusercontent.com/karpathy/llm-council/master/backend/config.py)"
     ]
   }
 }

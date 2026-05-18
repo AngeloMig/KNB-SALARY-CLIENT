@@ -1503,6 +1503,395 @@
       height: 100% !important;
     }
 
+    /* Reports tab — executive briefing layout */
+    #reports .report-brief {
+      display: grid;
+      grid-template-columns: minmax(280px, 1.1fr) minmax(240px, 0.75fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    #reports .report-hero,
+    #reports .report-insights,
+    #reports .report-module {
+      background: #ffffff;
+      border-radius: var(--dashboard-card-radius);
+      box-shadow: var(--dashboard-shadow);
+      padding: 18px;
+      min-width: 0;
+    }
+    #reports .report-eyebrow,
+    #reports .report-kpi-label,
+    #reports .report-section-label {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    #reports .report-hero-value {
+      color: var(--text);
+      font-size: 36px;
+      line-height: 1.05;
+      font-weight: 740;
+      letter-spacing: -0.04em;
+      font-variant-numeric: tabular-nums;
+      margin-top: 6px;
+    }
+    #reports .report-hero-sub,
+    #reports .report-kpi-note,
+    #reports .report-insight-meta {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+    #reports .report-hero-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    #reports .report-summary {
+      background: #ffffff;
+      border-radius: var(--dashboard-card-radius);
+      box-shadow: var(--dashboard-shadow);
+      padding: 16px 18px;
+      margin-bottom: 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+    }
+    #reports .report-summary-copy {
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.45;
+      font-weight: 600;
+    }
+    #reports .report-score {
+      display: grid;
+      gap: 3px;
+      text-align: right;
+      min-width: 120px;
+    }
+    #reports .report-score strong {
+      color: var(--text);
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 740;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+    #reports .report-score.good strong { color: var(--good); }
+    #reports .report-score.warn strong { color: var(--warn); }
+    #reports .report-score.bad strong { color: var(--bad); }
+    #reports .report-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    #reports .report-actions .btn {
+      padding: 6px 10px;
+      font-size: 11px;
+    }
+    #reports .report-kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    #reports .report-kpi {
+      background: #ffffff;
+      border-radius: var(--dashboard-card-radius);
+      box-shadow: var(--dashboard-shadow);
+      padding: 14px;
+      min-width: 0;
+    }
+    #reports .report-kpi-value {
+      color: var(--text);
+      font-size: 22px;
+      line-height: 1.1;
+      font-weight: 730;
+      letter-spacing: -0.025em;
+      font-variant-numeric: tabular-nums;
+      margin-top: 5px;
+    }
+    #reports .report-kpi-value.good { color: var(--good); }
+    #reports .report-kpi-value.warn { color: var(--warn); }
+    #reports .report-kpi-value.bad { color: var(--bad); }
+    #reports .report-insights {
+      display: grid;
+      gap: 10px;
+    }
+    #reports .report-insight {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 0;
+      border-top: 1px solid #f1f1f3;
+    }
+    #reports .report-insight:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+    #reports .report-insight strong {
+      display: block;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 740;
+      line-height: 1.25;
+    }
+    #reports .report-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+    #reports .report-module-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    #reports .report-module-title {
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 750;
+      letter-spacing: -0.015em;
+    }
+    #reports .report-chart-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    #reports .report-chart-box {
+      min-width: 0;
+      border: 1px solid #f1f1f3;
+      border-radius: var(--dashboard-card-radius);
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+    #reports .report-chart-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    #reports .report-chart-title {
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 740;
+      letter-spacing: -0.01em;
+    }
+    #reports .report-chart-total {
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.05;
+      font-weight: 730;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+    #reports .report-chart-meta {
+      color: var(--muted);
+      font-size: 10.5px;
+      font-weight: 650;
+      margin-top: 3px;
+    }
+    #reports .report-callouts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    #reports .report-callout {
+      background: #fafafa;
+      border-radius: var(--dashboard-card-radius);
+      padding: 9px 10px;
+      min-width: 0;
+    }
+    #reports .report-callout span {
+      display: block;
+      color: var(--micro);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+    #reports .report-callout strong {
+      display: block;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 740;
+      line-height: 1.15;
+      font-variant-numeric: tabular-nums;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #reports .report-legend {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 10.5px;
+      font-weight: 700;
+    }
+    #reports .report-legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    #reports .report-legend span::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #111111;
+    }
+    #reports .report-legend span.muted-dot::before { background: #8f8f8f; }
+    #reports .report-chart-box .chart-canvas-wrap {
+      height: 260px;
+      position: relative;
+    }
+    #reports .report-chart-box canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+    #reports .report-table-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin: 2px 0 12px;
+    }
+    #reports .report-mini-stat {
+      min-width: 0;
+      border: 1px solid #f1f1f3;
+      border-radius: var(--dashboard-card-radius);
+      background: #fafafa;
+      padding: 10px 11px;
+    }
+    #reports .report-mini-stat span {
+      display: block;
+      color: var(--micro);
+      font-size: 9px;
+      font-weight: 750;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #reports .report-mini-stat strong {
+      display: block;
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.05;
+      font-weight: 760;
+      letter-spacing: -0.025em;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #reports .report-mini-stat.good strong { color: var(--good); }
+    #reports .report-mini-stat.warn strong { color: var(--warn); }
+    #reports .report-mini-stat.bad strong { color: var(--bad); }
+    #reports .table-wrap {
+      border: 1px solid #eeeeef;
+      border-radius: var(--dashboard-card-radius);
+      overflow: hidden;
+      background: #ffffff;
+    }
+    #reports table {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+    }
+    #reports thead th {
+      background: #fafafa;
+      color: var(--micro);
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      padding: 10px 12px;
+      border-bottom: 1px solid #eeeeef;
+      white-space: nowrap;
+    }
+    #reports tbody td {
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.25;
+      padding: 11px 12px;
+      border-bottom: 1px solid #f3f3f4;
+      vertical-align: middle;
+    }
+    #reports tbody tr:last-child td { border-bottom: 0; }
+    #reports tbody tr:hover td { background: #fcfcfc; }
+    #reports td.report-money,
+    #reports th.report-money {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    #reports .report-row-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    #reports .report-rank {
+      display: inline-grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: #f2f2f3;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 760;
+      font-variant-numeric: tabular-nums;
+      flex: 0 0 auto;
+    }
+    #reports .report-row-title strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #reports tr.report-total-row td {
+      background: #fafafa;
+      border-top: 1px solid #e5e5e7;
+      font-weight: 760;
+    }
+    #reports tr.report-total-row:hover td { background: #fafafa; }
+    @media (max-width: 1050px) {
+      #reports .report-brief,
+      #reports .report-chart-grid { grid-template-columns: 1fr; }
+      #reports .report-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #reports .report-table-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 700px) {
+      #reports .report-kpis { grid-template-columns: 1fr; }
+      #reports .report-module-head { flex-direction: column; }
+      #reports .report-summary {
+        grid-template-columns: 1fr;
+      }
+      #reports .report-score { text-align: left; }
+      #reports .report-callouts { grid-template-columns: 1fr; }
+      #reports .report-chart-total { text-align: left; }
+      #reports .report-table-summary { grid-template-columns: 1fr; }
+    }
+
     .team-card {
       display: flex;
       flex-direction: column;
@@ -3879,6 +4268,258 @@
       }
     }
     /* ===== /Salary Outgoing spacing ===== */
+
+    /* ===== Payments — unified spacing + visual rhythm ===== */
+    #payments .topbar { margin-bottom: 20px; gap: 16px; }
+    #payments .payments-controls { gap: 12px; row-gap: 10px; }
+    #payments .toolbar {
+      margin-bottom: 20px;
+      padding: 12px 14px;
+      background: #ffffff;
+      border-radius: var(--dashboard-card-radius);
+      box-shadow: var(--dashboard-shadow);
+      gap: 12px;
+    }
+    #payments .toolbar .filters { gap: 10px; flex: 1; }
+    #payments .toolbar .search { flex: 1; min-width: 220px; }
+    #payments .toolbar .filter-select { min-width: 140px; }
+    #payments #paymentsCards { margin-bottom: 20px; }
+    #payments .table-wrap { margin-top: 4px; }
+    #payments #paymentsTable thead th { padding: 12px 14px; }
+    #payments #paymentsTable tbody td { padding: 12px 14px; vertical-align: middle; }
+
+    #payments .payments-progress-card {
+      padding: 18px 22px;
+      background: #ffffff;
+      box-shadow: var(--dashboard-shadow);
+      border-color: transparent;
+      overflow: visible;
+      grid-column: 1 / -1;
+    }
+    #payments .payments-progress-card .card-header {
+      align-items: flex-start;
+      margin-bottom: 14px;
+      gap: 12px;
+    }
+    #payments .payments-progress-card .card-header-right {
+      align-items: flex-end;
+      gap: 8px;
+    }
+    #payments .payments-progress-card .hero-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    #payments .payments-progress-card .hero-meta {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    #payments .payments-progress-card .hero-value {
+      color: var(--text);
+      font-size: 36px;
+      font-weight: 760;
+      letter-spacing: -0.04em;
+      line-height: 1.02;
+      font-variant-numeric: tabular-nums;
+    }
+    #payments .payments-progress-card .hero-pills {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    #payments .payments-progress-card .hero-substats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid #f1f1f3;
+      gap: 0;
+    }
+    #payments .payments-progress-card .hero-substats .substat {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+      padding: 0 18px;
+      border-left: 1px solid #f1f1f3;
+    }
+    #payments .payments-progress-card .hero-substats .substat:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+    #payments .payments-progress-card .hero-substats .substat strong {
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 740;
+      letter-spacing: -0.01em;
+      font-variant-numeric: tabular-nums;
+    }
+    #payments .payments-progress-card .hero-substats .substat-label {
+      color: var(--micro);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    #payments .payments-progress-card .substat-delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      width: fit-content;
+      padding: 1px 6px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      font-variant-numeric: tabular-nums;
+    }
+    #payments .payments-progress-card .substat-delta.good { color: var(--good); background: var(--good-bg); }
+    #payments .payments-progress-card .substat-delta.bad  { color: var(--bad);  background: var(--bad-bg); }
+    #payments .payments-progress-card .substat-delta.neutral { color: var(--muted); background: #f3f4f6; }
+
+    /* Group headers */
+    #payments .payment-group-header td {
+      padding: 10px 14px;
+      background: #f9fafb;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    #payments .payment-group-header .release-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--text);
+    }
+    #payments .payment-group-header .batch-health {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: var(--muted);
+    }
+    #payments .payment-group-header .batch-health.bad  { background: var(--bad-bg);  color: var(--bad); }
+    #payments .payment-group-header .batch-health.warn { background: var(--warn-bg); color: var(--warn); }
+    #payments .payment-group-header .batch-health.info { background: #e0f2fe; color: #0c4a6e; }
+    #payments .payment-group-header .batch-health.good { background: var(--good-bg); color: var(--good); }
+    #payments .payment-group-header .release-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Row design: avatar + 2-line client cell, status-colored left border */
+    #payments .payment-client {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    #payments .payment-client-text { min-width: 0; }
+    #payments .payment-client-text strong {
+      display: block;
+      font-size: 13px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #payments .payment-client-text .row-sub {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #payments .payment-date-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+    #payments tr[data-payment-row] {
+      position: relative;
+    }
+    #payments tr[data-payment-row] > td:first-child {
+      box-shadow: inset 3px 0 0 transparent;
+      transition: box-shadow 0.15s ease;
+    }
+    #payments tr[data-payment-row][data-row-status="paid"]      > td:first-child { box-shadow: inset 3px 0 0 var(--good); }
+    #payments tr[data-payment-row][data-row-status="pending"]   > td:first-child { box-shadow: inset 3px 0 0 #f59e0b; }
+    #payments tr[data-payment-row][data-row-status="overdue"]   > td:first-child { box-shadow: inset 3px 0 0 var(--bad); }
+    #payments tr[data-payment-row][data-row-status="cancelled"] > td:first-child { box-shadow: inset 3px 0 0 #9ca3af; }
+    #payments tr[data-payment-row][data-archived="1"]           > td { opacity: 0.55; }
+
+    #payments .action-group { gap: 6px; flex-wrap: nowrap; justify-content: flex-end; }
+    #payments .action-group .btn.small { padding: 5px 10px; font-size: 11px; }
+
+    /* Overflow menu uses existing .overflow-* styles; danger menuitem tone */
+    #payments .overflow-panel button.danger { color: var(--bad); }
+    #payments .overflow-panel button.danger:hover { background: var(--bad-bg); }
+
+    /* Days countdown chip */
+    #payments .countdown-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 1px 7px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      width: fit-content;
+      margin-top: 2px;
+    }
+    #payments .countdown-chip.neutral { background: #f3f4f6; color: var(--muted); }
+    #payments .countdown-chip.info    { background: #e0f2fe; color: #0c4a6e; }
+    #payments .countdown-chip.warn    { background: var(--warn-bg); color: var(--warn); }
+    #payments .countdown-chip.bad     { background: var(--bad-bg);  color: var(--bad); }
+
+    /* Note marker on rows that carry a notes string */
+    #payments .payment-note-marker {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: var(--muted);
+      margin-left: 4px;
+      vertical-align: middle;
+      cursor: help;
+    }
+    #payments .payment-note-marker:hover { background: #e5e7eb; color: var(--text); }
+
+    /* Bucket header is now clickable; show active state */
+    #payments .payment-group-header { cursor: pointer; }
+    #payments .payment-group-header:hover td { background: #f4f4f5; }
+    #payments .payment-group-header.is-active td {
+      background: #f1f5f9;
+      box-shadow: inset 3px 0 0 #0a0a0a;
+    }
+    #payments .payment-group-header:focus-visible td {
+      outline: none;
+      box-shadow: inset 0 0 0 2px rgba(17,17,17,0.08);
+    }
+
+    @media (max-width: 880px) {
+      #payments .toolbar { padding: 10px 12px; }
+      #payments .payments-progress-card { padding: 18px 18px; }
+      #payments .payments-progress-card .hero-substats { grid-template-columns: 1fr; gap: 12px; }
+      #payments .payments-progress-card .hero-substats .substat { padding: 0; border-left: 0; }
+    }
+    /* ===== /Payments spacing ===== */
 
     /* Period nav arrows */
     .period-nav {
@@ -7190,32 +7831,42 @@
         <div class="topbar">
           <div>
             <h1>Payments</h1>
-            <div class="step-label">6 Incoming Payments</div>
             <p class="subtitle">Track paid, pending, overdue, cancelled, and archived payments.</p>
           </div>
-          <button class="btn" data-open="payment">+ Add Payment</button>
+          <div class="button-group payments-controls">
+            <div class="period-nav">
+              <button class="period-nav-btn" id="paymentsPrevMonth" type="button" aria-label="Previous month" title="Previous month">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+              </button>
+              <div class="period-controls">
+                <select id="paymentMonth" aria-label="Month"></select>
+                <span class="period-separator" aria-hidden="true"></span>
+                <select id="paymentYear" aria-label="Year"></select>
+              </div>
+              <button class="period-nav-btn" id="paymentsNextMonth" type="button" aria-label="Next month" title="Next month">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+            <button class="btn" data-open="payment">+ Add Payment</button>
+            <div class="overflow-menu" id="paymentsOverflowMenu">
+              <button class="btn secondary overflow-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="More actions" title="More actions">⋯</button>
+              <div class="overflow-panel" role="menu" hidden>
+                <button type="button" role="menuitem" id="generateRecurringPayments">Generate from recurring clients</button>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="toolbar">
           <div class="filters">
             <input class="search" id="paymentSearch" placeholder="Search payments" />
-            <select class="filter-select" id="paymentStatusFilter">
-              <option value="">All statuses</option>
-              <option value="pending">Pending</option>
-              <option value="paid">Paid</option>
-              <option value="overdue">Overdue</option>
-              <option value="cancelled">Cancelled</option>
+            <select class="filter-select" id="paymentClientFilter">
+              <option value="">All clients</option>
             </select>
             <select class="filter-select" id="paymentArchiveFilter">
               <option value="live">Active records</option>
               <option value="archived">Archived only</option>
               <option value="all">All records</option>
             </select>
-            <div class="period-controls">
-              <label>Month</label>
-              <select id="paymentMonth"></select>
-              <label>Year</label>
-              <select id="paymentYear"></select>
-            </div>
             <select class="filter-select" id="paymentSort">
               <option value="dueDate">Sort: Due date</option>
               <option value="amountDesc">Sort: Amount high to low</option>
@@ -7227,6 +7878,7 @@
           </div>
           <button class="btn secondary" data-export="payments">Export CSV</button>
         </div>
+        <div class="grid cards" id="paymentsCards"></div>
         <div class="table-wrap"><table id="paymentsTable"></table></div>
       </section>
 
@@ -7248,50 +7900,79 @@
           </div>
         </div>
 
-        <div class="grid cards" id="reportCards"></div>
-
-        <div class="grid chart-grid">
-          <div class="card">
-            <div class="card-title">Salary Expense by Month</div>
-            <canvas id="salaryExpenseChart"></canvas>
-          </div>
-          <div class="card">
-            <div class="card-title">Client Payments by Month</div>
-            <canvas id="clientIncomeChart"></canvas>
-          </div>
+        <div class="report-brief">
+          <div class="report-hero" id="reportHero"></div>
+          <div class="report-insights" id="reportInsights"></div>
         </div>
 
-        <div class="card" style="margin-top: 16px;">
-          <div class="toolbar">
-            <div>
-              <h2>Salary Spend Since 2022</h2>
-              <p class="subtitle">Tracked salary outgoing by release date, grouped by year.</p>
+        <div class="report-summary" id="reportSummary"></div>
+
+        <div class="report-kpis" id="reportCards"></div>
+
+        <div class="report-layout">
+          <div class="report-module">
+            <div class="report-module-head">
+              <div>
+                <div class="report-section-label">Year trend</div>
+                <div class="report-module-title">Salary expense and client payments</div>
+                <div class="report-hero-sub">Monthly movement for the selected report year.</div>
+              </div>
             </div>
-            <button class="btn secondary" data-export="salarySpendSince2022">Export CSV</button>
-          </div>
-          <div class="chart-card" style="margin-bottom: 14px;">
-            <div class="chart-canvas-wrap"><canvas id="salarySpendSinceChart"></canvas></div>
-          </div>
-          <div class="table-wrap"><table id="salarySpendSinceTable"></table></div>
-        </div>
-
-        <div class="card">
-          <div class="toolbar">
-            <div>
-              <h2>Client Payment Summary</h2>
-              <p class="subtitle">Expected, paid, pending, and overdue by client for the selected month.</p>
+            <div class="report-chart-grid">
+              <div class="report-chart-box">
+                <div class="report-chart-head" id="salaryChartSummary"></div>
+                <div class="report-callouts" id="salaryChartCallouts"></div>
+                <div class="chart-canvas-wrap"><canvas id="salaryExpenseChart"></canvas></div>
+              </div>
+              <div class="report-chart-box">
+                <div class="report-chart-head" id="incomeChartSummary"></div>
+                <div class="report-callouts" id="incomeChartCallouts"></div>
+                <div class="chart-canvas-wrap"><canvas id="clientIncomeChart"></canvas></div>
+              </div>
             </div>
-            <button class="btn secondary" data-export="clientSummary">Export CSV</button>
           </div>
-          <div class="table-wrap"><table id="clientSummaryTable"></table></div>
-        </div>
 
-        <div class="card" style="margin-top: 16px;">
-          <div class="toolbar">
-            <h2>Yearly Salary Cost Per Employee</h2>
-            <button class="btn secondary" data-export="employeeYearlyCost">Export CSV</button>
+          <div class="report-module">
+            <div class="report-module-head">
+              <div>
+                <div class="report-section-label">Long view</div>
+                <div class="report-module-title">Salary Spend Since 2022</div>
+                <div class="report-hero-sub">Tracked salary outgoing by release date, grouped by year.</div>
+              </div>
+              <button class="btn secondary" data-export="salarySpendSince2022">Export CSV</button>
+            </div>
+            <div class="chart-card" style="margin-bottom: 14px;">
+              <div class="chart-canvas-wrap"><canvas id="salarySpendSinceChart"></canvas></div>
+            </div>
+            <div class="report-table-summary" id="salarySpendStats"></div>
+            <div class="table-wrap"><table id="salarySpendSinceTable"></table></div>
           </div>
-          <div class="table-wrap"><table id="yearlyCostTable"></table></div>
+
+          <div class="report-module">
+            <div class="report-module-head">
+              <div>
+                <div class="report-section-label">Clients</div>
+                <div class="report-module-title">Client Payment Summary</div>
+                <div class="report-hero-sub">Expected, paid, pending, and overdue by client for the selected month.</div>
+              </div>
+              <button class="btn secondary" data-export="clientSummary">Export CSV</button>
+            </div>
+            <div class="report-table-summary" id="clientSummaryStats"></div>
+            <div class="table-wrap"><table id="clientSummaryTable"></table></div>
+          </div>
+
+          <div class="report-module">
+            <div class="report-module-head">
+              <div>
+                <div class="report-section-label">People cost</div>
+                <div class="report-module-title">Yearly Salary Cost Per Employee</div>
+                <div class="report-hero-sub">Annualized cost based on current monthly salaries.</div>
+              </div>
+              <button class="btn secondary" data-export="employeeYearlyCost">Export CSV</button>
+            </div>
+            <div class="report-table-summary" id="yearlyCostStats"></div>
+            <div class="table-wrap"><table id="yearlyCostTable"></table></div>
+          </div>
         </div>
       </section>
 
@@ -9395,13 +10076,87 @@
 
     function clearPaymentFilters() {
       $("#paymentSearch").val("");
-      $("#paymentStatusFilter").val("");
+      $("#paymentClientFilter").val("");
       $("#paymentArchiveFilter").val("live");
       $("#paymentSort").val("dueDate");
+      paymentOverdueOnly = false;
+      paymentBucketFilter = "";
       resetPeriod(selectedPayments);
       $("#paymentMonth").val(selectedPayments.month);
       $("#paymentYear").val(selectedPayments.year);
       renderPayments();
+    }
+
+    function shiftPaymentMonth(delta) {
+      const m = Number(selectedPayments.month);
+      const y = Number(selectedPayments.year);
+      const d = new Date(y, m + delta, 1);
+      selectedPayments.month = d.getMonth();
+      selectedPayments.year = d.getFullYear();
+      $("#paymentMonth").val(selectedPayments.month);
+      $("#paymentYear").val(selectedPayments.year);
+      renderPayments();
+    }
+
+    // Create payment records for the selected period from every active client
+    // that has a frequency + defaultAmount and doesn't already have a row this month.
+    // Skips clients with frequency "One-time".
+    function generateRecurringPaymentsForPeriod(period) {
+      const due15 = ymd(period.year, period.month, 15);
+      const dueEnd = ymd(period.year, period.month, new Date(period.year, period.month + 1, 0).getDate());
+      const eligible = (db.clients || []).filter(c =>
+        !c.archived &&
+        c.status !== "inactive" &&
+        Number(c.defaultAmount || 0) > 0 &&
+        c.frequency &&
+        c.frequency !== "One-time"
+      );
+      if (!eligible.length) { showToast("No recurring clients with a default amount."); return 0; }
+      let created = 0;
+      eligible.forEach(c => {
+        // Avoid double-generating: skip if there's already an active payment for this client in this period.
+        const already = (db.payments || []).some(p =>
+          !p.archived &&
+          Number(p.clientId) === Number(c.id) &&
+          isSameMonthYear(p.dueDate, period)
+        );
+        if (already) return;
+        const newRows = [];
+        if (c.frequency === "Twice a month") {
+          newRows.push({ dueDate: ymd(period.year, period.month, 15), invoiceReference: `INV-${period.year}${String(period.month + 1).padStart(2, "0")}-${c.id}-A` });
+          newRows.push({ dueDate: dueEnd,                                invoiceReference: `INV-${period.year}${String(period.month + 1).padStart(2, "0")}-${c.id}-B` });
+        } else if (c.frequency === "Every 2 months") {
+          // Only generate on even-month offsets from a stable reference (Jan = month 0).
+          if (period.month % 2 !== 0) return;
+          newRows.push({ dueDate: dueEnd, invoiceReference: `INV-${period.year}${String(period.month + 1).padStart(2, "0")}-${c.id}` });
+        } else {
+          // Monthly or Custom — default to once per period at end-of-month due.
+          newRows.push({ dueDate: dueEnd, invoiceReference: `INV-${period.year}${String(period.month + 1).padStart(2, "0")}-${c.id}` });
+        }
+        newRows.forEach(row => {
+          db.payments.push({
+            id: nextId(db.payments),
+            archived: false,
+            clientId: c.id,
+            clientName: c.name,
+            amount: Number(c.defaultAmount || 0),
+            dueDate: row.dueDate,
+            paymentDate: "",
+            status: "pending",
+            frequency: c.frequency,
+            invoiceReference: row.invoiceReference,
+            notes: ""
+          });
+          created++;
+        });
+      });
+      if (created) {
+        addLog("Recurring payments generated", `${created} payment${created === 1 ? "" : "s"} added for ${months[period.month]} ${period.year}.`);
+        saveData();
+      } else {
+        showToast("Recurring payments already up to date for this period.");
+      }
+      return created;
     }
 
     function clearPayrollFilters() {
@@ -10337,40 +11092,244 @@
       $("#clientDetailBackdrop").addClass("open").attr("aria-hidden", "false");
     }
 
+    let paymentOverdueOnly = false;
+    let paymentBucketFilter = ""; // "", "overdue", "thisweek", "later", "paid", "cancelled"
+
     function renderPayments() {
       const search = $("#paymentSearch").val()?.toLowerCase() || "";
-      const status = $("#paymentStatusFilter").val() || "";
+      const clientFilter = $("#paymentClientFilter").val() || "";
       const archiveFilter = $("#paymentArchiveFilter").val() || "live";
-      const rows = sortPayments(db.payments.filter(p => {
+
+      // Populate client filter dropdown fresh each render.
+      const clientOptions = (db.clients || [])
+        .slice()
+        .sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")))
+        .map(c => `<option value="${c.id}" ${String(clientFilter) === String(c.id) ? "selected" : ""}>${escapeHtml(c.name)}${c.archived ? " (archived)" : ""}</option>`)
+        .join("");
+      $("#paymentClientFilter").html(`<option value="">All clients</option>${clientOptions}`);
+
+      const allInPeriod = db.payments.filter(p => archiveMatches(p, archiveFilter) && isSameMonthYear(p.dueDate, selectedPayments));
+      const overdueCount = allInPeriod.filter(p => p.status === "overdue").length;
+
+      const rows = sortPayments(allInPeriod.filter(p => {
         const text = `${p.clientName} ${p.invoiceReference} ${p.notes}`.toLowerCase();
-        return text.includes(search) && (!status || p.status === status) && archiveMatches(p, archiveFilter) && isSameMonthYear(p.dueDate, selectedPayments);
+        const matchesSearch = text.includes(search);
+        const matchesClient = !clientFilter || String(p.clientId) === String(clientFilter);
+        const matchesOverdueOnly = !paymentOverdueOnly || p.status === "overdue";
+        return matchesSearch && matchesClient && matchesOverdueOnly;
       }));
 
-      $("#paymentsTable").html(`
-        <thead><tr><th>Client</th><th>Amount</th><th>Due Date</th><th>Payment Date</th><th>Status</th><th>Frequency</th><th>Reference</th><th>Actions</th></tr></thead>
-        <tbody>
-          ${rows.length ? rows.map(p => `
-            <tr>
-              <td><strong>${escapeHtml(p.clientName)}</strong></td>
-              <td>${currency(p.amount)}</td>
-              <td>${escapeHtml(p.dueDate)}</td>
-              <td>${escapeHtml(p.paymentDate || "-")}</td>
-              <td>${badge(p.status, p.archived)}</td>
-              <td>${escapeHtml(p.frequency)}</td>
-              <td>${escapeHtml(p.invoiceReference)}</td>
-              <td><div class="action-group">
-                <button class="btn small secondary" data-edit="payment" data-id="${p.id}">Edit</button>
-                <button class="btn small good" data-payment-status="paid" data-id="${p.id}">Paid</button>
-                <button class="btn small secondary" data-payment-status="pending" data-id="${p.id}">Pending</button>
-                <button class="btn small warn" data-payment-status="overdue" data-id="${p.id}">Overdue</button>
-                <button class="btn small danger" data-payment-status="cancelled" data-id="${p.id}">Cancel</button>
-                ${p.archived ? `<button class="btn small blue" data-restore="payment" data-id="${p.id}">Restore</button>` : `<button class="btn small warn" data-archive="payment" data-id="${p.id}">Archive</button>`}
-                <button class="btn small danger" data-delete="payment" data-id="${p.id}">Delete</button>
-              </div></td>
-            </tr>
-          `).join("") : `<tr><td colspan="8" class="table-empty">No payments found.</td></tr>`}
-        </tbody>
+      // === Progress card ===
+      const live = allInPeriod.filter(p => !p.archived && p.status !== "cancelled");
+      const expected = live.reduce((s, p) => s + Number(p.amount || 0), 0);
+      const collected = live.filter(p => p.status === "paid").reduce((s, p) => s + Number(p.amount || 0), 0);
+      const pendingAmt = live.filter(p => p.status === "pending").reduce((s, p) => s + Number(p.amount || 0), 0);
+      const overdueAmt = live.filter(p => p.status === "overdue").reduce((s, p) => s + Number(p.amount || 0), 0);
+      const collectedPct = expected > 0 ? Math.round((collected / expected) * 100) : 0;
+      const tone = collectedPct >= 100 ? "complete" : overdueAmt > 0 ? "early" : collectedPct >= 50 ? "mid" : "early";
+      const statusLabel = collectedPct >= 100 ? "Healthy" : overdueAmt > 0 ? "Behind" : collectedPct >= 50 ? "On track" : "Watch";
+      const periodLabel = `${months[selectedPayments.month]} ${selectedPayments.year}`;
+      const overdueChip = overdueCount > 0
+        ? `<button type="button" class="ppc-variance ${paymentOverdueOnly ? "active" : ""}" id="paymentOverdueChip" title="Filter the table to overdue rows">⚠ ${overdueCount} overdue${paymentOverdueOnly ? " · clear" : ""}</button>`
+        : "";
+
+      // YoY: collected in the same month last year (paid + archived-or-not, status=paid).
+      const yoyPeriod = { month: selectedPayments.month, year: selectedPayments.year - 1 };
+      const yoyCollected = db.payments
+        .filter(p => !p.archived && p.status === "paid" && isSameMonthYear(p.dueDate, yoyPeriod))
+        .reduce((s, p) => s + Number(p.amount || 0), 0);
+      let yoyHtml = "";
+      if (yoyCollected > 0) {
+        const yoyPct = ((collected - yoyCollected) / yoyCollected) * 100;
+        const dir = Math.abs(yoyPct) < 0.05 ? "neutral" : yoyPct > 0 ? "up" : "down";
+        const arrow = dir === "up" ? "▲" : dir === "down" ? "▼" : "—";
+        // For income, higher = good.
+        const cls = dir === "neutral" ? "neutral" : dir === "up" ? "good" : "bad";
+        yoyHtml = `<span class="ppc-yoy ${cls}" title="vs ${months[yoyPeriod.month]} ${yoyPeriod.year}: ${currency(yoyCollected)}">${arrow} ${yoyPct >= 0 ? "+" : ""}${yoyPct.toFixed(1)}% YoY</span>`;
+      }
+
+      const substat = (label, amount, toneClass) => `
+        <div class="substat">
+          <span class="substat-label">${label}</span>
+          <strong>${currency(amount)}</strong>
+          <span class="substat-delta ${toneClass}">${expected > 0 ? `${Math.round((amount / expected) * 100)}% of expected` : "—"}</span>
+        </div>`;
+
+      $("#paymentsCards").html(`
+        <div class="card payments-progress-card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <h2>Payments · ${escapeHtml(periodLabel)}</h2>
+              ${yoyHtml}
+            </div>
+            <div class="card-header-right">
+              ${overdueChip}
+              <span class="ppc-status ${tone}">
+                <span class="ppc-status-dot"></span>${statusLabel}
+              </span>
+            </div>
+          </div>
+          <div class="hero-row">
+            <div class="hero-left">
+              <div class="hero-meta">Collected · ${escapeHtml(periodLabel)}</div>
+              <div class="hero-value">${currency(collected)}</div>
+              <div class="hero-pills">
+                <span class="margin-pill ${tone === "complete" ? "good" : tone === "mid" ? "info" : "warn"}" title="Collected / expected for this period">${collectedPct}% of ${compactCurrency(expected)}</span>
+              </div>
+              <div class="hero-substats">
+                ${substat("Paid", collected, "good")}
+                ${substat("Pending", pendingAmt, "neutral")}
+                ${substat("Overdue", overdueAmt, overdueAmt > 0 ? "bad" : "neutral")}
+              </div>
+            </div>
+          </div>
+        </div>
       `);
+
+      // === Group rows by urgency bucket ===
+      const today0 = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const weekFromNow = new Date(today0); weekFromNow.setDate(today0.getDate() + 7);
+      const bucketOf = (p) => {
+        if (p.status === "cancelled") return "cancelled";
+        if (p.status === "paid") return "paid";
+        if (p.status === "overdue") return "overdue";
+        const d = dateValue(p.dueDate);
+        if (!d) return "later";
+        if (d < today0) return "overdue";       // any unpaid past-due
+        if (d <= weekFromNow) return "thisweek";
+        return "later";
+      };
+      const bucketDefs = [
+        { key: "overdue",   label: "Overdue",         note: "Past due, action needed",      tone: "bad" },
+        { key: "thisweek",  label: "Due this week",   note: "Within the next 7 days",       tone: "warn" },
+        { key: "later",     label: "Due later",       note: "After next week (this period)",tone: "info" },
+        { key: "paid",      label: "Paid",            note: "Collected", tone: "good" },
+        { key: "cancelled", label: "Cancelled",       note: "Not expected to collect", tone: "neutral" }
+      ];
+      const groups = Object.fromEntries(bucketDefs.map(b => [b.key, []]));
+      rows.forEach(p => groups[bucketOf(p)].push(p));
+
+      // === Row renderer ===
+      const renderRow = (p) => {
+        const client = (db.clients || []).find(c => Number(c.id) === Number(p.clientId));
+        const displayName = p.clientName || client?.name || "—";
+        const [avBg, avFg] = nameAvatarTone(displayName);
+        const initials = nameInitials(displayName);
+        const dueLabel = p.dueDate || "—";
+        const paidLabel = p.paymentDate ? `paid ${p.paymentDate}` : "";
+
+        // Days countdown chip — context-aware urgency for unpaid rows.
+        let countdownHtml = "";
+        if (p.status !== "paid" && p.status !== "cancelled") {
+          const d = dateValue(p.dueDate);
+          if (d) {
+            const diff = daysBetween(today0, d);
+            let chipTone = "neutral", chipText = "";
+            if (diff < 0)        { chipTone = "bad";  chipText = `${Math.abs(diff)} day${Math.abs(diff) === 1 ? "" : "s"} overdue`; }
+            else if (diff === 0) { chipTone = "warn"; chipText = "due today"; }
+            else if (diff <= 7)  { chipTone = "warn"; chipText = `in ${diff} day${diff === 1 ? "" : "s"}`; }
+            else                 { chipTone = "info"; chipText = `in ${diff} days`; }
+            countdownHtml = `<span class="countdown-chip ${chipTone}">${escapeHtml(chipText)}</span>`;
+          }
+        }
+
+        // Notes preview (i icon when notes exist)
+        const noteText = String(p.notes || "").trim();
+        const noteHtml = noteText
+          ? `<span class="payment-note-marker" title="${escapeHtml(noteText)}" aria-label="Notes: ${escapeHtml(noteText)}">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 12h1v4h1"/></svg>
+            </span>`
+          : "";
+
+        return `
+          <tr data-payment-row data-id="${p.id}" data-row-status="${p.status || ""}" ${p.archived ? 'data-archived="1"' : ""}>
+            <td>
+              <div class="payment-client">
+                <span class="payroll-avatar" style="background:${avBg};color:${avFg}">${escapeHtml(initials)}</span>
+                <div class="payment-client-text">
+                  <strong>${escapeHtml(displayName)} ${noteHtml}</strong>
+                  ${p.invoiceReference ? `<div class="row-sub">${escapeHtml(p.invoiceReference)}</div>` : ""}
+                </div>
+              </div>
+            </td>
+            <td class="num"><strong>${currency(p.amount)}</strong></td>
+            <td>
+              <div class="payment-date-cell">
+                <span>${escapeHtml(dueLabel)}</span>
+                ${countdownHtml}
+                ${paidLabel ? `<span class="muted" style="font-size:11px;">${escapeHtml(paidLabel)}</span>` : ""}
+              </div>
+            </td>
+            <td>${badge(p.status, p.archived)}</td>
+            <td>
+              <div class="action-group">
+                ${p.status !== "paid" ? `<button class="btn small good" data-payment-status="paid" data-id="${p.id}" title="Mark as paid">Paid</button>` : `<button class="btn small secondary" data-payment-status="pending" data-id="${p.id}" title="Reset to pending">↺</button>`}
+                <button class="btn small secondary" data-edit="payment" data-id="${p.id}">Edit</button>
+                <div class="overflow-menu" data-payment-actions>
+                  <button class="btn small secondary overflow-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="More actions" title="More actions">⋯</button>
+                  <div class="overflow-panel" role="menu" hidden>
+                    <button type="button" role="menuitem" data-payment-status="pending" data-id="${p.id}">Mark pending</button>
+                    <button type="button" role="menuitem" data-payment-status="overdue" data-id="${p.id}">Mark overdue</button>
+                    <button type="button" role="menuitem" data-payment-status="cancelled" data-id="${p.id}">Mark cancelled</button>
+                    ${p.archived
+                      ? `<button type="button" role="menuitem" data-restore="payment" data-id="${p.id}">Restore</button>`
+                      : `<button type="button" role="menuitem" data-archive="payment" data-id="${p.id}">Archive</button>`}
+                    <button type="button" role="menuitem" data-delete="payment" data-id="${p.id}" class="danger">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>`;
+      };
+
+      const renderGroup = (b) => {
+        const list = groups[b.key];
+        if (!list || !list.length) return "";
+        if (paymentBucketFilter && paymentBucketFilter !== b.key) return "";
+        const total = list.reduce((s, p) => s + Number(p.amount || 0), 0);
+        const isActive = paymentBucketFilter === b.key;
+        return `
+          <tr class="payment-group-header ${isActive ? "is-active" : ""}" data-bucket="${b.key}" data-payment-bucket="${b.key}" tabindex="0" role="button" aria-pressed="${isActive ? "true" : "false"}" title="Click to ${isActive ? "clear filter" : "show only this bucket"}">
+            <td colspan="5">
+              <div class="release-header">
+                <div class="release-header-text">
+                  <div class="release-label">${escapeHtml(b.label)} <span class="batch-health ${b.tone}">${list.length} ${list.length === 1 ? "row" : "rows"}</span>${isActive ? `<span class="muted" style="font-size:11px;margin-left:8px;">click to clear</span>` : ""}</div>
+                  <div class="release-meta">${escapeHtml(b.note)} · ${currency(total)}</div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          ${list.map(renderRow).join("")}
+        `;
+      };
+
+      const anyRows = rows.length > 0;
+      if (anyRows) {
+        $("#paymentsTable").html(`
+          <thead><tr><th>Client</th><th class="num">Amount</th><th>Due / Paid</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>${bucketDefs.map(renderGroup).join("")}</tbody>
+        `);
+      } else {
+        $("#paymentsTable").html(`
+          <tbody><tr><td>
+            <div class="payroll-empty">
+              <svg viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="6" y="14" width="52" height="38" rx="3"/>
+                <path d="M6 24h52"/>
+                <path d="M14 36h22"/>
+                <path d="M14 42h14"/>
+                <circle cx="46" cy="40" r="6"/>
+                <path d="M43 40l2 2 4-4"/>
+              </svg>
+              <div class="payroll-empty-title">No payments for ${escapeHtml(periodLabel)}</div>
+              <div class="payroll-empty-sub">Add a payment to start tracking what's expected, paid, and overdue.</div>
+              <div class="payroll-empty-actions">
+                <button type="button" class="btn" data-open="payment">+ Add payment</button>
+              </div>
+            </div>
+          </td></tr></tbody>
+        `);
+      }
     }
 
     let payrollVarianceOnly = false;
@@ -10933,26 +11892,40 @@
       const rows = salarySpendSinceRows(2022);
       const lifetime = rows.reduce((sum, row) => sum + row.tracked, 0);
       $("#salarySpendSinceTable").html(`
-        <thead><tr><th>Year</th><th>Tracked Salary Spend</th><th>Paid Salary</th><th>Scheduled / Pending</th><th>Active Months</th><th>Avg Monthly Spend</th><th>Rows</th></tr></thead>
+        <thead><tr><th>Year</th><th class="report-money">Tracked Salary Spend</th><th class="report-money">Paid Salary</th><th class="report-money">Scheduled / Pending</th><th>Active Months</th><th class="report-money">Avg Monthly Spend</th><th>Rows</th></tr></thead>
         <tbody>
-          ${rows.map(row => `
+          ${rows.map((row, index) => `
             <tr>
-              <td><strong>${row.year}</strong></td>
-              <td>${currency(row.tracked)}</td>
-              <td>${currency(row.paid)}</td>
-              <td>${currency(row.open)}</td>
+              <td>
+                <div class="report-row-title">
+                  <span class="report-rank">${index + 1}</span>
+                  <strong>${row.year}</strong>
+                </div>
+              </td>
+              <td class="report-money">${currency(row.tracked)}</td>
+              <td class="report-money">${currency(row.paid)}</td>
+              <td class="report-money">${currency(row.open)}</td>
               <td>${row.activeMonths || "-"}</td>
-              <td>${row.activeMonths ? currency(row.averageMonthly) : "-"}</td>
+              <td class="report-money">${row.activeMonths ? currency(row.averageMonthly) : "-"}</td>
               <td>${row.releaseRows}</td>
             </tr>
           `).join("")}
-          <tr>
+          <tr class="report-total-row">
             <td><strong>Total since 2022</strong></td>
-            <td><strong>${currency(lifetime)}</strong></td>
+            <td class="report-money"><strong>${currency(lifetime)}</strong></td>
             <td colspan="5" class="muted">Based on salary outgoing records only.</td>
           </tr>
         </tbody>
       `);
+    }
+
+    function reportMiniStats(stats) {
+      return stats.map(stat => `
+        <div class="report-mini-stat ${stat.tone || ""}">
+          <span>${escapeHtml(stat.label)}</span>
+          <strong>${escapeHtml(stat.value)}</strong>
+        </div>
+      `).join("");
     }
 
     function renderReports() {
@@ -10964,43 +11937,218 @@
       const expected = expectedMonthlyIncome(period);
       const paid = paidMonthlyIncome(period);
       const pending = pendingMonthlyIncome(period);
+      const openIncome = Math.max(0, expected - paid);
       const net = expected - outgoingBase;
       const label = `${months[period.month]} ${period.year}`;
+      const collectionPct = expected ? Math.round((paid / expected) * 100) : 0;
+      const payrollRatio = expected ? Math.round((outgoingBase / expected) * 100) : 0;
+      const prevPeriod = previousPeriod(period);
+      const prevExpected = expectedMonthlyIncome(prevPeriod);
+      const prevPaid = paidMonthlyIncome(prevPeriod);
+      const prevOutgoing = salaryOutgoingAmount(prevPeriod, ["paid", "scheduled", "pending"]);
+      const prevNet = prevExpected - prevOutgoing;
+      const netDelta = pctDelta(net, prevNet);
+      const paidDelta = pctDelta(paid, prevPaid);
+      const clientRows = clientSummaryRows(period);
+      const topClient = clientRows.slice().sort((a, b) => b.paid - a.paid)[0];
+      const highestOpen = clientRows.slice().sort((a, b) => (b.pending + b.overdue) - (a.pending + a.overdue))[0];
+      const spendRows = salarySpendSinceRows(2022);
+      const spendYear = spendRows.find(row => Number(row.year) === Number(period.year));
+      const reportData = monthlyChartData(period.year);
+      const bestBy = (key) => reportData.slice().sort((a, b) => Number(b[key] || 0) - Number(a[key] || 0))[0];
+      const worstBy = (key) => reportData.slice().sort((a, b) => Number(a[key] || 0) - Number(b[key] || 0))[0];
+      const totalBy = (key) => reportData.reduce((sum, row) => sum + Number(row[key] || 0), 0);
+      const bestPayrollMonth = bestBy("payroll");
+      const lowestPayrollMonth = worstBy("payroll");
+      const bestPaidMonth = bestBy("paidIncome");
+      const highestOpenIncomeMonth = bestBy("pendingIncome");
+      const yearlyPayroll = totalBy("payroll");
+      const yearlyPaidIncome = totalBy("paidIncome");
+      const yearlyOpenIncome = totalBy("pendingIncome");
+      const activeEmployees = db.employees.filter(e => !e.archived);
+      const monthlySalaryTotal = activeEmployees.reduce((sum, employee) => sum + Number(employee.monthlySalary || 0), 0);
+      const avgMonthlySalary = activeEmployees.length ? monthlySalaryTotal / activeEmployees.length : 0;
+      const clientExpectedTotal = clientRows.reduce((sum, row) => sum + row.expected, 0);
+      const clientPaidTotal = clientRows.reduce((sum, row) => sum + row.paid, 0);
+      const clientOpenTotal = clientRows.reduce((sum, row) => sum + row.pending + row.overdue, 0);
+      const clientsWithBilling = clientRows.filter(row => row.expected > 0).length;
+      const lifetimeSalarySpend = spendRows.reduce((sum, row) => sum + row.tracked, 0);
+      const lifetimeOpenSalary = spendRows.reduce((sum, row) => sum + row.open, 0);
+      const netTone = net >= 0 ? "good" : "bad";
+      const collectionTone = collectionPct >= 90 ? "good" : collectionPct >= 50 ? "warn" : expected ? "bad" : "";
+      const reportScore = Math.max(0, Math.min(100,
+        Math.round((net >= 0 ? 35 : 0) + Math.min(35, collectionPct * 0.35) + (payrollRatio <= 70 ? 20 : payrollRatio <= 90 ? 10 : 0) + (openIncome <= expected * 0.1 ? 10 : 0))
+      ));
+      const scoreTone = reportScore >= 80 ? "good" : reportScore >= 55 ? "warn" : "bad";
+      const netDeltaText = netDelta.dir === "flat" ? "flat vs last month" : `${netDelta.dir === "up" ? "+" : ""}${netDelta.pct.toFixed(0)}% net vs last month`;
+      const paidDeltaText = paidDelta.dir === "flat" ? "collection flat" : `${paidDelta.dir === "up" ? "+" : ""}${paidDelta.pct.toFixed(0)}% collected vs last month`;
+
+      $("#reportHero").html(`
+        <div>
+          <div class="report-eyebrow">Report net · ${escapeHtml(label)}</div>
+          <div class="report-hero-value">${currency(net)}</div>
+          <div class="report-hero-sub">Expected income minus tracked salary outgoing.</div>
+        </div>
+        <div class="report-hero-pills">
+          <span class="health-chip ${netTone}"><span class="dot"></span>${net >= 0 ? "Positive" : "Negative"}</span>
+          <span class="health-chip ${collectionTone || "neutral"}"><span class="dot"></span>${collectionPct}% collected</span>
+          <span class="health-chip neutral"><span class="dot"></span>${payrollRatio}% payroll ratio</span>
+        </div>
+        <div class="report-actions" data-print-hide>
+          <button class="btn secondary" data-export="clientSummary">Export clients</button>
+          <button class="btn secondary" data-export="salarySpendSince2022">Export salary spend</button>
+          <button class="btn secondary" data-export="employeeYearlyCost">Export yearly cost</button>
+        </div>
+      `);
+
+      $("#reportInsights").html(`
+        <div class="report-insight">
+          <div>
+            <strong>${escapeHtml(topClient?.client || "No client collected yet")}</strong>
+            <div class="report-insight-meta">Top collected client for ${escapeHtml(label)}</div>
+          </div>
+          <div class="report-kpi-value">${currency(topClient?.paid || 0)}</div>
+        </div>
+        <div class="report-insight">
+          <div>
+            <strong>${escapeHtml(highestOpen?.client || "No open balance")}</strong>
+            <div class="report-insight-meta">Highest pending/overdue client balance</div>
+          </div>
+          <div class="report-kpi-value ${((highestOpen?.pending || 0) + (highestOpen?.overdue || 0)) > 0 ? "warn" : "good"}">${currency((highestOpen?.pending || 0) + (highestOpen?.overdue || 0))}</div>
+        </div>
+        <div class="report-insight">
+          <div>
+            <strong>${escapeHtml(String(period.year))} salary spend</strong>
+            <div class="report-insight-meta">${spendYear?.activeMonths || 0} active month${(spendYear?.activeMonths || 0) === 1 ? "" : "s"} tracked</div>
+          </div>
+          <div class="report-kpi-value">${currency(spendYear?.tracked || 0)}</div>
+        </div>
+      `);
+
+      $("#reportSummary").html(`
+        <div>
+          <div class="report-section-label">Executive summary</div>
+          <div class="report-summary-copy">
+            ${escapeHtml(label)} closed at ${currency(net)} net with ${currency(paid)} collected from ${currency(expected)} expected income.
+            Salary outgoing was ${currency(outgoingBase)} (${payrollRatio}% of expected income), leaving ${currency(openIncome)} still open.
+            ${escapeHtml(netDeltaText)} · ${escapeHtml(paidDeltaText)}.
+          </div>
+        </div>
+        <div class="report-score ${scoreTone}">
+          <div class="report-section-label">Health score</div>
+          <strong>${reportScore}</strong>
+          <div class="report-kpi-note">${reportScore >= 80 ? "Strong" : reportScore >= 55 ? "Needs watch" : "Needs attention"}</div>
+        </div>
+      `);
+
+      $("#salaryChartSummary").html(`
+        <div>
+          <div class="report-chart-title">Salary expense</div>
+          <div class="report-chart-meta">Tracked salary outgoing across ${period.year}</div>
+        </div>
+        <div>
+          <div class="report-chart-total">${currency(yearlyPayroll)}</div>
+          <div class="report-chart-meta">year total</div>
+        </div>
+      `);
+      $("#salaryChartCallouts").html(`
+        <div class="report-callout">
+          <span>Highest month</span>
+          <strong>${escapeHtml(bestPayrollMonth?.month || "—")} · ${currency(bestPayrollMonth?.payroll || 0)}</strong>
+        </div>
+        <div class="report-callout">
+          <span>Lowest month</span>
+          <strong>${escapeHtml(lowestPayrollMonth?.month || "—")} · ${currency(lowestPayrollMonth?.payroll || 0)}</strong>
+        </div>
+      `);
+      $("#incomeChartSummary").html(`
+        <div>
+          <div class="report-chart-title">Client payments</div>
+          <div class="report-chart-meta">Collected income against pending and overdue balances</div>
+        </div>
+        <div>
+          <div class="report-chart-total">${currency(yearlyPaidIncome)}</div>
+          <div class="report-chart-meta">collected · ${currency(yearlyOpenIncome)} open</div>
+        </div>
+        <div class="report-legend" style="flex-basis:100%;">
+          <span>Paid</span>
+          <span class="muted-dot">Pending / overdue</span>
+        </div>
+      `);
+      $("#incomeChartCallouts").html(`
+        <div class="report-callout">
+          <span>Best collection</span>
+          <strong>${escapeHtml(bestPaidMonth?.month || "—")} · ${currency(bestPaidMonth?.paidIncome || 0)}</strong>
+        </div>
+        <div class="report-callout">
+          <span>Highest open</span>
+          <strong>${escapeHtml(highestOpenIncomeMonth?.month || "—")} · ${currency(highestOpenIncomeMonth?.pendingIncome || 0)}</strong>
+        </div>
+      `);
 
       const cards = [
-        [`Planned Payroll (${label})`, currency(payroll), "Active + probation employees"],
-        [`Tracked Salary Outgoing (${label})`, currency(trackedOutgoing), trackedOutgoing ? "Actual/scheduled payroll records" : "No salary outgoing records yet"],
-        [`Paid Salary Outgoing (${label})`, currency(paidOutgoing), "Salary records marked paid"],
-        [`Expected Income (${label})`, currency(expected), "Paid + pending + overdue"],
-        [`Paid Income (${label})`, currency(paid), "Collected payments"],
-        [`Pending Income (${label})`, currency(pending), "Pending + overdue"],
-        [`Net Balance (${label})`, currency(net), "Expected income minus salary outgoing"],
-        ["Active Employees", activeEmployees().length, "Active + probation employees"]
+        { label: "Expected income", value: currency(expected), note: "Paid + pending + overdue", tone: "" },
+        { label: "Collected", value: currency(paid), note: `${collectionPct}% collected`, tone: collectionTone },
+        { label: "Open income", value: currency(openIncome), note: `${currency(pending)} pending/overdue`, tone: openIncome ? "warn" : "good" },
+        { label: "Salary outgoing", value: currency(outgoingBase), note: trackedOutgoing ? `${currency(paidOutgoing)} paid` : "Planned payroll fallback", tone: payrollRatio > 80 ? "warn" : "" }
       ];
 
       $("#reportCards").html(cards.map(card => `
-        <div class="card">
-          <div class="card-title">${card[0]}</div>
-          <div class="card-value">${card[1]}</div>
-          <div class="card-note">${card[2]}</div>
+        <div class="report-kpi">
+          <div class="report-kpi-label">${escapeHtml(card.label)}</div>
+          <div class="report-kpi-value ${card.tone || ""}">${card.value}</div>
+          <div class="report-kpi-note">${escapeHtml(card.note)}</div>
         </div>
       `).join(""));
 
       renderClientSummaryTable(period);
       renderSalarySpendSinceTable();
 
+      $("#salarySpendStats").html(reportMiniStats([
+        { label: "Since 2022", value: currency(lifetimeSalarySpend) },
+        { label: `${period.year} tracked`, value: currency(spendYear?.tracked || 0) },
+        { label: "Avg active month", value: currency(spendYear?.averageMonthly || 0) },
+        { label: "Scheduled / pending", value: currency(lifetimeOpenSalary), tone: lifetimeOpenSalary ? "warn" : "good" }
+      ]));
+
+      $("#clientSummaryStats").html(reportMiniStats([
+        { label: "Billed clients", value: String(clientsWithBilling) },
+        { label: "Expected", value: currency(clientExpectedTotal) },
+        { label: "Collected", value: currency(clientPaidTotal), tone: clientOpenTotal ? "" : "good" },
+        { label: "Still open", value: currency(clientOpenTotal), tone: clientOpenTotal ? "warn" : "good" }
+      ]));
+
+      $("#yearlyCostStats").html(reportMiniStats([
+        { label: "Active employees", value: String(activeEmployees.length) },
+        { label: "Monthly payroll", value: currency(monthlySalaryTotal) },
+        { label: "Annualized cost", value: currency(monthlySalaryTotal * 12) },
+        { label: "Avg monthly pay", value: currency(avgMonthlySalary) }
+      ]));
+
       $("#yearlyCostTable").html(`
-        <thead><tr><th>Employee</th><th>Department</th><th>Status</th><th>Monthly Salary</th><th>Yearly Cost</th></tr></thead>
+        <thead><tr><th>Employee</th><th>Department</th><th>Status</th><th class="report-money">Monthly Salary</th><th class="report-money">Yearly Cost</th></tr></thead>
         <tbody>
-          ${db.employees.filter(e => !e.archived).length ? db.employees.filter(e => !e.archived).map(e => `
+          ${activeEmployees.length ? activeEmployees.slice().sort((a, b) => Number(b.monthlySalary || 0) - Number(a.monthlySalary || 0)).map((e, index) => `
             <tr>
-              <td><strong>${escapeHtml(e.name)}</strong></td>
+              <td>
+                <div class="report-row-title">
+                  <span class="report-rank">${index + 1}</span>
+                  <strong>${escapeHtml(e.name)}</strong>
+                </div>
+              </td>
               <td>${escapeHtml(e.department)}</td>
               <td>${badge(e.status)}</td>
-              <td>${currency(e.monthlySalary)}</td>
-              <td>${currency(Number(e.monthlySalary) * 12)}</td>
+              <td class="report-money">${currency(e.monthlySalary)}</td>
+              <td class="report-money">${currency(Number(e.monthlySalary) * 12)}</td>
             </tr>
           `).join("") : `<tr><td colspan="5" class="table-empty">No employee records found.</td></tr>`}
+          ${activeEmployees.length ? `
+            <tr class="report-total-row">
+              <td colspan="3"><strong>Total active payroll</strong></td>
+              <td class="report-money"><strong>${currency(monthlySalaryTotal)}</strong></td>
+              <td class="report-money"><strong>${currency(monthlySalaryTotal * 12)}</strong></td>
+            </tr>
+          ` : ""}
         </tbody>
       `);
     }
@@ -11033,21 +12181,36 @@
     }
 
     function renderClientSummaryTable(period) {
-      const rows = clientSummaryRows(period);
+      const rows = clientSummaryRows(period).sort((a, b) => b.expected - a.expected);
       $("#clientSummaryTable").html(`
-        <thead><tr><th>Client</th><th>Expected</th><th>Paid</th><th>Pending</th><th>Overdue</th><th>Status</th></tr></thead>
+        <thead><tr><th>Client</th><th class="report-money">Expected</th><th class="report-money">Paid</th><th class="report-money">Pending</th><th class="report-money">Overdue</th><th>Status</th></tr></thead>
         <tbody>
-          ${rows.length ? rows.map(row => {
+          ${rows.length ? rows.map((row, index) => {
             const statusClass = row.status === "Good" ? "good" : row.status === "Overdue" ? "bad" : row.status === "Pending" ? "warn" : "";
             return `<tr>
-              <td><strong>${escapeHtml(row.client)}</strong></td>
-              <td>${currency(row.expected)}</td>
-              <td>${currency(row.paid)}</td>
-              <td>${currency(row.pending)}</td>
-              <td>${currency(row.overdue)}</td>
+              <td>
+                <div class="report-row-title">
+                  <span class="report-rank">${index + 1}</span>
+                  <strong>${escapeHtml(row.client)}</strong>
+                </div>
+              </td>
+              <td class="report-money">${currency(row.expected)}</td>
+              <td class="report-money">${currency(row.paid)}</td>
+              <td class="report-money">${currency(row.pending)}</td>
+              <td class="report-money">${currency(row.overdue)}</td>
               <td><span class="summary-status ${statusClass}">${escapeHtml(row.status)}</span></td>
             </tr>`;
           }).join("") : `<tr><td colspan="6" class="table-empty">No clients found.</td></tr>`}
+          ${rows.length ? `
+            <tr class="report-total-row">
+              <td><strong>Total</strong></td>
+              <td class="report-money"><strong>${currency(rows.reduce((sum, row) => sum + row.expected, 0))}</strong></td>
+              <td class="report-money"><strong>${currency(rows.reduce((sum, row) => sum + row.paid, 0))}</strong></td>
+              <td class="report-money"><strong>${currency(rows.reduce((sum, row) => sum + row.pending, 0))}</strong></td>
+              <td class="report-money"><strong>${currency(rows.reduce((sum, row) => sum + row.overdue, 0))}</strong></td>
+              <td class="muted">Selected month</td>
+            </tr>
+          ` : ""}
         </tbody>
       `);
     }
@@ -11359,7 +12522,25 @@
             labels: reportData.map(item => item.month),
             datasets: [{ label: "Salary Expense", data: reportData.map(item => item.payroll), tension: 0.3, borderColor: "#111111", backgroundColor: "rgba(17, 17, 17, 0.08)", pointBackgroundColor: "#111111", pointBorderColor: "#111111", fill: true }]
           },
-          options: chartDefaults
+          options: {
+            ...chartDefaults,
+            interaction: { mode: "index", intersect: false },
+            scales: {
+              x: { ticks: { color: chartText }, grid: { display: false } },
+              y: { beginAtZero: true, ticks: { color: chartText, callback: (v) => compactCurrency(v) }, grid: { color: chartGrid, drawBorder: false } }
+            },
+            plugins: {
+              ...chartDefaults.plugins,
+              tooltip: {
+                backgroundColor: "#111111",
+                titleColor: "#ffffff",
+                bodyColor: "#ffffff",
+                padding: 10,
+                cornerRadius: 8,
+                callbacks: { label: (item) => `${item.dataset.label}: ${currency(item.parsed.y)}` }
+              }
+            }
+          }
         });
       }
 
@@ -11422,7 +12603,25 @@
               { label: "Pending / Overdue", data: reportData.map(item => item.pendingIncome), tension: 0.3, borderColor: "#8f8f8f", backgroundColor: "rgba(143, 143, 143, 0.08)", pointBackgroundColor: "#8f8f8f", pointBorderColor: "#8f8f8f" }
             ]
           },
-          options: chartDefaults
+          options: {
+            ...chartDefaults,
+            interaction: { mode: "index", intersect: false },
+            scales: {
+              x: { ticks: { color: chartText }, grid: { display: false } },
+              y: { beginAtZero: true, ticks: { color: chartText, callback: (v) => compactCurrency(v) }, grid: { color: chartGrid, drawBorder: false } }
+            },
+            plugins: {
+              ...chartDefaults.plugins,
+              tooltip: {
+                backgroundColor: "#111111",
+                titleColor: "#ffffff",
+                bodyColor: "#ffffff",
+                padding: 10,
+                cornerRadius: 8,
+                callbacks: { label: (item) => `${item.dataset.label}: ${currency(item.parsed.y)}` }
+              }
+            }
+          }
         });
       }
     }
@@ -11560,15 +12759,19 @@
       if (periodHint && periodHint.type && periodHint.type !== "salary") params.set("type", periodHint.type);
       // Optional pre-split earnings (passed when the row is known to include
       // overtime, bonus, or other non-basic components).
-      if (periodHint && Number(periodHint.basicPay) > 0)    params.set("basicPay",    String(periodHint.basicPay));
-      if (periodHint && Number(periodHint.overtimePay) > 0) params.set("overtimePay", String(periodHint.overtimePay));
-      if (periodHint && Number(periodHint.bonuses) > 0)     params.set("bonuses",     String(periodHint.bonuses));
-      if (periodHint && Number(periodHint.allowances) > 0)  params.set("allowances",  String(periodHint.allowances));
+      if (periodHint && Number(periodHint.basicPay) > 0)      params.set("basicPay",      String(periodHint.basicPay));
+      if (periodHint && Number(periodHint.overtimePay) > 0)   params.set("overtimePay",   String(periodHint.overtimePay));
+      if (periodHint && Number(periodHint.bonuses) > 0)       params.set("bonuses",       String(periodHint.bonuses));
+      if (periodHint && Number(periodHint.allowances) > 0)    params.set("allowances",    String(periodHint.allowances));
+      if (periodHint && Number(periodHint.lateDeduction) > 0) params.set("lateDeduction", String(periodHint.lateDeduction));
+      // Pay schedule auto-detection — generator highlights the right cutoff pill.
+      if (periodHint && periodHint.paySchedule) params.set("paySchedule", periodHint.paySchedule);
+      if (periodHint && periodHint.payMonth)    params.set("payMonth",    periodHint.payMonth);
       return `${payslipGeneratorUrl()}?${params.toString()}`;
     }
 
-    // Decide how to split a payroll row across the generator's earnings fields.
-    // Returns { basicPay, overtimePay, bonuses, allowances } — all currency numbers.
+    // Decide how to split a payroll row across the generator's earnings/deductions.
+    // Returns { basicPay, overtimePay, bonuses, allowances, lateDeduction }.
     // The caller can pass any/all of these via URL params to the generator.
     function splitPayrollAmountForPayslip(item, emp) {
       const amount = Number(item.amount || 0);
@@ -11578,20 +12781,44 @@
 
       // Non-salary types: route the entire amount to the matching bucket.
       if (type === "bonus" || type === "13th-month" || type === "one-off") {
-        return { basicPay: 0, overtimePay: 0, bonuses: amount, allowances: 0 };
+        return { basicPay: 0, overtimePay: 0, bonuses: amount, allowances: 0, lateDeduction: 0 };
       }
       if (type === "reimbursement") {
-        return { basicPay: 0, overtimePay: 0, bonuses: 0, allowances: amount };
+        return { basicPay: 0, overtimePay: 0, bonuses: 0, allowances: amount, lateDeduction: 0 };
       }
 
-      // Default salary: split the surplus over the expected basic into overtime.
-      // (Negative variance — row paid less than expected — stays as a smaller basic
-      // since "negative overtime" doesn't make sense.)
+      // Default salary: itemize variance off the expected basic.
+      // Surplus → overtime. Shortfall → Late/Absence deduction (keeps basic intact
+      // so the payslip shows what the employee was entitled to + why it was reduced).
       if (monthly > 0 && amount > expectedBasic + 1) {
         const overtime = Math.round((amount - expectedBasic) * 100) / 100;
-        return { basicPay: expectedBasic, overtimePay: overtime, bonuses: 0, allowances: 0 };
+        return { basicPay: expectedBasic, overtimePay: overtime, bonuses: 0, allowances: 0, lateDeduction: 0 };
       }
-      return { basicPay: amount, overtimePay: 0, bonuses: 0, allowances: 0 };
+      if (monthly > 0 && amount < expectedBasic - 1) {
+        const lateDeduction = Math.round((expectedBasic - amount) * 100) / 100;
+        return { basicPay: expectedBasic, overtimePay: 0, bonuses: 0, allowances: 0, lateDeduction };
+      }
+      return { basicPay: amount, overtimePay: 0, bonuses: 0, allowances: 0, lateDeduction: 0 };
+    }
+
+    // Detect 1st / 2nd / custom cutoff from the row's period.
+    //   periodStart=YYYY-MM-01 and periodEnd=YYYY-MM-15           → "first"  (1st Cutoff)
+    //   periodStart=YYYY-MM-16 and periodEnd=last day of YYYY-MM  → "second" (2nd Cutoff)
+    //   otherwise                                                  → ""       (custom)
+    // Also returns payMonth (YYYY-MM) lined up with the period month.
+    function detectPaySchedule(item) {
+      const s = String(item.periodStart || "");
+      const e = String(item.periodEnd || "");
+      const sd = dateValue(s);
+      const ed = dateValue(e);
+      if (!sd || !ed) return { cutoff: "", payMonth: "" };
+      const sameMonth = sd.getFullYear() === ed.getFullYear() && sd.getMonth() === ed.getMonth();
+      if (!sameMonth) return { cutoff: "", payMonth: "" };
+      const payMonth = `${sd.getFullYear()}-${String(sd.getMonth() + 1).padStart(2, "0")}`;
+      const lastDay = new Date(sd.getFullYear(), sd.getMonth() + 1, 0).getDate();
+      if (sd.getDate() === 1 && ed.getDate() === 15) return { cutoff: "first", payMonth };
+      if (sd.getDate() === 16 && ed.getDate() === lastDay) return { cutoff: "second", payMonth };
+      return { cutoff: "", payMonth };
     }
 
     function openPayslipGeneratorForPayrollRow(itemId) {
@@ -11603,6 +12830,7 @@
         return;
       }
       const split = splitPayrollAmountForPayslip(item, emp);
+      const sched = detectPaySchedule(item);
       const url = buildPayslipGeneratorLink(emp, {
         start: item.periodStart || "",
         end: item.periodEnd || "",
@@ -11613,7 +12841,10 @@
         basicPay: split.basicPay,
         overtimePay: split.overtimePay,
         bonuses: split.bonuses,
-        allowances: split.allowances
+        allowances: split.allowances,
+        lateDeduction: split.lateDeduction,
+        paySchedule: sched.cutoff,
+        payMonth: sched.payMonth
       });
       const w = window.open(url, "_blank", "noopener");
       if (!w) showToast("Browser blocked the popup. Allow pop-ups for this page and try again.");
@@ -12293,8 +13524,12 @@
       const payment = db.payments.find(p => Number(p.id) === Number(id));
       if (!payment) return;
       payment.status = status;
-      if (status === "paid") payment.paymentDate = dateIso(today);
-      if (status !== "paid") payment.paymentDate = "";
+      if (status === "paid") {
+        // Preserve a manually-set paymentDate; only auto-fill today's date when empty.
+        if (!payment.paymentDate) payment.paymentDate = dateIso(today);
+      } else {
+        payment.paymentDate = "";
+      }
       addLog("Payment status changed", `${payment.clientName} payment ${payment.invoiceReference || ""} marked as ${status}.`);
       saveData();
       showToast(`Payment marked as ${status}.`);
@@ -13230,7 +14465,52 @@
       renderClients();
     });
     $(document).on("input", "#paymentSearch", debouncedRenderPayments);
-    $(document).on("change", "#paymentStatusFilter, #paymentArchiveFilter", renderPayments);
+    $(document).on("change", "#paymentArchiveFilter, #paymentClientFilter", renderPayments);
+    $(document).on("click", "#paymentsPrevMonth", function () { shiftPaymentMonth(-1); });
+    $(document).on("click", "#paymentsNextMonth", function () { shiftPaymentMonth(1); });
+    $(document).on("click", "#paymentOverdueChip", function () {
+      paymentOverdueOnly = !paymentOverdueOnly;
+      renderPayments();
+    });
+    $(document).on("click keydown", "[data-payment-bucket]", function (e) {
+      if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return;
+      if (e.type === "keydown") e.preventDefault();
+      const b = $(this).data("payment-bucket");
+      paymentBucketFilter = paymentBucketFilter === b ? "" : b;
+      renderPayments();
+    });
+    $(document).on("click", "#paymentsOverflowMenu .overflow-trigger", function (e) {
+      e.stopPropagation();
+      const $menu = $(this).closest(".overflow-menu");
+      const $panel = $menu.find(".overflow-panel");
+      const open = $panel.prop("hidden");
+      $(".overflow-panel").prop("hidden", true);
+      $(".overflow-trigger").attr("aria-expanded", "false");
+      $panel.prop("hidden", !open);
+      $(this).attr("aria-expanded", open ? "true" : "false");
+    });
+    $(document).on("click", "#generateRecurringPayments", async function () {
+      const created = generateRecurringPaymentsForPeriod(selectedPayments);
+      if (!created) return;
+      showToast(`Generated ${created} payment${created === 1 ? "" : "s"} from recurring clients.`);
+      renderPayments();
+    });
+    // Per-row ⋯ overflow menu (Payments)
+    $(document).on("click", "[data-payment-actions] .overflow-trigger", function (e) {
+      e.stopPropagation();
+      const $menu = $(this).closest(".overflow-menu");
+      const $panel = $menu.find(".overflow-panel");
+      const open = $panel.prop("hidden");
+      $(".overflow-panel").prop("hidden", true);
+      $(".overflow-trigger").attr("aria-expanded", "false");
+      $panel.prop("hidden", !open);
+      $(this).attr("aria-expanded", open ? "true" : "false");
+    });
+    // Close the overflow panel after a menuitem is clicked.
+    $(document).on("click", "[data-payment-actions] .overflow-panel button", function () {
+      $(".overflow-panel").prop("hidden", true);
+      $(".overflow-trigger").attr("aria-expanded", "false");
+    });
     $(document).on("input", "#payrollSearch", debouncedRenderPayroll);
     $(document).on("change", "#payrollStatusFilter, #payrollArchiveFilter, #payrollEmployeeFilter", renderPayroll);
     $(document).on("click", "#payrollPrevMonth", function () { shiftPayrollMonth(-1); });
