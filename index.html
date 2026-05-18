@@ -1504,11 +1504,113 @@
     }
 
     /* Reports tab — executive briefing layout */
+    #reports {
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    #reports .topbar {
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    #reports .topbar > div:first-child {
+      min-width: 220px;
+      flex: 1;
+    }
+    #reports h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+    #reports .subtitle {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    #reports .topbar .button-group {
+      gap: 8px;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+    }
+    #reports .report-controlbar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: nowrap;
+      min-width: 0;
+    }
+    #reports .period-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: nowrap;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    #reports .report-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 34px;
+      padding: 0 10px;
+      background: #ffffff;
+      border: 0;
+      border-radius: 999px;
+      box-shadow: var(--dashboard-shadow);
+    }
+    #reports .report-control label {
+      color: var(--micro);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0;
+      line-height: 1;
+    }
+    #reports .report-control select,
+    #reports .report-filter-select {
+      height: 28px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 0 18px 0 0;
+      box-shadow: none;
+      min-width: 0;
+    }
+    #reports .report-control select {
+      width: auto;
+      min-width: 54px;
+    }
+    #reports .report-filter-select {
+      width: 190px;
+      min-width: 160px;
+      height: 34px;
+      background: #ffffff;
+      box-shadow: var(--dashboard-shadow);
+      padding: 0 28px 0 12px;
+    }
+    #reports #printReport {
+      height: 34px;
+      padding: 0 12px;
+      font-size: 11px;
+      box-shadow: var(--dashboard-shadow);
+      border: 0;
+    }
     #reports .report-brief {
       display: grid;
-      grid-template-columns: minmax(280px, 1.1fr) minmax(240px, 0.75fr);
-      gap: 12px;
-      margin-bottom: 16px;
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+      gap: var(--dashboard-bento-gap);
+      margin-bottom: 10px;
     }
     #reports .report-hero,
     #reports .report-insights,
@@ -1516,7 +1618,7 @@
       background: #ffffff;
       border-radius: var(--dashboard-card-radius);
       box-shadow: var(--dashboard-shadow);
-      padding: 18px;
+      padding: var(--dashboard-card-padding);
       min-width: 0;
     }
     #reports .report-eyebrow,
@@ -1530,10 +1632,10 @@
     }
     #reports .report-hero-value {
       color: var(--text);
-      font-size: 36px;
+      font-size: 32px;
       line-height: 1.05;
-      font-weight: 740;
-      letter-spacing: -0.04em;
+      font-weight: 760;
+      letter-spacing: -0.035em;
       font-variant-numeric: tabular-nums;
       margin-top: 6px;
     }
@@ -1556,8 +1658,8 @@
       background: #ffffff;
       border-radius: var(--dashboard-card-radius);
       box-shadow: var(--dashboard-shadow);
-      padding: 16px 18px;
-      margin-bottom: 16px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 16px;
@@ -1565,7 +1667,7 @@
     }
     #reports .report-summary-copy {
       color: var(--text);
-      font-size: 13px;
+      font-size: 12px;
       line-height: 1.45;
       font-weight: 600;
     }
@@ -1577,7 +1679,7 @@
     }
     #reports .report-score strong {
       color: var(--text);
-      font-size: 24px;
+      font-size: 22px;
       line-height: 1;
       font-weight: 740;
       letter-spacing: -0.03em;
@@ -1586,6 +1688,91 @@
     #reports .report-score.good strong { color: var(--good); }
     #reports .report-score.warn strong { color: var(--warn); }
     #reports .report-score.bad strong { color: var(--bad); }
+    #reports .report-module-tools {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    #reports .report-module-tools .series-toggle {
+      padding: 3px;
+      background: #f3f4f6;
+    }
+    #reports .report-module-tools .series-pill {
+      padding: 5px 10px;
+      font-size: 11px;
+    }
+    #reports .report-story {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.8fr);
+      gap: var(--dashboard-bento-gap);
+      margin-bottom: 10px;
+    }
+    #reports .report-narrative,
+    #reports .report-attention {
+      background: #ffffff;
+      border-radius: var(--dashboard-card-radius);
+      box-shadow: var(--dashboard-shadow);
+      padding: 13px 14px;
+      min-width: 0;
+    }
+    #reports .report-narrative-list,
+    #reports .report-attention-list {
+      display: grid;
+      gap: 6px;
+      margin-top: 9px;
+    }
+    #reports .report-narrative-item,
+    #reports .report-attention-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+      padding: 8px 0;
+      border-top: 1px solid #f1f1f3;
+    }
+    #reports .report-narrative-item:first-child,
+    #reports .report-attention-item:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+    #reports .report-story-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: #f2f2f3;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    #reports .report-story-icon.good { color: var(--good); background: var(--good-bg); }
+    #reports .report-story-icon.warn { color: var(--warn); background: var(--warn-bg); }
+    #reports .report-story-icon.bad { color: var(--bad); background: var(--bad-bg); }
+    #reports .report-story-copy strong {
+      display: block;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 750;
+      line-height: 1.25;
+      margin-bottom: 2px;
+    }
+    #reports .report-story-copy span {
+      display: block;
+      color: var(--muted);
+      font-size: 10.5px;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+    #reports .report-attention-empty {
+      color: var(--good);
+      font-size: 12px;
+      font-weight: 750;
+      margin-top: 10px;
+    }
     #reports .report-actions {
       display: inline-flex;
       align-items: center;
@@ -1600,22 +1787,22 @@
     #reports .report-kpis {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      margin-bottom: 16px;
+      gap: var(--dashboard-bento-gap);
+      margin-bottom: 10px;
     }
     #reports .report-kpi {
       background: #ffffff;
       border-radius: var(--dashboard-card-radius);
       box-shadow: var(--dashboard-shadow);
-      padding: 14px;
+      padding: 13px 14px;
       min-width: 0;
     }
     #reports .report-kpi-value {
       color: var(--text);
-      font-size: 22px;
+      font-size: 18px;
       line-height: 1.1;
-      font-weight: 730;
-      letter-spacing: -0.025em;
+      font-weight: 760;
+      letter-spacing: -0.02em;
       font-variant-numeric: tabular-nums;
       margin-top: 5px;
     }
@@ -1624,14 +1811,14 @@
     #reports .report-kpi-value.bad { color: var(--bad); }
     #reports .report-insights {
       display: grid;
-      gap: 10px;
+      gap: 0;
     }
     #reports .report-insight {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 10px;
       align-items: center;
-      padding: 10px 0;
+      padding: 8px 0;
       border-top: 1px solid #f1f1f3;
     }
     #reports .report-insight:first-child {
@@ -1641,40 +1828,53 @@
     #reports .report-insight strong {
       display: block;
       color: var(--text);
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 740;
       line-height: 1.25;
     }
     #reports .report-layout {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      gap: 16px;
+      gap: var(--dashboard-bento-gap);
     }
     #reports .report-module-head {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f1f1f3;
     }
     #reports .report-module-title {
       color: var(--text);
-      font-size: 15px;
-      font-weight: 750;
-      letter-spacing: -0.015em;
+      font-size: 13px;
+      font-weight: 740;
+      letter-spacing: -0.01em;
     }
     #reports .report-chart-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+      gap: var(--dashboard-bento-gap);
     }
     #reports .report-chart-box {
       min-width: 0;
-      border: 1px solid #f1f1f3;
+      border: 0;
       border-radius: var(--dashboard-card-radius);
-      padding: 14px;
+      padding: 12px;
       display: grid;
-      gap: 12px;
+      gap: 9px;
+      background: #ffffff;
+      box-shadow: inset 0 0 0 1px #eeeeef;
+    }
+    #reports .report-module-yeartrend {
+      padding: 16px;
+    }
+    #reports .report-module-yeartrend .report-chart-grid {
+      align-items: stretch;
+    }
+    #reports .report-module-yeartrend .report-chart-box {
+      align-content: start;
     }
     #reports .report-chart-head {
       display: flex;
@@ -1685,13 +1885,13 @@
     }
     #reports .report-chart-title {
       color: var(--text);
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 740;
       letter-spacing: -0.01em;
     }
     #reports .report-chart-total {
       color: var(--text);
-      font-size: 20px;
+      font-size: 17px;
       line-height: 1.05;
       font-weight: 730;
       letter-spacing: -0.03em;
@@ -1700,19 +1900,20 @@
     }
     #reports .report-chart-meta {
       color: var(--muted);
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 650;
       margin-top: 3px;
     }
     #reports .report-callouts {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
+      gap: 6px;
     }
     #reports .report-callout {
       background: #fafafa;
-      border-radius: var(--dashboard-card-radius);
-      padding: 9px 10px;
+      border: 0;
+      border-radius: 8px;
+      padding: 8px 10px;
       min-width: 0;
     }
     #reports .report-callout span {
@@ -1727,7 +1928,7 @@
     #reports .report-callout strong {
       display: block;
       color: var(--text);
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 740;
       line-height: 1.15;
       font-variant-numeric: tabular-nums;
@@ -1758,30 +1959,46 @@
     }
     #reports .report-legend span.muted-dot::before { background: #8f8f8f; }
     #reports .report-chart-box .chart-canvas-wrap {
-      height: 260px;
+      height: 210px;
       position: relative;
     }
     #reports .report-chart-box canvas {
       width: 100% !important;
       height: 100% !important;
     }
+    #reports .chart-card {
+      border: 0;
+      border-radius: var(--dashboard-card-radius);
+      background: #ffffff;
+      padding: 8px 10px;
+      box-shadow: inset 0 0 0 1px #eeeeef;
+    }
+    #reports .chart-card .chart-canvas-wrap {
+      height: 210px;
+    }
+    #reports .report-module-longview .chart-card .chart-canvas-wrap {
+      height: 250px;
+    }
+    #reports .report-module-longview.is-employee-view .chart-card .chart-canvas-wrap {
+      height: 310px;
+    }
     #reports .report-table-summary {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
-      margin: 2px 0 12px;
+      gap: 6px;
+      margin: 0 0 10px;
     }
     #reports .report-mini-stat {
       min-width: 0;
       border: 1px solid #f1f1f3;
       border-radius: var(--dashboard-card-radius);
       background: #fafafa;
-      padding: 10px 11px;
+      padding: 8px 9px;
     }
     #reports .report-mini-stat span {
       display: block;
       color: var(--micro);
-      font-size: 9px;
+      font-size: 8.5px;
       font-weight: 750;
       letter-spacing: 0.09em;
       text-transform: uppercase;
@@ -1793,7 +2010,7 @@
     #reports .report-mini-stat strong {
       display: block;
       color: var(--text);
-      font-size: 16px;
+      font-size: 13px;
       line-height: 1.05;
       font-weight: 760;
       letter-spacing: -0.025em;
@@ -1810,6 +2027,7 @@
       border-radius: var(--dashboard-card-radius);
       overflow: hidden;
       background: #ffffff;
+      box-shadow: 0 1px 2px rgba(17, 17, 17, 0.03);
     }
     #reports table {
       border-collapse: separate;
@@ -1819,20 +2037,20 @@
     #reports thead th {
       background: #fafafa;
       color: var(--micro);
-      font-size: 9.5px;
+      font-size: 8.5px;
       font-weight: 800;
       letter-spacing: 0.09em;
       text-transform: uppercase;
-      padding: 10px 12px;
+      padding: 8px 10px;
       border-bottom: 1px solid #eeeeef;
       white-space: nowrap;
     }
     #reports tbody td {
       color: var(--text);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 650;
       line-height: 1.25;
-      padding: 11px 12px;
+      padding: 8px 10px;
       border-bottom: 1px solid #f3f3f4;
       vertical-align: middle;
     }
@@ -1874,15 +2092,62 @@
       font-weight: 760;
     }
     #reports tr.report-total-row:hover td { background: #fafafa; }
+    #reports .report-module-tools .btn {
+      height: 30px;
+      padding: 0 10px;
+      font-size: 10.5px;
+    }
+    #reports .report-module-tools .series-toggle {
+      border-radius: 999px;
+      gap: 2px;
+    }
+    #reports .report-module-tools .series-pill {
+      height: 24px;
+      padding: 0 9px;
+    }
+    #reports .report-module .chart-card[style] {
+      margin-bottom: 10px !important;
+    }
     @media (max-width: 1050px) {
       #reports .report-brief,
-      #reports .report-chart-grid { grid-template-columns: 1fr; }
+      #reports .report-chart-grid,
+      #reports .report-story { grid-template-columns: 1fr; }
       #reports .report-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       #reports .report-table-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 700px) {
+      #reports .topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      #reports .topbar .button-group {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      #reports .report-controlbar,
+      #reports .period-controls {
+        width: 100%;
+      }
+      #reports .report-control {
+        flex: 1;
+        min-width: 130px;
+      }
+      #reports .report-filter-select,
+      #reports #printReport {
+        width: 100%;
+      }
       #reports .report-kpis { grid-template-columns: 1fr; }
       #reports .report-module-head { flex-direction: column; }
+      #reports .report-module-tools {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      #reports .report-module-tools .series-toggle {
+        width: 100%;
+      }
+      #reports .report-module-tools .series-pill {
+        flex: 1;
+      }
       #reports .report-summary {
         grid-template-columns: 1fr;
       }
@@ -1890,6 +2155,17 @@
       #reports .report-callouts { grid-template-columns: 1fr; }
       #reports .report-chart-total { text-align: left; }
       #reports .report-table-summary { grid-template-columns: 1fr; }
+      #reports .table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      #reports table {
+        min-width: 680px;
+      }
+      #reports .report-chart-box .chart-canvas-wrap,
+      #reports .chart-card .chart-canvas-wrap {
+        height: 190px;
+      }
     }
 
     .team-card {
@@ -7250,6 +7526,51 @@
       .print-only { display: block; }
       h1 { font-size: 22px; }
       h2 { font-size: 14px; }
+      #reports .topbar {
+        border-bottom: 2px solid #111;
+        padding-bottom: 10px;
+        margin-bottom: 12px;
+      }
+      #reports .report-brief,
+      #reports .report-story,
+      #reports .report-kpis,
+      #reports .report-layout,
+      #reports .report-chart-grid {
+        gap: 8px !important;
+      }
+      #reports .report-brief,
+      #reports .report-story,
+      #reports .report-chart-grid {
+        grid-template-columns: 1fr 1fr !important;
+      }
+      #reports .report-kpis {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      }
+      #reports .report-hero,
+      #reports .report-insights,
+      #reports .report-summary,
+      #reports .report-narrative,
+      #reports .report-attention,
+      #reports .report-kpi,
+      #reports .report-module {
+        box-shadow: none !important;
+        border: 1px solid #d6d6d8;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      #reports .report-hero-value { font-size: 28px; }
+      #reports .report-kpi-value { font-size: 17px; }
+      #reports .report-module {
+        margin-top: 8px;
+        padding: 12px;
+      }
+      #reports .chart-canvas-wrap { height: 190px !important; }
+      #reports .report-table-summary { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+      #reports thead th,
+      #reports tbody td {
+        padding: 7px 8px;
+        font-size: 10px;
+      }
     }
 
     @media (max-width: 1100px) {
@@ -7889,13 +8210,20 @@
             <div class="step-label">7 Report Preview</div>
             <p class="subtitle">Monthly report preview based on selected month/year.</p>
           </div>
-          <div class="button-group">
+          <div class="button-group report-controlbar">
             <div class="period-controls">
-              <label>Month</label>
-              <select id="reportMonth"></select>
-              <label>Year</label>
-              <select id="reportYear"></select>
+              <div class="report-control">
+                <label>Month</label>
+                <select id="reportMonth"></select>
+              </div>
+              <div class="report-control">
+                <label>Year</label>
+                <select id="reportYear"></select>
+              </div>
             </div>
+            <select class="report-filter-select" id="reportClientFilter" aria-label="Report client filter">
+              <option value="">All clients</option>
+            </select>
             <button class="btn secondary" id="printReport">Print Report</button>
           </div>
         </div>
@@ -7907,10 +8235,15 @@
 
         <div class="report-summary" id="reportSummary"></div>
 
+        <div class="report-story">
+          <div class="report-narrative" id="reportNarrative"></div>
+          <div class="report-attention" id="reportAttention"></div>
+        </div>
+
         <div class="report-kpis" id="reportCards"></div>
 
         <div class="report-layout">
-          <div class="report-module">
+          <div class="report-module report-module-yeartrend">
             <div class="report-module-head">
               <div>
                 <div class="report-section-label">Year trend</div>
@@ -7932,14 +8265,21 @@
             </div>
           </div>
 
-          <div class="report-module">
+          <div class="report-module report-module-longview">
             <div class="report-module-head">
               <div>
                 <div class="report-section-label">Long view</div>
                 <div class="report-module-title">Salary Spend Since 2022</div>
-                <div class="report-hero-sub">Tracked salary outgoing by release date, grouped by year.</div>
+                <div class="report-hero-sub" id="salarySpendReportSub">Tracked salary outgoing by release date, grouped by year.</div>
               </div>
-              <button class="btn secondary" data-export="salarySpendSince2022">Export CSV</button>
+              <div class="report-module-tools">
+                <div class="series-toggle" id="reportSalarySpendMode" role="group" aria-label="Salary spend report view" data-print-hide>
+                  <button class="series-pill active" data-report-spend-mode="year">Year</button>
+                  <button class="series-pill" data-report-spend-mode="month">Month</button>
+                  <button class="series-pill" data-report-spend-mode="employee">Employee</button>
+                </div>
+                <button class="btn secondary" data-export="salarySpendSince2022">Export CSV</button>
+              </div>
             </div>
             <div class="chart-card" style="margin-bottom: 14px;">
               <div class="chart-canvas-wrap"><canvas id="salarySpendSinceChart"></canvas></div>
@@ -8197,6 +8537,8 @@
     let compareMode = "none"; // none | prevMonth | prevYear | goal
     let drillTarget = null;   // null | "income" | "collected" | "open" | "payroll" | "net" | "netTotal"
     let selectedSalarySpendMode = "month"; // year | month
+    let selectedReportSalarySpendMode = "year"; // year | month | employee
+    let selectedReportClientId = "";
     let clientRiskFilter = "all"; // all | good | warn | bad | neutral | archived
     let clientViewMode = "cards"; // cards | list
     let activeClientDetailId = null;
@@ -11888,30 +12230,86 @@
       return rows;
     }
 
+    function salarySpendMonthlyRows(year) {
+      return months.map((month, index) => {
+        const records = (db.salaryOutgoings || []).filter(item => {
+          if (item.archived) return false;
+          const date = dateValue(payrollCashDate(item));
+          return date && date.getFullYear() === Number(year) && date.getMonth() === index;
+        });
+        const tracked = records
+          .filter(item => ["paid", "scheduled", "pending"].includes(item.status))
+          .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+        const paid = records
+          .filter(item => item.status === "paid")
+          .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+        const open = records
+          .filter(item => ["scheduled", "pending"].includes(item.status))
+          .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+        return {
+          month: month.slice(0, 3),
+          label: month,
+          tracked,
+          paid,
+          open,
+          releaseRows: records.length
+        };
+      });
+    }
+
+    function salarySpendEmployeeRows(year) {
+      const byEmployee = {};
+      (db.salaryOutgoings || []).forEach(item => {
+        if (item.archived) return;
+        const date = dateValue(payrollCashDate(item));
+        if (!date || date.getFullYear() !== Number(year)) return;
+        const employeeName = item.employeeName || db.employees.find(emp => Number(emp.id) === Number(item.employeeId))?.name || "Unknown employee";
+        if (!byEmployee[employeeName]) byEmployee[employeeName] = { employee: employeeName, tracked: 0, paid: 0, open: 0, releaseRows: 0 };
+        if (["paid", "scheduled", "pending"].includes(item.status)) {
+          byEmployee[employeeName].tracked += Number(item.amount || 0);
+          byEmployee[employeeName].releaseRows += 1;
+        }
+        if (item.status === "paid") byEmployee[employeeName].paid += Number(item.amount || 0);
+        if (["scheduled", "pending"].includes(item.status)) byEmployee[employeeName].open += Number(item.amount || 0);
+      });
+      return Object.values(byEmployee).sort((a, b) => b.tracked - a.tracked);
+    }
+
     function renderSalarySpendSinceTable() {
-      const rows = salarySpendSinceRows(2022);
+      const mode = selectedReportSalarySpendMode;
+      const rows = mode === "month"
+        ? salarySpendMonthlyRows(selectedReports.year)
+        : mode === "employee"
+          ? salarySpendEmployeeRows(selectedReports.year)
+          : salarySpendSinceRows(2022);
       const lifetime = rows.reduce((sum, row) => sum + row.tracked, 0);
+      const primaryLabel = mode === "month" ? "Month" : mode === "employee" ? "Employee" : "Year";
+      const avgLabel = mode === "year" ? "Avg Monthly Spend" : "Avg Per Row";
       $("#salarySpendSinceTable").html(`
-        <thead><tr><th>Year</th><th class="report-money">Tracked Salary Spend</th><th class="report-money">Paid Salary</th><th class="report-money">Scheduled / Pending</th><th>Active Months</th><th class="report-money">Avg Monthly Spend</th><th>Rows</th></tr></thead>
+        <thead><tr><th>${primaryLabel}</th><th class="report-money">Tracked Salary Spend</th><th class="report-money">Paid Salary</th><th class="report-money">Scheduled / Pending</th><th>${mode === "year" ? "Active Months" : "Rows"}</th><th class="report-money">${avgLabel}</th><th>Records</th></tr></thead>
         <tbody>
-          ${rows.map((row, index) => `
+          ${rows.length ? rows.map((row, index) => {
+            const label = row.year || row.label || row.employee || row.month || "-";
+            const rowCount = row.releaseRows || 0;
+            const avgValue = mode === "year" ? row.averageMonthly : rowCount ? row.tracked / rowCount : 0;
+            return `
             <tr>
               <td>
                 <div class="report-row-title">
                   <span class="report-rank">${index + 1}</span>
-                  <strong>${row.year}</strong>
+                  <strong>${escapeHtml(label)}</strong>
                 </div>
               </td>
               <td class="report-money">${currency(row.tracked)}</td>
               <td class="report-money">${currency(row.paid)}</td>
               <td class="report-money">${currency(row.open)}</td>
-              <td>${row.activeMonths || "-"}</td>
-              <td class="report-money">${row.activeMonths ? currency(row.averageMonthly) : "-"}</td>
-              <td>${row.releaseRows}</td>
+              <td>${mode === "year" ? (row.activeMonths || "-") : (rowCount || "-")}</td>
+              <td class="report-money">${avgValue ? currency(avgValue) : "-"}</td>
+              <td>${rowCount}</td>
             </tr>
-          `).join("")}
+          `; }).join("") : `<tr><td colspan="7" class="table-empty">No salary outgoing records found.</td></tr>`}
           <tr class="report-total-row">
-            <td><strong>Total since 2022</strong></td>
+            <td><strong>${mode === "year" ? "Total since 2022" : `Total ${selectedReports.year}`}</strong></td>
             <td class="report-money"><strong>${currency(lifetime)}</strong></td>
             <td colspan="5" class="muted">Based on salary outgoing records only.</td>
           </tr>
@@ -11926,6 +12324,10 @@
           <strong>${escapeHtml(stat.value)}</strong>
         </div>
       `).join("");
+    }
+
+    function reportStoryIcon(tone, text) {
+      return `<span class="report-story-icon ${tone || ""}">${escapeHtml(text)}</span>`;
     }
 
     function renderReports() {
@@ -11950,10 +12352,20 @@
       const netDelta = pctDelta(net, prevNet);
       const paidDelta = pctDelta(paid, prevPaid);
       const clientRows = clientSummaryRows(period);
-      const topClient = clientRows.slice().sort((a, b) => b.paid - a.paid)[0];
-      const highestOpen = clientRows.slice().sort((a, b) => (b.pending + b.overdue) - (a.pending + a.overdue))[0];
+      const selectedReportClientExists = db.clients.some(client => !client.archived && String(client.id) === String(selectedReportClientId));
+      if (selectedReportClientId && !selectedReportClientExists) selectedReportClientId = "";
+      const reportClientRows = selectedReportClientId
+        ? clientRows.filter(row => String(row.clientId) === String(selectedReportClientId))
+        : clientRows;
+      const topClient = reportClientRows.slice().sort((a, b) => b.paid - a.paid)[0];
+      const highestOpen = reportClientRows.slice().sort((a, b) => (b.pending + b.overdue) - (a.pending + a.overdue))[0];
       const spendRows = salarySpendSinceRows(2022);
       const spendYear = spendRows.find(row => Number(row.year) === Number(period.year));
+      const spendModeRows = selectedReportSalarySpendMode === "month"
+        ? salarySpendMonthlyRows(period.year)
+        : selectedReportSalarySpendMode === "employee"
+          ? salarySpendEmployeeRows(period.year)
+          : spendRows;
       const reportData = monthlyChartData(period.year);
       const bestBy = (key) => reportData.slice().sort((a, b) => Number(b[key] || 0) - Number(a[key] || 0))[0];
       const worstBy = (key) => reportData.slice().sort((a, b) => Number(a[key] || 0) - Number(b[key] || 0))[0];
@@ -11968,20 +12380,42 @@
       const activeEmployees = db.employees.filter(e => !e.archived);
       const monthlySalaryTotal = activeEmployees.reduce((sum, employee) => sum + Number(employee.monthlySalary || 0), 0);
       const avgMonthlySalary = activeEmployees.length ? monthlySalaryTotal / activeEmployees.length : 0;
-      const clientExpectedTotal = clientRows.reduce((sum, row) => sum + row.expected, 0);
-      const clientPaidTotal = clientRows.reduce((sum, row) => sum + row.paid, 0);
-      const clientOpenTotal = clientRows.reduce((sum, row) => sum + row.pending + row.overdue, 0);
-      const clientsWithBilling = clientRows.filter(row => row.expected > 0).length;
-      const lifetimeSalarySpend = spendRows.reduce((sum, row) => sum + row.tracked, 0);
-      const lifetimeOpenSalary = spendRows.reduce((sum, row) => sum + row.open, 0);
+      const clientExpectedTotal = reportClientRows.reduce((sum, row) => sum + row.expected, 0);
+      const clientPaidTotal = reportClientRows.reduce((sum, row) => sum + row.paid, 0);
+      const clientOpenTotal = reportClientRows.reduce((sum, row) => sum + row.pending + row.overdue, 0);
+      const clientsWithBilling = reportClientRows.filter(row => row.expected > 0).length;
+      const lifetimeSalarySpend = spendModeRows.reduce((sum, row) => sum + row.tracked, 0);
+      const lifetimeOpenSalary = spendModeRows.reduce((sum, row) => sum + row.open, 0);
       const netTone = net >= 0 ? "good" : "bad";
       const collectionTone = collectionPct >= 90 ? "good" : collectionPct >= 50 ? "warn" : expected ? "bad" : "";
+      const payrollTone = payrollRatio <= 70 ? "good" : payrollRatio <= 90 ? "warn" : "bad";
       const reportScore = Math.max(0, Math.min(100,
         Math.round((net >= 0 ? 35 : 0) + Math.min(35, collectionPct * 0.35) + (payrollRatio <= 70 ? 20 : payrollRatio <= 90 ? 10 : 0) + (openIncome <= expected * 0.1 ? 10 : 0))
       ));
       const scoreTone = reportScore >= 80 ? "good" : reportScore >= 55 ? "warn" : "bad";
       const netDeltaText = netDelta.dir === "flat" ? "flat vs last month" : `${netDelta.dir === "up" ? "+" : ""}${netDelta.pct.toFixed(0)}% net vs last month`;
       const paidDeltaText = paidDelta.dir === "flat" ? "collection flat" : `${paidDelta.dir === "up" ? "+" : ""}${paidDelta.pct.toFixed(0)}% collected vs last month`;
+      const attentionRows = reportClientRows
+        .map(row => ({ ...row, open: row.pending + row.overdue }))
+        .filter(row => row.open > 0 || row.status === "Overdue")
+        .sort((a, b) => (b.overdue - a.overdue) || (b.open - a.open))
+        .slice(0, 5);
+      $("#reportClientFilter").html(`
+        <option value="">All clients</option>
+        ${db.clients.filter(client => !client.archived).sort((a, b) => a.name.localeCompare(b.name)).map(client => `
+          <option value="${escapeHtml(client.id)}">${escapeHtml(client.name)}</option>
+        `).join("")}
+      `).val(selectedReportClientId);
+      $("#reportSalarySpendMode .series-pill").removeClass("active");
+      $(`#reportSalarySpendMode .series-pill[data-report-spend-mode="${selectedReportSalarySpendMode}"]`).addClass("active");
+      $(".report-module-longview").toggleClass("is-employee-view", selectedReportSalarySpendMode === "employee");
+      $("#salarySpendReportSub").text(
+        selectedReportSalarySpendMode === "month"
+          ? `Tracked salary outgoing by month for ${period.year}.`
+          : selectedReportSalarySpendMode === "employee"
+            ? `Tracked salary outgoing by employee for ${period.year}.`
+            : "Tracked salary outgoing by release date, grouped by year."
+      );
 
       $("#reportHero").html(`
         <div>
@@ -12039,6 +12473,62 @@
           <strong>${reportScore}</strong>
           <div class="report-kpi-note">${reportScore >= 80 ? "Strong" : reportScore >= 55 ? "Needs watch" : "Needs attention"}</div>
         </div>
+      `);
+
+      $("#reportNarrative").html(`
+        <div class="report-section-label">What changed</div>
+        <div class="report-module-title">${escapeHtml(label)} readout</div>
+        <div class="report-narrative-list">
+          <div class="report-narrative-item">
+            ${reportStoryIcon(netTone, netDelta.dir === "down" ? "!" : "+")}
+            <div class="report-story-copy">
+              <strong>${escapeHtml(netDeltaText)}</strong>
+              <span>Net is ${currency(net)} after salary outgoing of ${currency(outgoingBase)}.</span>
+            </div>
+          </div>
+          <div class="report-narrative-item">
+            ${reportStoryIcon(collectionTone || "neutral", collectionPct >= 90 ? "OK" : "!")}
+            <div class="report-story-copy">
+              <strong>${collectionPct}% collection rate</strong>
+              <span>${currency(paid)} collected from ${currency(expected)} expected income.</span>
+            </div>
+          </div>
+          <div class="report-narrative-item">
+            ${reportStoryIcon(payrollTone, payrollRatio <= 70 ? "OK" : "!")}
+            <div class="report-story-copy">
+              <strong>${payrollRatio}% payroll ratio</strong>
+              <span>${payrollRatio <= 70 ? "Payroll is within a healthy range." : payrollRatio <= 90 ? "Payroll is elevated and should be watched." : "Payroll is high against expected income."}</span>
+            </div>
+          </div>
+          <div class="report-narrative-item">
+            ${reportStoryIcon(openIncome ? "warn" : "good", openIncome ? "!" : "OK")}
+            <div class="report-story-copy">
+              <strong>${currency(openIncome)} still open</strong>
+              <span>${highestOpen?.client ? `${escapeHtml(highestOpen.client)} carries the largest open balance.` : "No client currently carries an open balance."}</span>
+            </div>
+          </div>
+        </div>
+      `);
+
+      $("#reportAttention").html(`
+        <div class="report-section-label">Needs attention</div>
+        <div class="report-module-title">Client risk ranking</div>
+        ${attentionRows.length ? `
+          <div class="report-attention-list">
+            ${attentionRows.map((row, index) => {
+              const tone = row.overdue > 0 ? "bad" : "warn";
+              return `
+                <div class="report-attention-item">
+                  ${reportStoryIcon(tone, String(index + 1))}
+                  <div class="report-story-copy">
+                    <strong>${escapeHtml(row.client)} · ${currency(row.open)}</strong>
+                    <span>${currency(row.overdue)} overdue · ${currency(row.pending)} pending</span>
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        ` : `<div class="report-attention-empty">No unpaid client balances for this period.</div>`}
       `);
 
       $("#salaryChartSummary").html(`
@@ -12105,9 +12595,9 @@
       renderSalarySpendSinceTable();
 
       $("#salarySpendStats").html(reportMiniStats([
-        { label: "Since 2022", value: currency(lifetimeSalarySpend) },
-        { label: `${period.year} tracked`, value: currency(spendYear?.tracked || 0) },
-        { label: "Avg active month", value: currency(spendYear?.averageMonthly || 0) },
+        { label: selectedReportSalarySpendMode === "year" ? "Since 2022" : `${period.year} tracked`, value: currency(lifetimeSalarySpend) },
+        { label: selectedReportSalarySpendMode === "employee" ? "Employees paid" : "Rows shown", value: String(spendModeRows.filter(row => row.tracked > 0).length) },
+        { label: "Avg active row", value: currency(spendModeRows.filter(row => row.tracked > 0).length ? lifetimeSalarySpend / spendModeRows.filter(row => row.tracked > 0).length : 0) },
         { label: "Scheduled / pending", value: currency(lifetimeOpenSalary), tone: lifetimeOpenSalary ? "warn" : "good" }
       ]));
 
@@ -12176,12 +12666,14 @@
         const pending = payments.filter(p => p.status === "pending").reduce((sum, p) => sum + Number(p.amount || 0), 0);
         const overdue = payments.filter(p => p.status === "overdue").reduce((sum, p) => sum + Number(p.amount || 0), 0);
         const status = overdue > 0 ? "Overdue" : pending > 0 ? "Pending" : expected > 0 && paid >= expected ? "Good" : "No payment";
-        return { client: client.name, expected, paid, pending, overdue, status };
+        return { clientId: client.id, client: client.name, expected, paid, pending, overdue, status };
       });
     }
 
     function renderClientSummaryTable(period) {
-      const rows = clientSummaryRows(period).sort((a, b) => b.expected - a.expected);
+      const rows = clientSummaryRows(period)
+        .filter(row => !selectedReportClientId || String(row.clientId) === String(selectedReportClientId))
+        .sort((a, b) => b.expected - a.expected);
       $("#clientSummaryTable").html(`
         <thead><tr><th>Client</th><th class="report-money">Expected</th><th class="report-money">Paid</th><th class="report-money">Pending</th><th class="report-money">Overdue</th><th>Status</th></tr></thead>
         <tbody>
@@ -12247,15 +12739,16 @@
       const chartGrid = "#eeeeee";
       const chartDefaults = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
             position: "bottom",
-            labels: { color: chartText, boxWidth: 12, boxHeight: 12, usePointStyle: true }
+            labels: { color: chartText, boxWidth: 8, boxHeight: 8, usePointStyle: true, font: { size: 10, weight: "600" } }
           }
         },
         scales: {
-          x: { ticks: { color: chartText }, grid: { color: chartGrid, drawBorder: false } },
-          y: { beginAtZero: true, ticks: { color: chartText }, grid: { color: chartGrid, drawBorder: false } }
+          x: { ticks: { color: chartText, font: { size: 10 } }, grid: { color: chartGrid, drawBorder: false } },
+          y: { beginAtZero: true, ticks: { color: chartText, font: { size: 10 } }, grid: { color: chartGrid, drawBorder: false } }
         }
       };
 
@@ -12520,17 +13013,18 @@
           type: "line",
           data: {
             labels: reportData.map(item => item.month),
-            datasets: [{ label: "Salary Expense", data: reportData.map(item => item.payroll), tension: 0.3, borderColor: "#111111", backgroundColor: "rgba(17, 17, 17, 0.08)", pointBackgroundColor: "#111111", pointBorderColor: "#111111", fill: true }]
+            datasets: [{ label: "Salary Expense", data: reportData.map(item => item.payroll), tension: 0.35, borderColor: "#111111", borderWidth: 2, backgroundColor: "rgba(17, 17, 17, 0.055)", pointRadius: 2.5, pointHoverRadius: 4, pointBackgroundColor: "#111111", pointBorderColor: "#111111", fill: true }]
           },
           options: {
             ...chartDefaults,
             interaction: { mode: "index", intersect: false },
             scales: {
-              x: { ticks: { color: chartText }, grid: { display: false } },
-              y: { beginAtZero: true, ticks: { color: chartText, callback: (v) => compactCurrency(v) }, grid: { color: chartGrid, drawBorder: false } }
+              x: { ticks: { color: chartText, font: { size: 10 }, maxRotation: 0 }, grid: { display: false }, border: { display: false } },
+              y: { beginAtZero: true, ticks: { color: chartText, font: { size: 10 }, maxTicksLimit: 5, callback: (v) => compactCurrency(v) }, grid: { color: "rgba(229, 231, 235, 0.75)", drawBorder: false }, border: { display: false } }
             },
             plugins: {
               ...chartDefaults.plugins,
+              legend: { display: false },
               tooltip: {
                 backgroundColor: "#111111",
                 titleColor: "#ffffff",
@@ -12546,37 +13040,57 @@
 
       const salarySpendCanvas = document.getElementById("salarySpendSinceChart");
       if (salarySpendCanvas) {
-        const spendRows = salarySpendSinceRows(2022);
+        const isEmployeeSpendMode = selectedReportSalarySpendMode === "employee";
+        const spendRows = selectedReportSalarySpendMode === "month"
+          ? salarySpendMonthlyRows(selectedReports.year)
+          : isEmployeeSpendMode
+            ? salarySpendEmployeeRows(selectedReports.year).slice(0, 12)
+            : salarySpendSinceRows(2022);
+        const spendLabels = spendRows.map(row => String(row.year || row.month || row.employee || row.label || ""));
         charts.salarySpendSince = new Chart(salarySpendCanvas, {
           type: "bar",
           data: {
-            labels: spendRows.map(row => String(row.year)),
+            labels: spendLabels,
             datasets: [
               {
                 label: "Paid salary",
                 data: spendRows.map(row => row.paid),
                 backgroundColor: "#111111",
                 borderColor: "#111111",
-                borderWidth: 1
+                borderWidth: 1,
+                borderRadius: 3,
+                maxBarThickness: isEmployeeSpendMode ? 18 : 34,
+                categoryPercentage: isEmployeeSpendMode ? 0.74 : 0.56,
+                barPercentage: isEmployeeSpendMode ? 0.82 : 0.82
               },
               {
                 label: "Scheduled / pending",
                 data: spendRows.map(row => row.open),
                 backgroundColor: "#d1d5db",
                 borderColor: "#9ca3af",
-                borderWidth: 1
+                borderWidth: 1,
+                borderRadius: 3,
+                maxBarThickness: isEmployeeSpendMode ? 18 : 34,
+                categoryPercentage: isEmployeeSpendMode ? 0.74 : 0.56,
+                barPercentage: isEmployeeSpendMode ? 0.82 : 0.82
               }
             ]
           },
           options: {
             ...chartDefaults,
+            indexAxis: isEmployeeSpendMode ? "y" : "x",
             interaction: { mode: "index", intersect: false },
             scales: {
-              x: { stacked: true, ticks: { color: chartText }, grid: { display: false } },
-              y: { stacked: true, beginAtZero: true, ticks: { color: chartText, callback: (v) => compactCurrency(v) }, grid: { color: chartGrid, drawBorder: false } }
+              x: isEmployeeSpendMode
+                ? { stacked: true, beginAtZero: true, ticks: { color: chartText, font: { size: 10 }, maxTicksLimit: 5, callback: (v) => compactCurrency(v) }, grid: { color: "rgba(229, 231, 235, 0.75)", drawBorder: false }, border: { display: false } }
+                : { stacked: true, ticks: { color: chartText, font: { size: 10, weight: "600" }, maxRotation: 0 }, grid: { display: false }, border: { display: false } },
+              y: isEmployeeSpendMode
+                ? { stacked: true, ticks: { color: chartText, font: { size: 10, weight: "700" }, autoSkip: false }, grid: { display: false }, border: { display: false } }
+                : { stacked: true, beginAtZero: true, ticks: { color: chartText, font: { size: 10 }, maxTicksLimit: 5, callback: (v) => compactCurrency(v) }, grid: { color: "rgba(229, 231, 235, 0.75)", drawBorder: false }, border: { display: false } }
             },
             plugins: {
               ...chartDefaults.plugins,
+              legend: { display: false },
               tooltip: {
                 backgroundColor: "#111111",
                 titleColor: "#ffffff",
@@ -12584,6 +13098,10 @@
                 padding: 10,
                 cornerRadius: 8,
                 callbacks: {
+                  title: (items) => {
+                    const row = spendRows[items[0]?.dataIndex || 0];
+                    return String(row?.label || row?.employee || row?.year || items[0]?.label || "");
+                  },
                   label: (item) => `${item.dataset.label}: ${currency(item.parsed.y)}`
                 }
               }
@@ -12599,19 +13117,20 @@
           data: {
             labels: reportData.map(item => item.month),
             datasets: [
-              { label: "Paid Income", data: reportData.map(item => item.paidIncome), tension: 0.3, borderColor: "#111111", backgroundColor: "rgba(17, 17, 17, 0.08)", pointBackgroundColor: "#111111", pointBorderColor: "#111111" },
-              { label: "Pending / Overdue", data: reportData.map(item => item.pendingIncome), tension: 0.3, borderColor: "#8f8f8f", backgroundColor: "rgba(143, 143, 143, 0.08)", pointBackgroundColor: "#8f8f8f", pointBorderColor: "#8f8f8f" }
+              { label: "Paid Income", data: reportData.map(item => item.paidIncome), tension: 0.35, borderColor: "#111111", borderWidth: 2, backgroundColor: "rgba(17, 17, 17, 0.06)", pointRadius: 2.5, pointHoverRadius: 4, pointBackgroundColor: "#111111", pointBorderColor: "#111111" },
+              { label: "Pending / Overdue", data: reportData.map(item => item.pendingIncome), tension: 0.35, borderColor: "#9ca3af", borderWidth: 1.75, backgroundColor: "rgba(156, 163, 175, 0.08)", pointRadius: 2.5, pointHoverRadius: 4, pointBackgroundColor: "#9ca3af", pointBorderColor: "#9ca3af" }
             ]
           },
           options: {
             ...chartDefaults,
             interaction: { mode: "index", intersect: false },
             scales: {
-              x: { ticks: { color: chartText }, grid: { display: false } },
-              y: { beginAtZero: true, ticks: { color: chartText, callback: (v) => compactCurrency(v) }, grid: { color: chartGrid, drawBorder: false } }
+              x: { ticks: { color: chartText, font: { size: 10 }, maxRotation: 0 }, grid: { display: false }, border: { display: false } },
+              y: { beginAtZero: true, ticks: { color: chartText, font: { size: 10 }, maxTicksLimit: 5, callback: (v) => compactCurrency(v) }, grid: { color: "rgba(229, 231, 235, 0.75)", drawBorder: false }, border: { display: false } }
             },
             plugins: {
               ...chartDefaults.plugins,
+              legend: { display: false },
               tooltip: {
                 backgroundColor: "#111111",
                 titleColor: "#ffffff",
@@ -14043,9 +14562,14 @@
       if (type === "clients") return db.clients;
       if (type === "payments") return db.payments;
       if (type === "payrollRuns") return db.salaryOutgoings || [];
-      if (type === "salarySpendSince2022") return salarySpendSinceRows(2022);
+      if (type === "salarySpendSince2022") {
+        if (selectedReportSalarySpendMode === "month") return salarySpendMonthlyRows(selectedReports.year);
+        if (selectedReportSalarySpendMode === "employee") return salarySpendEmployeeRows(selectedReports.year);
+        return salarySpendSinceRows(2022);
+      }
       if (type === "employeeYearlyCost") return db.employees.filter(e => !e.archived).map(e => ({ name: e.name, department: e.department, status: e.status, monthlySalary: e.monthlySalary, yearlyCost: Number(e.monthlySalary) * 12 }));
-      if (type === "clientSummary") return clientSummaryRows(selectedReports);
+      if (type === "clientSummary") return clientSummaryRows(selectedReports)
+        .filter(row => !selectedReportClientId || String(row.clientId) === String(selectedReportClientId));
       return [];
     }
 
@@ -14403,9 +14927,15 @@
       io.observe(sentinel);
     })();
 
-    $(document).on("change", "#reportMonth, #reportYear", function () {
+    $(document).on("change", "#reportMonth, #reportYear, #reportClientFilter", function () {
       selectedReports.month = Number($("#reportMonth").val());
       selectedReports.year = Number($("#reportYear").val());
+      selectedReportClientId = $("#reportClientFilter").val() || "";
+      renderReports();
+      setTimeout(drawCharts, 0);
+    });
+    $(document).on("click", "[data-report-spend-mode]", function () {
+      selectedReportSalarySpendMode = $(this).data("report-spend-mode") || "year";
       renderReports();
       setTimeout(drawCharts, 0);
     });
