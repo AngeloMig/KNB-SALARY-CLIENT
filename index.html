@@ -1537,6 +1537,529 @@
 
     .health-meta { font-size: 11px; margin-top: 3px; }
 
+    /* Clients tab — compact account portfolio */
+    #clients .client-overview {
+      display: grid;
+      grid-template-columns: minmax(260px, 1.15fr) repeat(3, minmax(150px, 0.7fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    #clients .client-hero,
+    #clients .client-kpi {
+      background: #ffffff;
+      border-radius: var(--dashboard-card-radius);
+      box-shadow: var(--dashboard-shadow);
+      padding: 18px;
+      min-width: 0;
+    }
+    #clients .client-hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    #clients .client-eyebrow,
+    #clients .client-kpi-label,
+    #clients .client-card-label {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    #clients .client-hero-value {
+      color: var(--text);
+      font-size: 32px;
+      line-height: 1.05;
+      font-weight: 720;
+      letter-spacing: -0.035em;
+      font-variant-numeric: tabular-nums;
+      margin-top: 5px;
+    }
+    #clients .client-hero-meta,
+    #clients .client-kpi-meta,
+    #clients .client-card-meta {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+    #clients .client-hero-pills {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    #clients .client-spotlights {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0;
+      padding-top: 12px;
+      border-top: 1px solid #f1f1f3;
+    }
+    #clients .client-spotlight {
+      min-width: 0;
+      padding: 0 12px;
+      border-left: 1px solid #f1f1f3;
+    }
+    #clients .client-spotlight:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+    #clients .client-spotlight:last-child { padding-right: 0; }
+    #clients .client-spotlight strong {
+      display: block;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 740;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #clients .client-risk-filters {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    #clients .client-risk-chip {
+      border: 0;
+      border-radius: 999px;
+      background: #f4f4f5;
+      color: var(--muted);
+      padding: 5px 10px;
+      font-size: 10.5px;
+      font-weight: 700;
+      cursor: pointer;
+      font-variant-numeric: tabular-nums;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    #clients .client-risk-chip:hover { color: var(--text); }
+    #clients .client-risk-chip.active {
+      background: #111111;
+      color: #ffffff;
+    }
+    #clients .client-shell-tools {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    #clients .client-kpi {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      justify-content: space-between;
+    }
+    #clients .client-kpi-value {
+      color: var(--text);
+      font-size: 22px;
+      line-height: 1.1;
+      font-weight: 730;
+      letter-spacing: -0.025em;
+      font-variant-numeric: tabular-nums;
+    }
+    #clients .client-kpi-value.good { color: var(--good); }
+    #clients .client-kpi-value.warn { color: var(--warn); }
+    #clients .client-kpi-value.bad { color: var(--bad); }
+    #clients .clients-shell {
+      background: #ffffff;
+      border-radius: var(--dashboard-card-radius);
+      box-shadow: var(--dashboard-shadow);
+      padding: 16px;
+    }
+    #clients .clients-shell-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    #clients .clients-shell-title {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 740;
+      letter-spacing: -0.01em;
+    }
+    #clients .client-directory {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    #clients .client-directory.view-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    #clients .client-card {
+      border: 1px solid #f1f1f3;
+      border-radius: var(--dashboard-card-radius);
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+      cursor: pointer;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    }
+    #clients .client-card:hover,
+    #clients .client-card:focus-visible {
+      border-color: #d4d4d8;
+      box-shadow: 0 8px 18px rgba(17,17,17,0.06);
+      transform: translateY(-1px);
+      outline: none;
+    }
+    #clients .client-card.archived {
+      opacity: 0.68;
+      background: #fafafa;
+    }
+    #clients .client-card-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+    }
+    #clients .client-name {
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 760;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #clients .client-contact {
+      color: var(--muted);
+      font-size: 11.5px;
+      margin-top: 3px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #clients .client-card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0;
+      padding-top: 10px;
+      border-top: 1px solid #f1f1f3;
+    }
+    #clients .client-card-stat {
+      padding: 0 12px;
+      border-left: 1px solid #f1f1f3;
+      min-width: 0;
+    }
+    #clients .client-card-stat:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+    #clients .client-card-stat:last-child { padding-right: 0; }
+    #clients .client-card-value {
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 720;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+      margin-top: 3px;
+    }
+    #clients .client-collection {
+      display: grid;
+      gap: 6px;
+      padding-top: 10px;
+      border-top: 1px solid #f1f1f3;
+    }
+    #clients .client-collection-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    #clients .client-progress {
+      height: 5px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #f3f4f6;
+    }
+    #clients .client-progress span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: #0a0a0a;
+    }
+    #clients .client-due-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      width: fit-content;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--muted);
+      background: #f3f4f6;
+    }
+    #clients .client-due-chip.good { color: var(--good); background: var(--good-bg); }
+    #clients .client-due-chip.warn { color: var(--warn); background: var(--warn-bg); }
+    #clients .client-due-chip.bad { color: var(--bad); background: var(--bad-bg); }
+    #clients .client-card-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #f1f1f3;
+    }
+    #clients .client-card-actions {
+      display: inline-flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    #clients .client-directory.view-list .client-card {
+      grid-template-columns: minmax(180px, 1.35fr) minmax(120px, 0.7fr) minmax(120px, 0.7fr) minmax(120px, 0.7fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+    }
+    #clients .client-directory.view-list .client-card-head,
+    #clients .client-directory.view-list .client-card-foot {
+      display: contents;
+      padding: 0;
+      border: 0;
+    }
+    #clients .client-directory.view-list .client-card-grid {
+      display: contents;
+      padding: 0;
+      border: 0;
+    }
+    #clients .client-directory.view-list .client-card-stat {
+      padding: 0;
+      border: 0;
+    }
+    #clients .client-directory.view-list .client-collection {
+      display: none;
+    }
+    #clients .client-directory.view-list .client-name { font-size: 14px; }
+    #clients .client-directory.view-list .client-card-value { font-size: 13px; }
+    #clients .client-directory.view-list .client-card-actions {
+      justify-content: flex-end;
+      flex-wrap: nowrap;
+    }
+    .client-detail-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(17,17,17,0.24);
+      z-index: 210;
+      display: none;
+      justify-content: flex-end;
+    }
+    .client-detail-backdrop.open { display: flex; }
+    .client-detail-panel {
+      width: min(460px, 100%);
+      height: 100%;
+      background: #ffffff;
+      box-shadow: -20px 0 40px rgba(17,17,17,0.14);
+      padding: 20px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .client-detail-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #f1f1f3;
+    }
+    .client-detail-title {
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 760;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+    .client-detail-sub {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      margin-top: 4px;
+    }
+    .client-detail-close {
+      border: 0;
+      background: #f4f4f5;
+      border-radius: 8px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1;
+    }
+    .client-detail-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .client-detail-filter-row {
+      display: inline-flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .client-detail-filter {
+      border: 0;
+      border-radius: 999px;
+      background: #f4f4f5;
+      color: var(--muted);
+      padding: 4px 9px;
+      font-size: 10.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .client-detail-filter.active {
+      background: #111111;
+      color: #ffffff;
+    }
+    .client-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .client-detail-stat {
+      border: 1px solid #f1f1f3;
+      border-radius: var(--dashboard-card-radius);
+      padding: 12px;
+      min-width: 0;
+    }
+    .client-detail-stat span {
+      display: block;
+      color: var(--micro);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .client-detail-stat strong {
+      display: block;
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 720;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+    .client-detail-section {
+      display: grid;
+      gap: 8px;
+    }
+    .client-detail-section-title {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .client-payment-list {
+      display: grid;
+      gap: 6px;
+    }
+    .client-payment-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid #f1f1f3;
+      border-radius: var(--dashboard-card-radius);
+      padding: 10px;
+    }
+    .client-payment-row strong {
+      display: block;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 740;
+      font-variant-numeric: tabular-nums;
+    }
+    .client-payment-row .muted {
+      font-size: 11px;
+      margin-top: 2px;
+    }
+    .client-note-grid,
+    .client-activity-list {
+      display: grid;
+      gap: 8px;
+    }
+    .client-note-box,
+    .client-activity-row {
+      border: 1px solid #f1f1f3;
+      border-radius: var(--dashboard-card-radius);
+      padding: 10px;
+      min-width: 0;
+    }
+    .client-note-box strong,
+    .client-activity-row strong {
+      display: block;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 740;
+      margin-bottom: 3px;
+    }
+    @media (max-width: 700px) {
+      .client-detail-panel { width: 100%; }
+      .client-detail-grid { grid-template-columns: 1fr; }
+      #clients .client-directory.view-list .client-card {
+        grid-template-columns: 1fr;
+      }
+      #clients .client-directory.view-list .client-card-head,
+      #clients .client-directory.view-list .client-card-foot,
+      #clients .client-directory.view-list .client-card-grid {
+        display: grid;
+      }
+    }
+    #clients .client-empty {
+      grid-column: 1 / -1;
+      padding: 34px 16px;
+      text-align: center;
+      color: var(--muted);
+    }
+    #clients .client-empty-title {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 740;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 1050px) {
+      #clients .client-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #clients .client-directory { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      #clients .client-overview { grid-template-columns: 1fr; }
+      #clients .client-card-grid { grid-template-columns: 1fr; gap: 8px; }
+      #clients .client-card-stat {
+        padding: 0;
+        border-left: 0;
+      }
+      #clients .client-card-foot {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      #clients .client-card-actions { justify-content: flex-start; }
+      #clients .client-spotlights { grid-template-columns: 1fr; gap: 10px; }
+      #clients .client-spotlight {
+        padding: 0;
+        border-left: 0;
+      }
+    }
+
     .onboarding-backdrop {
       position: fixed;
       inset: 0;
@@ -2694,12 +3217,10 @@
 
     .employee-card-footer {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
+      flex-direction: column;
+      gap: 8px;
       padding-top: 10px;
       border-top: 1px solid var(--line);
-      min-height: 28px;
     }
 
     .employee-card-footer-meta {
@@ -2715,8 +3236,22 @@
     .employee-card .hover-actions {
       opacity: 1;
       transition: opacity 0.18s ease;
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 6px;
+      justify-content: flex-end;
+      width: 100%;
     }
-    .employee-card .hover-actions .btn { padding: 5px 9px; font-size: 11px; }
+    .employee-card .hover-actions .btn {
+      padding: 5px 10px;
+      font-size: 11px;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    .employee-card .hover-actions .btn.icon-only {
+      padding: 5px 8px;
+      min-width: 30px;
+    }
 
     /* Directory header controls: view toggle + count */
     .directory-controls {
@@ -4835,6 +5370,36 @@
     }
     .toast-confirm .toast-confirm-actions .btn { font-size: 12px; padding: 6px 12px; }
 
+    /* Payslip queue bar — appears bottom-left while a bulk-generate queue is active */
+    .payslip-queue-bar {
+      position: fixed;
+      left: 22px;
+      bottom: 22px;
+      background: #0a0a0a;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-radius: 12px;
+      box-shadow: 0 18px 48px rgba(17, 17, 17, 0.22);
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      max-width: 460px;
+    }
+    .payslip-queue-text { font-size: 12.5px; }
+    .payslip-queue-text strong { font-weight: 700; margin-right: 4px; }
+    .payslip-queue-actions { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+    .payslip-queue-bar .btn.small {
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 5px 10px;
+      font-size: 11px;
+    }
+    .payslip-queue-bar .btn.small:hover { background: rgba(255,255,255,0.20); }
+    .payslip-queue-bar .btn.small.secondary { background: rgba(255,255,255,0.04); }
+
     .emp-history {
       margin-top: 12px;
       padding-top: 12px;
@@ -6598,7 +7163,27 @@
           </div>
           <button class="btn secondary" data-export="clients">Export CSV</button>
         </div>
-        <div class="table-wrap"><table id="clientsTable"></table></div>
+        <div id="clientOverview" class="client-overview"></div>
+        <div class="clients-shell">
+          <div class="clients-shell-head">
+            <div>
+              <div class="clients-shell-title">Client portfolio</div>
+              <div class="client-card-meta" id="clientDirectoryMeta"></div>
+            </div>
+            <div class="client-shell-tools">
+              <div class="client-risk-filters" id="clientRiskFilters" role="group" aria-label="Client risk filter"></div>
+              <div class="view-toggle client-view-toggle" role="group" aria-label="Client view">
+                <button type="button" class="view-toggle-btn active" data-client-view="cards" aria-label="Card view" title="Card view">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                </button>
+                <button type="button" class="view-toggle-btn" data-client-view="list" aria-label="Compact list" title="Compact list">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div id="clientsTable" class="client-directory"></div>
+        </div>
       </section>
 
       <section id="payments" class="section">
@@ -6880,6 +7465,8 @@
     </div>
   </div>
 
+  <input type="file" id="importPayslipArchiveFile" accept=".json,application/json" hidden />
+
   <div class="modal-backdrop" id="modalBackdrop">
     <div class="modal">
       <div class="modal-header">
@@ -6890,6 +7477,9 @@
       </div>
       <form id="recordForm"></form>
     </div>
+  </div>
+  <div class="client-detail-backdrop" id="clientDetailBackdrop" aria-hidden="true">
+    <aside class="client-detail-panel" id="clientDetailPanel" role="dialog" aria-modal="true" aria-label="Client details"></aside>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -6926,6 +7516,10 @@
     let compareMode = "none"; // none | prevMonth | prevYear | goal
     let drillTarget = null;   // null | "income" | "collected" | "open" | "payroll" | "net" | "netTotal"
     let selectedSalarySpendMode = "month"; // year | month
+    let clientRiskFilter = "all"; // all | good | warn | bad | neutral | archived
+    let clientViewMode = "cards"; // cards | list
+    let activeClientDetailId = null;
+    let clientDetailPaymentFilter = "all"; // all | open | paid | overdue
     const SALARY_RELEASE_DAYS = [5, 20];
 
     // -----------------------------------------------------------------------------
@@ -7076,6 +7670,7 @@
           { id: 8, name: "POKS", position: "JUNIOR DEVELOPER", department: "SHOPIFY", startDate: `${currentYear}-01-01`, monthlySalary: 12000, status: "active", lastIncrease: "", nextReview: ymd(twoMonths.getFullYear(), twoMonths.getMonth(), 1), notes: "Employee ID: EMP-007. Imported from KNB payslip backup.", archived: false }
         ],
         salaryHistory: [],
+        payslips: [],
         clients: [
           { id: 1, name: "RIVYL", contact: "", email: "", phone: "", defaultAmount: 85000, frequency: "Monthly", method: "Bank transfer", status: "active", notes: "Monthly client retainer.", archived: false },
           { id: 2, name: "MODERNSHELVING", contact: "", email: "", phone: "", defaultAmount: 85000, frequency: "Monthly", method: "Bank transfer", status: "active", notes: "Monthly client retainer.", archived: false },
@@ -7115,6 +7710,7 @@
       data.payments = (data.payments || []).map(item => ({ ...item, archived: Boolean(item.archived) }));
       data.salaryOutgoings = (data.salaryOutgoings || []).map(item => ({ ...item, archived: Boolean(item.archived) }));
       data.salaryHistory = data.salaryHistory || [];
+      data.payslips = data.payslips || [];
       data.activityLogs = data.activityLogs || [];
       data.savedViews = data.savedViews || [];
       data.settings.goals = data.settings.goals || { income: 0, payroll: 0, net: 0 };
@@ -8793,6 +9389,7 @@
       $("#clientStatusFilter").val("");
       $("#clientArchiveFilter").val("live");
       $("#clientSort").val("name");
+      clientRiskFilter = "all";
       renderClients();
     }
 
@@ -9281,6 +9878,7 @@
             <div class="employee-card-footer">
               <div class="employee-card-footer-meta">Started ${escapeHtml(t.date || "—")}</div>
               <div class="action-group hover-actions">
+                <button class="btn small secondary icon-only" data-payslip-generate data-id="${e.id}" aria-label="Generate payslip" title="Generate payslip">🧾</button>
                 <button class="btn small secondary" data-edit="employee" data-id="${e.id}">Edit</button>
                 ${e.archived ? `<button class="btn small blue" data-restore="employee" data-id="${e.id}">Restore</button>` : `<button class="btn small warn" data-archive="employee" data-id="${e.id}">Archive</button>`}
                 <button class="btn small danger" data-delete="employee" data-id="${e.id}">Delete</button>
@@ -9368,36 +9966,375 @@
       return `<div class="health-chip ${h.tone}"><span class="dot"></span>${escapeHtml(h.label)}</div><div class="muted health-meta">${escapeHtml(meta)}</div>`;
     }
 
+    function clientPaymentStats(clientId) {
+      const payments = (db.payments || []).filter(p => !p.archived && Number(p.clientId) === Number(clientId));
+      const paid = payments.filter(p => p.status === "paid").reduce((sum, p) => sum + Number(p.amount || 0), 0);
+      const open = payments.filter(p => ["pending", "overdue"].includes(p.status)).reduce((sum, p) => sum + Number(p.amount || 0), 0);
+      const overdue = payments.filter(p => p.status === "overdue").reduce((sum, p) => sum + Number(p.amount || 0), 0);
+      const next = payments
+        .filter(p => ["pending", "overdue"].includes(p.status) && dateValue(p.dueDate))
+        .sort((a, b) => dateValue(a.dueDate) - dateValue(b.dueDate))[0];
+      return { payments, paid, open, overdue, next };
+    }
+
+    function clientMonthlyCollectionStats(clientId) {
+      const currentPeriod = { month: today.getMonth(), year: today.getFullYear() };
+      const rows = (db.payments || []).filter(p =>
+        !p.archived &&
+        Number(p.clientId) === Number(clientId) &&
+        isSameMonthYear(p.dueDate, currentPeriod) &&
+        p.status !== "cancelled"
+      );
+      const expected = rows.reduce((sum, p) => sum + Number(p.amount || 0), 0);
+      const collected = rows.filter(p => p.status === "paid").reduce((sum, p) => sum + Number(p.amount || 0), 0);
+      return { expected, collected, pct: expected ? Math.round((collected / expected) * 100) : 0 };
+    }
+
+    function clientDueState(payment) {
+      if (!payment?.dueDate) return { label: "No open due", tone: "good" };
+      const due = dateValue(payment.dueDate);
+      if (!due) return { label: "No open due", tone: "good" };
+      const diff = daysBetween(today, due);
+      if (payment.status === "overdue" || diff < 0) return { label: `${Math.abs(diff)}d overdue`, tone: "bad" };
+      if (diff === 0) return { label: "Due today", tone: "warn" };
+      if (diff <= 7) return { label: `Due in ${diff}d`, tone: "warn" };
+      return { label: `Due in ${diff}d`, tone: "neutral" };
+    }
+
+    function clientPaymentPrefill(clientId) {
+      const client = (db.clients || []).find(c => Number(c.id) === Number(clientId));
+      if (!client) return null;
+      const refSlug = String(client.name || "CLIENT").trim().toUpperCase().replace(/[^A-Z0-9]+/g, "-").replace(/^-|-$/g, "");
+      const currentPeriod = `${today.getFullYear()}-${pad(today.getMonth() + 1)}`;
+      return {
+        clientId: client.id,
+        amount: client.defaultAmount || 0,
+        dueDate: dateIso(today),
+        paymentDate: "",
+        status: "pending",
+        frequency: client.frequency || db.settings.defaultFrequency,
+        invoiceReference: `${refSlug}-${currentPeriod}`,
+        notes: client.notes || "",
+        method: client.method || ""
+      };
+    }
+
+    function nextClientDueDate(client) {
+      const payments = (db.payments || [])
+        .filter(p => !p.archived && Number(p.clientId) === Number(client.id) && dateValue(p.dueDate))
+        .sort((a, b) => dateValue(b.dueDate) - dateValue(a.dueDate));
+      const base = payments[0] ? dateValue(payments[0].dueDate) : today;
+      const freq = String(client.frequency || "").toLowerCase();
+      const next = new Date(base);
+      if (freq.includes("twice")) next.setDate(next.getDate() + 15);
+      else if (freq.includes("2 month")) next.setMonth(next.getMonth() + 2);
+      else if (freq.includes("one-time")) next.setMonth(next.getMonth() + 1);
+      else next.setMonth(next.getMonth() + 1);
+      return dateIso(next);
+    }
+
+    function clientNextPaymentPrefill(clientId) {
+      const client = (db.clients || []).find(c => Number(c.id) === Number(clientId));
+      if (!client) return null;
+      const dueDate = nextClientDueDate(client);
+      const refSlug = String(client.name || "CLIENT").trim().toUpperCase().replace(/[^A-Z0-9]+/g, "-").replace(/^-|-$/g, "");
+      return {
+        clientId: client.id,
+        amount: client.defaultAmount || 0,
+        dueDate,
+        paymentDate: "",
+        status: "pending",
+        frequency: client.frequency || db.settings.defaultFrequency,
+        invoiceReference: `${refSlug}-${dueDate.slice(0, 7)}`,
+        notes: client.billingNotes || client.notes || ""
+      };
+    }
+
+    function clientActivityRows(client) {
+      const key = String(client.name || "").toLowerCase();
+      return (db.activityLogs || [])
+        .filter(log => `${log.action || ""} ${log.detail || ""}`.toLowerCase().includes(key))
+        .slice(0, 6);
+    }
+
+    function clientRiskMatches(client) {
+      if (clientRiskFilter === "all") return true;
+      if (clientRiskFilter === "archived") return Boolean(client.archived);
+      return !client.archived && clientHealth(client.id).tone === clientRiskFilter;
+    }
+
+    function renderClientRiskFilters() {
+      const clients = db.clients || [];
+      const count = (filter) => clients.filter(c => {
+        if (filter === "all") return !c.archived;
+        if (filter === "archived") return c.archived;
+        return !c.archived && clientHealth(c.id).tone === filter;
+      }).length;
+      const chips = [
+        ["all", "All", count("all")],
+        ["good", "Healthy", count("good")],
+        ["warn", "Watch", count("warn")],
+        ["bad", "At risk", count("bad")],
+        ["neutral", "New", count("neutral")],
+        ["archived", "Archived", count("archived")]
+      ];
+      $("#clientRiskFilters").html(chips.map(([key, label, n]) => `
+        <button type="button" class="client-risk-chip ${clientRiskFilter === key ? "active" : ""}" data-client-risk="${key}">
+          ${escapeHtml(label)} · ${n}
+        </button>
+      `).join(""));
+    }
+
+    function clientSpotlights() {
+      const live = (db.clients || []).filter(c => !c.archived);
+      const paidByClient = live.map(c => ({
+        client: c,
+        total: (db.payments || []).filter(p => !p.archived && Number(p.clientId) === Number(c.id) && p.status === "paid")
+          .reduce((sum, p) => sum + Number(p.amount || 0), 0)
+      })).sort((a, b) => b.total - a.total)[0];
+      const openByClient = live.map(c => ({ client: c, total: clientPaymentStats(c.id).open }))
+        .sort((a, b) => b.total - a.total)[0];
+      return { topPaid: paidByClient, highestOpen: openByClient };
+    }
+
+    function renderClientOverview(rows) {
+      const live = (db.clients || []).filter(c => !c.archived);
+      const active = live.filter(c => c.status === "active");
+      const inactive = live.length - active.length;
+      const defaultBook = active.reduce((sum, c) => sum + Number(c.defaultAmount || 0), 0);
+      const currentPeriod = { month: today.getMonth(), year: today.getFullYear() };
+      const monthPayments = (db.payments || []).filter(p => !p.archived && isSameMonthYear(p.dueDate, currentPeriod));
+      const collected = monthPayments.filter(p => p.status === "paid").reduce((sum, p) => sum + Number(p.amount || 0), 0);
+      const expected = monthPayments.filter(p => p.status !== "cancelled").reduce((sum, p) => sum + Number(p.amount || 0), 0);
+      const atRisk = live.filter(c => ["bad", "warn"].includes(clientHealth(c.id).tone)).length;
+      const collectPct = expected ? Math.round((collected / expected) * 100) : 0;
+      const spot = clientSpotlights();
+      $("#clientOverview").html(`
+        <div class="client-hero">
+          <div>
+            <div class="client-eyebrow">Client book</div>
+            <div class="client-hero-value">${currency(defaultBook)}</div>
+            <div class="client-hero-meta">Default monthly value from ${active.length} active client${active.length === 1 ? "" : "s"}</div>
+          </div>
+          <div class="client-hero-pills">
+            <span class="health-chip good"><span class="dot"></span>${active.length} active</span>
+            ${inactive ? `<span class="health-chip neutral"><span class="dot"></span>${inactive} inactive</span>` : ""}
+            ${atRisk ? `<span class="health-chip warn"><span class="dot"></span>${atRisk} watch</span>` : `<span class="health-chip good"><span class="dot"></span>Healthy</span>`}
+          </div>
+          <div class="client-spotlights">
+            <div class="client-spotlight">
+              <div class="client-card-label">Top client</div>
+              <strong>${escapeHtml(spot.topPaid?.client?.name || "—")}</strong>
+              <div class="client-card-meta">${currency(spot.topPaid?.total || 0)} collected</div>
+            </div>
+            <div class="client-spotlight">
+              <div class="client-card-label">Highest open</div>
+              <strong>${escapeHtml(spot.highestOpen?.client?.name || "—")}</strong>
+              <div class="client-card-meta">${currency(spot.highestOpen?.total || 0)} still open</div>
+            </div>
+          </div>
+        </div>
+        <div class="client-kpi">
+          <div class="client-kpi-label">Collected this month</div>
+          <div class="client-kpi-value good">${currency(collected)}</div>
+          <div class="client-kpi-meta">${collectPct}% of ${currency(expected || 0)}</div>
+        </div>
+        <div class="client-kpi">
+          <div class="client-kpi-label">Still open</div>
+          <div class="client-kpi-value ${expected - collected > 0 ? "warn" : "good"}">${currency(Math.max(0, expected - collected))}</div>
+          <div class="client-kpi-meta">${months[currentPeriod.month]} ${currentPeriod.year}</div>
+        </div>
+        <div class="client-kpi">
+          <div class="client-kpi-label">Filtered view</div>
+          <div class="client-kpi-value">${rows.length}</div>
+          <div class="client-kpi-meta">Matching client${rows.length === 1 ? "" : "s"}</div>
+        </div>
+      `);
+    }
+
     function renderClients() {
       const search = $("#clientSearch").val()?.toLowerCase() || "";
       const status = $("#clientStatusFilter").val() || "";
       const archiveFilter = $("#clientArchiveFilter").val() || "live";
       const rows = sortClients(db.clients.filter(c => {
-        const text = `${c.name} ${c.contact} ${c.email}`.toLowerCase();
-        return text.includes(search) && (!status || c.status === status) && archiveMatches(c, archiveFilter);
+        const text = `${c.name} ${c.contact} ${c.email} ${c.phone} ${c.method} ${c.frequency} ${c.notes}`.toLowerCase();
+        const archiveOk = clientRiskFilter === "archived" ? c.archived : archiveMatches(c, archiveFilter);
+        return text.includes(search) && (!status || c.status === status) && archiveOk && clientRiskMatches(c);
       }));
 
-      $("#clientsTable").html(`
-        <thead><tr><th>Client</th><th>Contact</th><th>Default Amount</th><th>Frequency</th><th>Method</th><th>Status</th><th>Health</th><th>Actions</th></tr></thead>
-        <tbody>
-          ${rows.length ? rows.map(c => `
-            <tr>
-              <td><strong>${escapeHtml(c.name)}</strong><div class="muted">${escapeHtml(c.email)}</div></td>
-              <td>${escapeHtml(c.contact)}<div class="muted">${escapeHtml(c.phone)}</div></td>
-              <td>${currency(c.defaultAmount)}</td>
-              <td>${escapeHtml(c.frequency)}</td>
-              <td>${escapeHtml(c.method)}</td>
-              <td>${badge(c.status, c.archived)}</td>
-              <td>${clientHealthChip(c)}</td>
-              <td><div class="action-group">
+      renderClientOverview(rows);
+      renderClientRiskFilters();
+      $("#clientDirectoryMeta").text(`${rows.length} shown · ${clientRiskFilter === "archived" ? "archived only" : archiveFilter === "live" ? "active records" : archiveFilter === "archived" ? "archived only" : "all records"}`);
+      $("#clientsTable").attr("class", `client-directory view-${clientViewMode}`);
+      $(".client-view-toggle .view-toggle-btn").removeClass("active");
+      $(`.client-view-toggle .view-toggle-btn[data-client-view="${clientViewMode}"]`).addClass("active");
+      $("#clientsTable").html(rows.length ? rows.map(c => {
+        const stats = clientPaymentStats(c.id);
+        const collection = clientMonthlyCollectionStats(c.id);
+        const h = clientHealth(c.id);
+        const contactLine = [c.contact, c.email, c.phone].filter(Boolean).join(" · ") || "No contact set";
+        const dueState = clientDueState(stats.next);
+        const nextDue = stats.next?.dueDate
+          ? dateValue(stats.next.dueDate).toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" })
+          : "Clear";
+        return `
+          <article class="client-card ${c.archived ? "archived" : ""}" data-client-detail="${c.id}" data-id="${c.id}" tabindex="0" role="button" aria-label="View ${escapeHtml(c.name)} details">
+            <div class="client-card-head">
+              <div>
+                <div class="client-name">${escapeHtml(c.name)}</div>
+                <div class="client-contact">${escapeHtml(contactLine)}</div>
+              </div>
+              ${badge(c.status, c.archived)}
+            </div>
+            <div class="client-card-grid">
+              <div class="client-card-stat">
+                <div class="client-card-label">Default</div>
+                <div class="client-card-value">${currency(c.defaultAmount)}</div>
+                <div class="client-card-meta">${escapeHtml(c.frequency || "—")}</div>
+              </div>
+              <div class="client-card-stat">
+                <div class="client-card-label">Open</div>
+                <div class="client-card-value">${currency(stats.open)}</div>
+                <div class="client-card-meta">${stats.overdue ? `${currency(stats.overdue)} overdue` : "No overdue"}</div>
+              </div>
+              <div class="client-card-stat">
+                <div class="client-card-label">Next due</div>
+                <div class="client-card-value">${escapeHtml(nextDue)}</div>
+                <div class="client-card-meta"><span class="client-due-chip ${dueState.tone}">${escapeHtml(dueState.label)}</span></div>
+              </div>
+            </div>
+            <div class="client-collection">
+              <div class="client-collection-head">
+                <span>${currency(collection.collected)} / ${currency(collection.expected || c.defaultAmount || 0)} collected</span>
+                <span>${collection.pct}%</span>
+              </div>
+              <div class="client-progress" aria-hidden="true"><span style="width:${Math.max(0, Math.min(100, collection.pct))}%"></span></div>
+              <div class="client-card-meta">${escapeHtml(c.method || "—")}</div>
+            </div>
+            <div class="client-card-foot">
+              <div>
+                <div class="health-chip ${h.tone}"><span class="dot"></span>${escapeHtml(h.label)}</div>
+                <div class="client-card-meta">${h.onTimePct !== null ? `${h.onTimePct}% on-time${h.avgDays > 0 ? ` · +${h.avgDays}d avg late` : ""}` : `${h.total} recent record${h.total === 1 ? "" : "s"}`}</div>
+              </div>
+              <div class="client-card-actions">
+                <button class="btn small good" data-client-payment="${c.id}">+ Payment</button>
                 <button class="btn small secondary" data-edit="client" data-id="${c.id}">Edit</button>
                 ${c.archived ? `<button class="btn small blue" data-restore="client" data-id="${c.id}">Restore</button>` : `<button class="btn small warn" data-archive="client" data-id="${c.id}">Archive</button>`}
                 <button class="btn small danger" data-delete="client" data-id="${c.id}">Delete</button>
-              </div></td>
-            </tr>
-          `).join("") : `<tr><td colspan="8" class="table-empty">No clients found.</td></tr>`}
-        </tbody>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("") : `
+        <div class="client-empty">
+          <div class="client-empty-title">No clients match these filters</div>
+          <div>Try clearing filters, switching status, or showing archived records.</div>
+        </div>
       `);
+      if (activeClientDetailId) renderClientDetailDrawer(activeClientDetailId);
+    }
+
+    function closeClientDetailDrawer() {
+      activeClientDetailId = null;
+      $("#clientDetailBackdrop").removeClass("open").attr("aria-hidden", "true");
+      $("#clientDetailPanel").empty();
+    }
+
+    function renderClientDetailDrawer(clientId) {
+      const client = (db.clients || []).find(c => Number(c.id) === Number(clientId));
+      if (!client) { closeClientDetailDrawer(); return; }
+      activeClientDetailId = Number(client.id);
+      const stats = clientPaymentStats(client.id);
+      const health = clientHealth(client.id);
+      const collection = clientMonthlyCollectionStats(client.id);
+      const paymentMatchesDrawerFilter = (p) => {
+        if (clientDetailPaymentFilter === "open") return ["pending", "overdue"].includes(p.status);
+        if (clientDetailPaymentFilter === "paid") return p.status === "paid";
+        if (clientDetailPaymentFilter === "overdue") return p.status === "overdue";
+        return true;
+      };
+      const recent = stats.payments
+        .slice()
+        .filter(paymentMatchesDrawerFilter)
+        .sort((a, b) => (dateValue(b.dueDate) || 0) - (dateValue(a.dueDate) || 0))
+        .slice(0, 6);
+      const contactLine = [client.contact, client.email, client.phone].filter(Boolean).join(" · ") || "No contact set";
+      const activity = clientActivityRows(client);
+      const filterButton = (key, label) => `<button type="button" class="client-detail-filter ${clientDetailPaymentFilter === key ? "active" : ""}" data-client-payment-filter="${key}">${label}</button>`;
+      $("#clientDetailPanel").html(`
+        <div class="client-detail-head">
+          <div>
+            <div class="client-detail-title">${escapeHtml(client.name)}</div>
+            <div class="client-detail-sub">${escapeHtml(contactLine)}</div>
+          </div>
+          <button type="button" class="client-detail-close" data-client-detail-close aria-label="Close">×</button>
+        </div>
+        <div class="client-detail-actions">
+          <button class="btn small good" data-client-payment="${client.id}">+ Payment</button>
+          <button class="btn small secondary" data-client-next-payment="${client.id}">Generate next payment</button>
+          <button class="btn small secondary" data-edit="client" data-id="${client.id}">Edit client</button>
+          ${client.archived ? `<button class="btn small blue" data-restore="client" data-id="${client.id}">Restore</button>` : `<button class="btn small warn" data-archive="client" data-id="${client.id}">Archive</button>`}
+        </div>
+        <div class="client-detail-grid">
+          <div class="client-detail-stat"><span>Default</span><strong>${currency(client.defaultAmount)}</strong><div class="client-card-meta">${escapeHtml(client.frequency || "—")}</div></div>
+          <div class="client-detail-stat"><span>Collected</span><strong>${currency(stats.paid)}</strong><div class="client-card-meta">All-time paid</div></div>
+          <div class="client-detail-stat"><span>Open</span><strong>${currency(stats.open)}</strong><div class="client-card-meta">${stats.overdue ? `${currency(stats.overdue)} overdue` : "No overdue"}</div></div>
+          <div class="client-detail-stat"><span>This month</span><strong>${collection.pct}%</strong><div class="client-card-meta">${currency(collection.collected)} / ${currency(collection.expected || client.defaultAmount || 0)}</div></div>
+        </div>
+        <div class="client-detail-section">
+          <div class="client-detail-section-title">Health</div>
+          <div>
+            <div class="health-chip ${health.tone}"><span class="dot"></span>${escapeHtml(health.label)}</div>
+            <div class="client-card-meta">${health.onTimePct !== null ? `${health.onTimePct}% on-time${health.avgDays > 0 ? ` · +${health.avgDays}d avg late` : ""}${health.overdue ? ` · ${health.overdue} overdue` : ""}` : `${health.total} recent record${health.total === 1 ? "" : "s"}`}</div>
+          </div>
+        </div>
+        <div class="client-detail-section">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+            <div class="client-detail-section-title">Recent payments</div>
+            <div class="client-detail-filter-row">
+              ${filterButton("all", "All")}
+              ${filterButton("open", "Open")}
+              ${filterButton("paid", "Paid")}
+              ${filterButton("overdue", "Overdue")}
+            </div>
+          </div>
+          <div class="client-payment-list">
+            ${recent.length ? recent.map(p => `
+              <div class="client-payment-row">
+                <div>
+                  <strong>${currency(p.amount)}</strong>
+                  <div class="muted">${escapeHtml(p.invoiceReference || "No reference")} · due ${escapeHtml(p.dueDate || "—")}</div>
+                </div>
+                <div class="action-group">
+                  ${badge(p.status, p.archived)}
+                  ${p.status !== "paid" && p.status !== "cancelled" ? `<button class="btn small good" data-payment-status="paid" data-id="${p.id}">Paid</button>` : ""}
+                  <button class="btn small secondary" data-edit="payment" data-id="${p.id}">Edit</button>
+                </div>
+              </div>
+            `).join("") : `<div class="client-card-meta">No payments recorded yet.</div>`}
+          </div>
+        </div>
+        <div class="client-detail-section">
+          <div class="client-detail-section-title">Notes</div>
+          <div class="client-note-grid">
+            <div class="client-note-box"><strong>Internal</strong><div class="client-card-meta">${escapeHtml(client.internalNotes || client.notes || "No internal notes yet.")}</div></div>
+            <div class="client-note-box"><strong>Billing</strong><div class="client-card-meta">${escapeHtml(client.billingNotes || "No billing notes yet.")}</div></div>
+          </div>
+        </div>
+        <div class="client-detail-section">
+          <div class="client-detail-section-title">Activity</div>
+          <div class="client-activity-list">
+            ${activity.length ? activity.map(log => `
+              <div class="client-activity-row">
+                <strong>${escapeHtml(log.action || "Activity")}</strong>
+                <div class="client-card-meta">${escapeHtml(log.detail || "")}</div>
+                <div class="client-card-meta">${log.date ? escapeHtml(formatDateTime(log.date)) : ""}</div>
+              </div>
+            `).join("") : `<div class="client-card-meta">No client activity yet.</div>`}
+          </div>
+        </div>
+      `);
+      $("#clientDetailBackdrop").addClass("open").attr("aria-hidden", "false");
     }
 
     function renderPayments() {
@@ -9484,6 +10421,27 @@
       else if (items.some(item => item.status === "paid")) { health = "Partially paid"; tone = "warn"; }
       else { health = "Ready"; tone = "neutral"; }
       return { run, items, paid, total, pendingAmount, missing, health, tone };
+    }
+
+    function payrollSmartActionsHtml(rows, pendingTotal, period) {
+      const live = (rows || []).filter(item => !item.archived && item.status !== "cancelled");
+      const dayInPeriod = (day) => live.some(item => {
+        const d = dateValue(payrollReleaseDate(item));
+        return d && d.getDate() === day && d.getMonth() === period.month && d.getFullYear() === period.year;
+      });
+      const has5th = dayInPeriod(SALARY_RELEASE_DAYS[0]);
+      const has20th = dayInPeriod(SALARY_RELEASE_DAYS[1]);
+      const items = [];
+      if (!has5th)  items.push(`<button type="button" role="menuitem" data-payroll-generate-release="0">Generate 5th release</button>`);
+      if (!has20th) items.push(`<button type="button" role="menuitem" data-payroll-generate-release="1">Generate 20th release</button>`);
+      if (pendingTotal > 0) items.push(`<button type="button" role="menuitem" data-payroll-mark-open-paid>Mark open as paid</button>`);
+      if (!items.length) return "";
+      return `
+        <div class="overflow-menu payroll-smart-actions">
+          <button class="overflow-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Quick actions" title="Quick actions">⋯</button>
+          <div class="overflow-panel" role="menu" hidden>${items.join("")}</div>
+        </div>
+      `;
     }
 
     function payrollChecklistHtml(rows, flaggedCount, missingCount, paidPct) {
@@ -9676,18 +10634,12 @@
               <div class="hero-value">${currency(paid)}</div>
               <div class="hero-pills">
                 ${yoyHtml ? yoyHtml.replace("ppc-yoy", "hero-delta") : ""}
-                <span class="margin-pill ${toneClass === "complete" ? "good" : toneClass === "mid" ? "info" : "warn"}" title="Paid payroll divided by planned monthly payroll">${paidPct}% complete</span>
                 ${varianceHeaderHtml}
                 <span class="ppc-status ${toneClass}">
                   <span class="ppc-status-dot"></span>${statusLabel}
                 </span>
+                ${payrollSmartActionsHtml(rows, pending, selectedPayroll)}
               </div>
-              <div class="payroll-hero-actions">
-                <button type="button" class="btn secondary" data-payroll-generate-release="0">Generate 5th</button>
-                <button type="button" class="btn secondary" data-payroll-generate-release="1">Generate 20th</button>
-                <button type="button" class="btn good" data-payroll-mark-open-paid>Mark open paid</button>
-              </div>
-              ${payrollChecklistHtml(rows, flaggedCount, missingCount, paidPct)}
             </div>
             ${payrollMilestonesHtml(rows, selectedPayroll)}
           </div>
@@ -9763,6 +10715,7 @@
           </td>
           <td class="payroll-paid-cell">${item.paymentDate ? `<span class="payroll-paid-date">${escapeHtml(item.paymentDate)}</span>` : `<span class="muted">—</span>`}</td>
           <td><div class="action-group">
+            <button class="btn small secondary" data-payslip-row="${item.id}" title="Generate payslip for this row">🧾</button>
             <button class="btn small secondary" data-edit="payroll" data-id="${item.id}">Edit</button>
             ${item.archived
               ? `<button class="btn small blue" data-restore="payroll" data-id="${item.id}">Restore</button>`
@@ -9804,7 +10757,8 @@
                   <div class="release-meta">${escapeHtml(dateLabel)} · ${total} ${total === 1 ? "record" : "records"} · ${currency(groupTotal)} · <strong>${paidCount}/${total} paid</strong> ${batch ? `<span class="batch-health ${batch.tone}">${escapeHtml(batch.health)}</span>` : ""}</div>
                 </div>
                 <div class="release-actions" data-print-hide>
-                  ${total > 0 ? `<button class="btn small secondary" data-print-payslips="${escapeHtml(key)}">🖨 Payslips</button>` : ""}
+                  ${total > 0 ? `<button class="btn small secondary" data-payslip-release="${escapeHtml(key)}" title="Generate payslips for every row in this release (opens one tab per row)">🧾 Generate</button>` : ""}
+                  ${total > 0 ? `<button class="btn small secondary" data-print-payslips="${escapeHtml(key)}">🖨 Print</button>` : ""}
                   ${total > 0 && !allPaid ? `<button class="btn small good" data-bulk-paid="${escapeHtml(key)}">Mark all paid</button>` : ""}
                   ${total > 0 && allPaid ? `<button class="btn small secondary" data-bulk-scheduled="${escapeHtml(key)}">Reset to scheduled</button>` : ""}
                   ${total > 0 ? `<button class="btn small secondary" data-clone-next="${escapeHtml(key)}" title="Duplicate this release to next month">⎘ Clone → next month</button>` : ""}
@@ -10556,6 +11510,263 @@
     function paidCountForEmployee(empId) {
       return paidOutgoingsForEmployee(empId).length;
     }
+
+    // === Payslip generator integration =========================================
+    // Default relative URL — both repos sit side-by-side in /Users/.../GitHub/.
+    // Override at runtime by setting db.settings.payslipGeneratorUrl.
+    const DEFAULT_PAYSLIP_GENERATOR_URL = "../KNB-PAYSLIP-GENERATOR/index.html";
+
+    function payslipGeneratorUrl() {
+      return (db.settings && db.settings.payslipGeneratorUrl) || DEFAULT_PAYSLIP_GENERATOR_URL;
+    }
+
+    function payslipEmployeeKey(emp) {
+      if (!emp) return "";
+      // Match the generator's slug: lowercased first word of the name, fall back to id.
+      const base = String(emp.name || "").trim().toLowerCase().split(/\s+/)[0];
+      return base || `emp-${emp.id}`;
+    }
+
+    // Returns the canonical EMP-XXX label for matching against the generator's archive.
+    // Prefers an explicit `employeeId` field on the record. Falls back to scraping
+    // "Employee ID: EMP-XXX" out of the notes (legacy seed records store it there).
+    // Returns "" rather than fabricating one from the numeric `id`, because the
+    // salary-client numeric id has no relationship to the company-issued EMP-XXX.
+    function payslipEmployeeIdLabel(emp) {
+      if (!emp) return "";
+      if (emp.employeeId) return String(emp.employeeId).trim();
+      const note = String(emp.notes || "");
+      const match = note.match(/Employee ID:\s*([A-Z]+-\d+)/i);
+      if (match) return match[1].toUpperCase();
+      return "";
+    }
+
+    function buildPayslipGeneratorLink(emp, periodHint) {
+      const params = new URLSearchParams();
+      params.set("source", "knb-salary-client");
+      params.set("key", payslipEmployeeKey(emp));
+      if (emp.name) params.set("name", emp.name);
+      params.set("employeeId", payslipEmployeeIdLabel(emp));
+      if (emp.position) params.set("position", emp.position);
+      if (emp.department) params.set("department", emp.department);
+      if (emp.email) params.set("email", emp.email);
+      if (Number(emp.monthlySalary || 0) > 0) params.set("basic", String(Number(emp.monthlySalary)));
+      // Optional period defaults — from latest matching salary outgoing or a specific payroll row.
+      if (periodHint && periodHint.start) params.set("periodStart", periodHint.start);
+      if (periodHint && periodHint.end) params.set("periodEnd", periodHint.end);
+      if (periodHint && periodHint.paymentDate) params.set("paymentDate", periodHint.paymentDate);
+      if (periodHint && periodHint.amount) params.set("amount", String(periodHint.amount));
+      if (periodHint && periodHint.reference) params.set("reference", periodHint.reference);
+      if (periodHint && periodHint.type && periodHint.type !== "salary") params.set("type", periodHint.type);
+      // Optional pre-split earnings (passed when the row is known to include
+      // overtime, bonus, or other non-basic components).
+      if (periodHint && Number(periodHint.basicPay) > 0)    params.set("basicPay",    String(periodHint.basicPay));
+      if (periodHint && Number(periodHint.overtimePay) > 0) params.set("overtimePay", String(periodHint.overtimePay));
+      if (periodHint && Number(periodHint.bonuses) > 0)     params.set("bonuses",     String(periodHint.bonuses));
+      if (periodHint && Number(periodHint.allowances) > 0)  params.set("allowances",  String(periodHint.allowances));
+      return `${payslipGeneratorUrl()}?${params.toString()}`;
+    }
+
+    // Decide how to split a payroll row across the generator's earnings fields.
+    // Returns { basicPay, overtimePay, bonuses, allowances } — all currency numbers.
+    // The caller can pass any/all of these via URL params to the generator.
+    function splitPayrollAmountForPayslip(item, emp) {
+      const amount = Number(item.amount || 0);
+      const type = String(item.type || "salary").toLowerCase();
+      const monthly = Number(emp?.monthlySalary || 0);
+      const expectedBasic = monthly > 0 ? Math.round((monthly / 2) * 100) / 100 : amount;
+
+      // Non-salary types: route the entire amount to the matching bucket.
+      if (type === "bonus" || type === "13th-month" || type === "one-off") {
+        return { basicPay: 0, overtimePay: 0, bonuses: amount, allowances: 0 };
+      }
+      if (type === "reimbursement") {
+        return { basicPay: 0, overtimePay: 0, bonuses: 0, allowances: amount };
+      }
+
+      // Default salary: split the surplus over the expected basic into overtime.
+      // (Negative variance — row paid less than expected — stays as a smaller basic
+      // since "negative overtime" doesn't make sense.)
+      if (monthly > 0 && amount > expectedBasic + 1) {
+        const overtime = Math.round((amount - expectedBasic) * 100) / 100;
+        return { basicPay: expectedBasic, overtimePay: overtime, bonuses: 0, allowances: 0 };
+      }
+      return { basicPay: amount, overtimePay: 0, bonuses: 0, allowances: 0 };
+    }
+
+    function openPayslipGeneratorForPayrollRow(itemId) {
+      const item = (db.salaryOutgoings || []).find(o => Number(o.id) === Number(itemId));
+      if (!item) { showToast("Payroll row not found."); return; }
+      const emp = (db.employees || []).find(e => Number(e.id) === Number(item.employeeId));
+      if (!emp) {
+        showToast("Employee record not found for this row — open the Employee directly to generate this payslip.");
+        return;
+      }
+      const split = splitPayrollAmountForPayslip(item, emp);
+      const url = buildPayslipGeneratorLink(emp, {
+        start: item.periodStart || "",
+        end: item.periodEnd || "",
+        paymentDate: item.paymentDate || item.scheduledDate || "",
+        amount: Number(item.amount || 0),
+        reference: item.reference || "",
+        type: item.type || "salary",
+        basicPay: split.basicPay,
+        overtimePay: split.overtimePay,
+        bonuses: split.bonuses,
+        allowances: split.allowances
+      });
+      const w = window.open(url, "_blank", "noopener");
+      if (!w) showToast("Browser blocked the popup. Allow pop-ups for this page and try again.");
+    }
+
+    function latestPeriodHintForEmployee(emp) {
+      const outgoings = (db.salaryOutgoings || [])
+        .filter(o => !o.archived && o.status !== "cancelled" && Number(o.employeeId) === Number(emp.id))
+        .slice()
+        .sort((a, b) => String(b.periodEnd || "").localeCompare(String(a.periodEnd || "")));
+      const top = outgoings[0];
+      if (!top) return null;
+      return {
+        start: top.periodStart || "",
+        end: top.periodEnd || "",
+        paymentDate: top.paymentDate || top.scheduledDate || ""
+      };
+    }
+
+    function openPayslipGeneratorFor(empId) {
+      const emp = (db.employees || []).find(e => Number(e.id) === Number(empId));
+      if (!emp) { showToast("Employee not found."); return; }
+      const hint = latestPeriodHintForEmployee(emp);
+      const url = buildPayslipGeneratorLink(emp, hint);
+      const w = window.open(url, "_blank", "noopener");
+      if (!w) showToast("Browser blocked the popup. Allow pop-ups for this page and try again.");
+    }
+
+    // Match an archived payslip back to a salary-client employee by id, name or slug.
+    function payslipsForEmployee(emp) {
+      const list = db.payslips || [];
+      const idLbl = payslipEmployeeIdLabel(emp);
+      const fullName = String(emp.name || "").trim().toLowerCase();
+      return list
+        .filter(p => {
+          const e = p.data?.employee || {};
+          // 1) Strongest signal: explicit EMP-XXX label.
+          if (idLbl && e.employeeId && String(e.employeeId).toLowerCase() === String(idLbl).toLowerCase()) return true;
+          // 2) Fallback: full-name (lowercased, trimmed) — strict equality, not first-word slug.
+          if (!idLbl && e.name && fullName && String(e.name).trim().toLowerCase() === fullName) return true;
+          return false;
+        })
+        .sort((a, b) => String(b.data?.payPeriod?.end || "").localeCompare(String(a.data?.payPeriod?.end || "")));
+    }
+
+    // Build a stable per-entry dedupe key that includes the employee, so two
+    // different employees in the same pay period never collapse against each other.
+    function payslipDedupeKey(p) {
+      if (p?.id) return `id:${p.id}`;
+      if (p?.sigKey) return `sig:${p.sigKey}`;
+      const e = p?.data?.employee || {};
+      const empKey = e.employeeId || e.key || e.name || "unknown";
+      const period = JSON.stringify(p?.data?.payPeriod || {});
+      return `fb:${empKey}|${period}`;
+    }
+
+    function mergeIncomingPayslips(incoming) {
+      const list = Array.isArray(incoming) ? incoming : [];
+      if (!list.length) return 0;
+      const existing = db.payslips || [];
+      const seen = new Set(existing.map(payslipDedupeKey));
+      let added = 0;
+      list.forEach(p => {
+        const key = payslipDedupeKey(p);
+        if (!seen.has(key)) { existing.push(p); seen.add(key); added++; }
+      });
+      db.payslips = existing;
+      return added;
+    }
+
+    // Re-render the open employee modal's Payslip history block (if any) so
+    // sync/import/delete reflect immediately without closing the modal.
+    function refreshEmployeePayslipHistory() {
+      const $block = $("#recordForm .emp-payslip-history");
+      if (!$block.length) return;
+      const empId = Number($block.data("employee-id"));
+      const emp = (db.employees || []).find(e => Number(e.id) === empId);
+      if (!emp) return;
+      $block.replaceWith(employeePayslipHistoryBlock(emp));
+    }
+
+    // Read the generator's archive directly when both apps share an origin
+    // (i.e. both served by the same local web server). Under file:// this fails
+    // because each file path is its own origin — we surface a helpful message.
+    function showSyncSetupInstructions() {
+      confirmToast(
+        "Cross-app sync needs both apps served from one origin. In Terminal, run:\n\n" +
+        "cd ~/Documents/GitHub\npython3 -m http.server 8000\n\n" +
+        "Then open this app at:\nhttp://localhost:8000/KNB-SALARY-CLIENT/index.html\n\n" +
+        "The generator and this app will share localStorage automatically.",
+        { confirmLabel: "Got it", cancelLabel: "Dismiss", tone: "info" }
+      );
+    }
+
+    function syncPayslipsFromGenerator() {
+      const isFileScheme = window.location.protocol === "file:";
+      if (isFileScheme) {
+        showSyncSetupInstructions();
+        return;
+      }
+      try {
+        const raw = localStorage.getItem("phPayslipArchive");
+        if (raw === null) {
+          showToast("No payslip archive found at this origin yet. Save one in the generator first.");
+          return;
+        }
+        let incoming = [];
+        try { incoming = JSON.parse(raw); } catch (_) { incoming = []; }
+        if (!Array.isArray(incoming) || !incoming.length) {
+          showToast("Payslip archive is empty.");
+          return;
+        }
+        const added = mergeIncomingPayslips(incoming);
+        addLog("Payslip archive synced", `${added} new payslip${added === 1 ? "" : "s"} pulled from generator's localStorage.`);
+        saveData();
+        refreshEmployeePayslipHistory();
+        showToast(added ? `Synced ${added} new payslip${added === 1 ? "" : "s"}.` : "Already up to date.");
+      } catch (err) {
+        showToast("Could not read payslip archive from this origin.");
+      }
+    }
+
+    function importPayslipArchive(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          const incoming = Array.isArray(parsed.archive) ? parsed.archive : (Array.isArray(parsed) ? parsed : []);
+          if (!incoming.length) { showToast("No payslips found in file."); return; }
+          const added = mergeIncomingPayslips(incoming);
+          addLog("Payslip archive imported", `${added} new payslip${added === 1 ? "" : "s"} merged.`);
+          saveData();
+          refreshEmployeePayslipHistory();
+          showToast(`Imported ${added} new payslip${added === 1 ? "" : "s"}.`);
+        } catch (err) {
+          showToast("Could not read payslip JSON file.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function deletePayslipEntry(dedupeKey) {
+      const before = (db.payslips || []).length;
+      db.payslips = (db.payslips || []).filter(p => payslipDedupeKey(p) !== dedupeKey);
+      const removed = before - db.payslips.length;
+      if (!removed) { showToast("Payslip entry not found."); return; }
+      addLog("Payslip removed", `${removed} entry removed from local payslip archive.`);
+      saveData();
+      refreshEmployeePayslipHistory();
+      showToast("Payslip removed from local archive.");
+    }
+    // === /Payslip generator integration ========================================
     function nameInitials(name) {
       return String(name || "?").split(/\s+/).filter(Boolean).slice(0, 2)
         .map(p => p.charAt(0).toUpperCase()).join("") || "?";
@@ -10647,6 +11858,7 @@
           </div>
 
           ${record.id ? `<div class="emp3-history-wrap">${employeeSalaryHistoryBlock(record)}</div>` : ""}
+          ${record.id ? `<div class="emp3-history-wrap">${employeePayslipHistoryBlock(record)}</div>` : ""}
           ${formActions()}`;
       }
 
@@ -10774,6 +11986,8 @@
             ${field("method", "Payment Method", record.method)}
             ${selectField("status", "Status", ["active", "inactive", "paused"], record.status || "active")}
             ${textareaField("notes", "Notes", record.notes)}
+            ${textareaField("internalNotes", "Internal notes", record.internalNotes)}
+            ${textareaField("billingNotes", "Billing notes", record.billingNotes)}
           </div>${formActions()}`;
       }
 
@@ -10851,6 +12065,48 @@
               <p class="emp-history-sub">Raises and salary changes for ${escapeHtml(record.name || "this employee")}.</p>
             </div>
             <button type="button" class="btn small" data-emp-history-add="${record.id}">+ Add salary change</button>
+          </div>
+          <div class="emp-history-list">${rowsHtml}</div>
+        </div>`;
+    }
+
+    function employeePayslipHistoryBlock(record) {
+      const slips = payslipsForEmployee(record);
+      const rowsHtml = slips.length ? slips.map(p => {
+        const period = p.data?.payPeriod || {};
+        const tot = p.data?.totals || {};
+        const ref = p.data?.reference || p.sigKey || "";
+        const archivedAt = p.archivedAt ? new Date(p.archivedAt).toLocaleDateString("en-PH", { year: "numeric", month: "short", day: "numeric" }) : "";
+        const dk = payslipDedupeKey(p);
+        return `
+          <div class="emp-history-row" data-payslip-id="${escapeHtml(p.id || "")}">
+            <div class="emp-history-main">
+              <div class="emp-history-date">${escapeHtml(period.start || "—")} → ${escapeHtml(period.end || "—")}</div>
+              <div class="emp-history-amounts">
+                <span class="emp-history-new">${currency(Number(tot.netPay || 0))}</span>
+                ${tot.totalDeductions ? `<span class="emp-history-delta bad">−${currency(tot.totalDeductions)} ded</span>` : `<span class="emp-history-delta neutral">net</span>`}
+                ${period.paymentDate ? `<span class="muted" style="font-size:11px;">paid ${escapeHtml(period.paymentDate)}</span>` : ""}
+              </div>
+              ${ref ? `<div class="emp-history-reason">Ref: ${escapeHtml(ref)}${archivedAt ? ` · archived ${escapeHtml(archivedAt)}` : ""}</div>` : ""}
+            </div>
+            <div class="emp-history-actions">
+              <button type="button" class="btn small danger" data-payslip-delete="${escapeHtml(dk)}" aria-label="Remove from local archive" title="Remove from local archive (generator's copy is not touched)">×</button>
+            </div>
+          </div>`;
+      }).join("") : `<div class="emp-history-empty">No payslips archived yet. Open in the generator and save to archive.</div>`;
+
+      return `
+        <div class="emp-history emp-payslip-history" data-employee-id="${record.id}">
+          <div class="emp-history-header">
+            <div>
+              <h3>Payslip history</h3>
+              <p class="emp-history-sub">Archived payslips from the generator${slips.length ? `: ${slips.length} on file` : ""}.</p>
+            </div>
+            <div style="display:inline-flex;gap:6px;">
+              <button type="button" class="btn small secondary" data-payslip-sync title="Pull payslips from the generator's localStorage (same-origin only)">↻ Sync</button>
+              <button type="button" class="btn small secondary" data-payslip-import title="Import payslip archive JSON">⤓ Import</button>
+              <button type="button" class="btn small" data-payslip-generate data-id="${record.id}">🧾 Generate payslip</button>
+            </div>
           </div>
           <div class="emp-history-list">${rowsHtml}</div>
         </div>`;
@@ -11583,7 +12839,7 @@
 
     const CSV_FIELD_MAP = {
       employees: ["name", "position", "department", "startDate", "monthlySalary", "status", "lastIncrease", "nextReview", "notes"],
-      clients:   ["name", "contact", "email", "phone", "defaultAmount", "frequency", "method", "status", "notes"],
+      clients:   ["name", "contact", "email", "phone", "defaultAmount", "frequency", "method", "status", "notes", "internalNotes", "billingNotes"],
       payments:  ["clientName", "amount", "dueDate", "paymentDate", "status", "frequency", "invoiceReference", "notes"]
     };
 
@@ -11965,6 +13221,14 @@
     });
     $(document).on("input", "#clientSearch", debouncedRenderClients);
     $(document).on("change", "#clientStatusFilter, #clientArchiveFilter", renderClients);
+    $(document).on("click", "[data-client-risk]", function () {
+      clientRiskFilter = $(this).data("client-risk") || "all";
+      renderClients();
+    });
+    $(document).on("click", "[data-client-view]", function () {
+      clientViewMode = $(this).data("client-view") === "list" ? "list" : "cards";
+      renderClients();
+    });
     $(document).on("input", "#paymentSearch", debouncedRenderPayments);
     $(document).on("change", "#paymentStatusFilter, #paymentArchiveFilter", renderPayments);
     $(document).on("input", "#payrollSearch", debouncedRenderPayroll);
@@ -11983,10 +13247,57 @@
     });
 
     $(document).on("click", "[data-open]", function () { openModal($(this).data("open")); });
-    $(document).on("click", "[data-edit]", function (e) { e.stopPropagation(); openModal($(this).data("edit"), $(this).data("id")); });
+    $(document).on("click", "[data-edit]", function (e) {
+      e.stopPropagation();
+      if ($(this).closest("#clientDetailPanel").length) closeClientDetailDrawer();
+      openModal($(this).data("edit"), $(this).data("id"));
+    });
     $(document).on("click", "[data-card-edit]", function (e) {
       if ($(e.target).closest("button, a, .action-group, .hover-actions, input, select, textarea").length) return;
       openModal($(this).data("card-edit"), $(this).data("id"));
+    });
+    $(document).on("keydown", "[data-card-edit]", function (e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      if ($(e.target).closest("button, a, input, select, textarea").length) return;
+      e.preventDefault();
+      openModal($(this).data("card-edit"), $(this).data("id"));
+    });
+    $(document).on("click", "[data-client-detail]", function (e) {
+      if ($(e.target).closest("button, a, .action-group, input, select, textarea").length) return;
+      renderClientDetailDrawer($(this).data("client-detail"));
+    });
+    $(document).on("keydown", "[data-client-detail]", function (e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      if ($(e.target).closest("button, a, input, select, textarea").length) return;
+      e.preventDefault();
+      renderClientDetailDrawer($(this).data("client-detail"));
+    });
+    $(document).on("click", "[data-client-detail-close]", closeClientDetailDrawer);
+    $(document).on("click", "#clientDetailBackdrop", function (e) {
+      if (e.target === this) closeClientDetailDrawer();
+    });
+    $(document).on("keydown", function (e) {
+      if (e.key === "Escape" && $("#clientDetailBackdrop").hasClass("open")) closeClientDetailDrawer();
+    });
+    $(document).on("click", "[data-client-payment]", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const prefill = clientPaymentPrefill($(this).data("client-payment"));
+      if (!prefill) return;
+      if ($(this).closest("#clientDetailPanel").length) closeClientDetailDrawer();
+      pushAndOpen("payment", null, prefill);
+    });
+    $(document).on("click", "[data-client-next-payment]", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const prefill = clientNextPaymentPrefill($(this).data("client-next-payment"));
+      if (!prefill) return;
+      if ($(this).closest("#clientDetailPanel").length) closeClientDetailDrawer();
+      pushAndOpen("payment", null, prefill);
+    });
+    $(document).on("click", "[data-client-payment-filter]", function () {
+      clientDetailPaymentFilter = $(this).data("client-payment-filter") || "all";
+      if (activeClientDetailId) renderClientDetailDrawer(activeClientDetailId);
     });
 
     $(document).on("click", "[data-emp-history-add]", function (e) {
@@ -11998,6 +13309,37 @@
         employeeName: emp?.name || "",
         previousSalary: emp?.monthlySalary || 0
       });
+    });
+    $(document).on("click", "[data-payslip-generate]", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      openPayslipGeneratorFor($(this).data("id"));
+    });
+    $(document).on("click", "[data-payslip-import]", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      $("#importPayslipArchiveFile").trigger("click");
+    });
+    $(document).on("click", "[data-payslip-sync]", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      syncPayslipsFromGenerator();
+    });
+    $(document).on("click", "[data-payslip-delete]", async function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const dk = $(this).data("payslip-delete");
+      const ok = await confirmToast(
+        "Remove this payslip from the local archive? The generator's copy is not touched.",
+        { confirmLabel: "Remove", tone: "danger" }
+      );
+      if (!ok) return;
+      deletePayslipEntry(String(dk));
+    });
+    $(document).on("change", "#importPayslipArchiveFile", function (e) {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = "";
+      if (file) importPayslipArchive(file);
     });
     $(document).on("click", "[data-emp-history-edit]", function (e) {
       e.preventDefault();
@@ -12026,6 +13368,64 @@
     $(document).on("click", "[data-bulk-paid]", function () { bulkPayrollStatusForRelease($(this).data("bulk-paid"), "paid"); });
     $(document).on("click", "[data-bulk-scheduled]", function () { bulkPayrollStatusForRelease($(this).data("bulk-scheduled"), "scheduled"); });
     $(document).on("click", "[data-print-payslips]", function () { printPayslipsForRelease($(this).data("print-payslips")); });
+    $(document).on("click", "[data-payslip-row]", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      openPayslipGeneratorForPayrollRow($(this).data("payslip-row"));
+    });
+    // Bulk "Generate" on a release: queue the rows and let the user open them
+    // one tab at a time. Each "Open next" click is a real user gesture so the
+    // browser's popup blocker can't suppress later windows.
+    let pendingPayslipQueue = [];
+    function renderPayslipQueueBar() {
+      let $bar = $("#payslipQueueBar");
+      if (!pendingPayslipQueue.length) { $bar.remove(); return; }
+      if (!$bar.length) {
+        $bar = $('<div id="payslipQueueBar" class="payslip-queue-bar" role="region" aria-label="Payslip queue"></div>').appendTo(document.body);
+      }
+      const remaining = pendingPayslipQueue.length;
+      const next = pendingPayslipQueue[0];
+      const nextName = next ? (next.employeeName || "Next") : "Next";
+      $bar.html(`
+        <div class="payslip-queue-text">
+          <strong>Payslip queue:</strong> ${remaining} remaining · next: ${escapeHtml(nextName)}
+        </div>
+        <div class="payslip-queue-actions">
+          <button type="button" class="btn small" data-payslip-queue-next>Open next →</button>
+          <button type="button" class="btn small secondary" data-payslip-queue-skip>Skip</button>
+          <button type="button" class="btn small secondary" data-payslip-queue-cancel>Cancel</button>
+        </div>
+      `);
+    }
+
+    $(document).on("click", "[data-payslip-release]", async function () {
+      const key = $(this).data("payslip-release");
+      const items = (db.salaryOutgoings || []).filter(o =>
+        !o.archived && o.status !== "cancelled" && (payrollReleaseDate(o) || o.periodEnd || "unknown") === String(key)
+      );
+      if (!items.length) { showToast("Nothing to generate."); return; }
+      const ok = await confirmToast(
+        `Queue ${items.length} payslip${items.length === 1 ? "" : "s"} from this release? You'll click 'Open next' to open each one (one tab at a time — avoids popup blockers).`,
+        { confirmLabel: "Queue", tone: "info" }
+      );
+      if (!ok) return;
+      pendingPayslipQueue = items.slice();
+      renderPayslipQueueBar();
+    });
+    $(document).on("click", "[data-payslip-queue-next]", function () {
+      const next = pendingPayslipQueue.shift();
+      if (!next) { renderPayslipQueueBar(); return; }
+      openPayslipGeneratorForPayrollRow(next.id);
+      renderPayslipQueueBar();
+    });
+    $(document).on("click", "[data-payslip-queue-skip]", function () {
+      pendingPayslipQueue.shift();
+      renderPayslipQueueBar();
+    });
+    $(document).on("click", "[data-payslip-queue-cancel]", function () {
+      pendingPayslipQueue = [];
+      renderPayslipQueueBar();
+    });
     $(document).on("change", ".payroll-check", function () { renderPayrollBulkBar(); });
     $(document).on("change", "#payrollCheckAll", function () {
       const on = $(this).is(":checked");
@@ -12048,8 +13448,8 @@
       renderPayroll();
     });
 
-    // Overflow menu (Salary Outgoing topbar)
-    $(document).on("click", "#payrollOverflowMenu .overflow-trigger", function (e) {
+    // Overflow menu (Salary Outgoing topbar + hero smart actions)
+    $(document).on("click", "#payrollOverflowMenu .overflow-trigger, .payroll-smart-actions .overflow-trigger", function (e) {
       e.stopPropagation();
       const $menu = $(this).closest(".overflow-menu");
       const $panel = $menu.find(".overflow-panel");
