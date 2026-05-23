@@ -7,6 +7,9 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #f4f4f5;
@@ -1606,20 +1609,1065 @@
       box-shadow: var(--dashboard-shadow);
       border: 0;
     }
-    #reports .report-brief {
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
-      gap: var(--dashboard-bento-gap);
-      margin-bottom: 10px;
-    }
     #reports .report-hero,
-    #reports .report-insights,
     #reports .report-module {
       background: #ffffff;
       border-radius: var(--dashboard-card-radius);
       box-shadow: var(--dashboard-shadow);
       padding: var(--dashboard-card-padding);
       min-width: 0;
+    }
+    /* Compact hero: backdrop sparkline behind content, sub-stats row + insights */
+    #reports .report-hero {
+      position: relative;
+      padding: 16px 18px 14px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    #reports .report-hero-backdrop {
+      position: absolute;
+      inset: 0;
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: 0;
+    }
+    #reports .report-hero-backdrop canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+    #reports .report-hero-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(240px, auto);
+      gap: 24px;
+      align-items: stretch;
+    }
+    #reports .report-hero-left { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+    #reports .report-hero-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    #reports .delta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 11px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    #reports .delta-chip.good { background: #ecfdf5; color: #166534; }
+    #reports .delta-chip.bad  { background: #fef2f2; color: #9f1d1d; }
+    #reports .delta-chip.warn { background: #fff7ed; color: #8a5a00; }
+    #reports .delta-chip-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+    }
+    /* KPI sub-stats strip (merged into hero) */
+    #reports .report-substats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #f1f1f3;
+    }
+    #reports .substat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 0 14px;
+      border-left: 1px solid #f1f1f3;
+      min-width: 0;
+    }
+    #reports .substat:first-child { border-left: 0; padding-left: 0; }
+    #reports .substat:last-child { padding-right: 0; }
+    #reports .substat-label {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    #reports .substat strong {
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 720;
+      letter-spacing: -0.015em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.15;
+    }
+    #reports .substat strong.warn { color: var(--warn); }
+    #reports .substat strong.bad { color: var(--bad); }
+    #reports .substat strong.good { color: var(--good); }
+    #reports .substat-meta {
+      color: var(--muted);
+      font-size: 10.5px;
+      font-weight: 600;
+    }
+    #reports .substat-meta.warn { color: var(--warn); }
+    #reports .substat-meta.good { color: var(--good); }
+
+    /* Top-client share progress bar */
+    #reports .share-bar {
+      width: 100%;
+      max-width: 220px;
+      height: 5px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    #reports .share-bar > span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, #16a34a 0%, #166534 100%);
+      border-radius: inherit;
+    }
+
+    /* Compact "All clear" chip when nothing needs attention */
+    #reports .report-attention.compact-clear {
+      padding: 8px 14px;
+      display: inline-flex;
+      align-items: center;
+      width: auto;
+    }
+    #reports .attention-clear-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--good);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    #reports .attention-clear-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--good);
+    }
+
+    /* Scope preset pills (reuse dashboard's preset-pill base) */
+    #reports #reportsPeriodPresets {
+      display: inline-flex;
+      gap: 2px;
+      padding: 3px;
+      background: #f3f4f6;
+      border-radius: 999px;
+    }
+    #reports #reportsPeriodPresets .preset-pill {
+      background: transparent;
+      color: var(--muted);
+      border: 0;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+    }
+    #reports #reportsPeriodPresets .preset-pill:hover { color: var(--text); }
+    #reports #reportsPeriodPresets .preset-pill.active {
+      background: #ffffff;
+      color: var(--text);
+      box-shadow: 0 1px 2px rgba(17,17,17,0.08), 0 3px 8px rgba(17,17,17,0.04);
+    }
+
+    /* Long View 2-col grid: bars on left, donut on right */
+    #reports .report-longview-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(220px, 1fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+    #reports .report-longview-bars { min-width: 0; }
+    #reports .report-longview-bars .chart-canvas-wrap {
+      min-height: 200px;
+      height: 220px;
+    }
+    #reports .report-longview-donut {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-left: 16px;
+      border-left: 1px solid #f1f1f3;
+      min-width: 0;
+    }
+    #reports .donut-wrap {
+      position: relative;
+      height: 140px;
+    }
+    #reports .donut-wrap canvas { height: 100% !important; width: 100% !important; }
+    #reports .donut-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+    }
+    #reports .donut-legend-row {
+      display: grid;
+      grid-template-columns: 8px minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 8px;
+    }
+    #reports .donut-swatch {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+    }
+    #reports .donut-legend-name {
+      color: var(--text);
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #reports .donut-legend-pct {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      min-width: 28px;
+      text-align: right;
+    }
+    #reports .donut-legend-val {
+      color: var(--text);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      min-width: 44px;
+      text-align: right;
+    }
+
+    /* 3-column grid for the trailing summary tables */
+    #reports .report-3col {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--dashboard-bento-gap);
+    }
+    #reports .report-mini {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    #reports .report-mini .report-module-head {
+      padding-bottom: 8px;
+      margin-bottom: 4px;
+      align-items: center;
+    }
+    #reports .report-mini .report-module-title {
+      font-size: 13px;
+    }
+    #reports .report-mini .table-wrap {
+      border: 0;
+      box-shadow: none;
+      border-radius: 0;
+      background: transparent;
+      overflow: auto;
+    }
+    #reports .report-mini table {
+      font-size: 12px;
+    }
+    #reports .report-mini th {
+      padding: 8px 6px;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+    }
+    #reports .report-mini td {
+      padding: 10px 6px;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    #reports .report-mini .row-sub {
+      font-size: 10.5px;
+      margin-top: 1px;
+    }
+    #reports .report-mini .row-sub.warn { color: var(--warn); font-weight: 600; }
+    #reports .report-mini .small-btn {
+      padding: 4px 9px;
+      font-size: 11px;
+      min-height: 0;
+      border-radius: 999px;
+    }
+    #reports .report-mini .report-total-row td {
+      background: #fafafa;
+      font-weight: 700;
+    }
+    #reports .report-mini .summary-status {
+      padding: 2px 7px;
+      font-size: 10.5px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+    #reports .report-mini .summary-status.good { background: #ecfdf5; color: #166534; }
+    #reports .report-mini .summary-status.bad { background: #fef2f2; color: #9f1d1d; }
+    #reports .report-mini .summary-status.warn { background: #fff7ed; color: #8a5a00; }
+
+    @media (max-width: 1100px) {
+      #reports .report-longview-grid { grid-template-columns: 1fr; }
+      #reports .report-longview-donut { border-left: 0; padding-left: 0; border-top: 1px solid #f1f1f3; padding-top: 14px; }
+      #reports .report-3col { grid-template-columns: 1fr; }
+    }
+
+    /* ============================================================
+       REPORTS — MINIMALIST DATA WALL (Linear / Posthog inspired)
+       Goal: dense, ungrouped, hyper-functional. No card chrome.
+       ============================================================ */
+    #reports.report-wall {
+      padding: 0;
+      background: transparent;
+      max-width: 1200px;
+      margin: 0 auto;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+    }
+    #reports.report-wall * { box-sizing: border-box; }
+
+    /* Topbar */
+    #reports .wall-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 0;
+      flex-wrap: wrap;
+    }
+    #reports .wall-title {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    #reports .wall-eyebrow {
+      color: var(--micro);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+    }
+    #reports .wall-period {
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    #reports .wall-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    #reports .wall-controls .period-presets {
+      display: inline-flex;
+      gap: 0;
+      padding: 0;
+      background: transparent;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    #reports .wall-controls .preset-pill {
+      background: transparent;
+      color: var(--muted);
+      border: 0;
+      border-radius: 0;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border-right: 1px solid #e5e7eb;
+    }
+    #reports .wall-controls .preset-pill:last-child { border-right: 0; }
+    #reports .wall-controls .preset-pill:hover { background: #fafafa; color: var(--text); }
+    #reports .wall-controls .preset-pill.active {
+      background: #0a0a0a;
+      color: #ffffff;
+      box-shadow: none;
+    }
+    #reports .wall-select {
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      color: var(--text);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 11.5px;
+      font-weight: 600;
+      font-family: inherit;
+      min-height: 28px;
+    }
+    #reports .wall-icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      color: var(--text);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0;
+    }
+    #reports .wall-icon-btn:hover { background: #fafafa; }
+    #reports .wall-icon-btn.small { width: 24px; height: 24px; font-size: 12px; }
+
+    /* KPI strip - 4 columns separated by vertical hairlines */
+    #reports .wall-kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-bottom: 1px solid #e5e7eb;
+    }
+    #reports .wall-kpi {
+      padding: 20px 24px;
+      border-left: 1px solid #e5e7eb;
+      min-width: 0;
+    }
+    #reports .wall-kpi:first-child { border-left: 0; padding-left: 0; }
+    #reports .wall-kpi:last-child { padding-right: 0; }
+    #reports .wall-kpi-label {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      margin-bottom: 8px;
+    }
+    #reports .wall-kpi-value {
+      color: var(--text);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.05;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1;
+    }
+    #reports .wall-kpi-value.bad { color: #b91c1c; }
+    #reports .wall-kpi-value.warn { color: #b45309; }
+    #reports .wall-kpi-meta {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
+      margin-top: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+    #reports .wall-kpi-meta.bad { color: #b91c1c; }
+    #reports .wall-kpi-meta.warn { color: #b45309; }
+    #reports .wall-kpi-meta.good { color: #15803d; }
+    #reports .wall-kpi-delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 10.5px;
+      font-weight: 700;
+      margin-right: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+    #reports .wall-kpi-delta.good { background: #ecfdf5; color: #166534; }
+    #reports .wall-kpi-delta.bad { background: #fef2f2; color: #b91c1c; }
+
+    /* Sections (chart, share lists, tables) — separated by hairlines */
+    #reports .wall-section {
+      padding: 20px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    #reports .wall-section:last-of-type { border-bottom: 0; }
+    #reports .wall-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    #reports .wall-section-label {
+      color: var(--micro);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+    }
+    #reports .wall-section-meta {
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+    #reports .wall-section-actions {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+    #reports .wall-pills {
+      display: inline-flex;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    #reports .wall-pill {
+      background: transparent;
+      color: var(--muted);
+      border: 0;
+      border-right: 1px solid #e5e7eb;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #reports .wall-pill:last-child { border-right: 0; }
+    #reports .wall-pill:hover { background: #fafafa; color: var(--text); }
+    #reports .wall-pill.active { background: #0a0a0a; color: #ffffff; }
+
+    /* Chart wrap */
+    #reports .wall-chart-wrap {
+      width: 100%;
+      height: 220px;
+      min-height: 220px;
+    }
+    #reports .wall-chart-wrap canvas { width: 100% !important; height: 100% !important; }
+
+    /* Shares — 2 column layout for employees + clients */
+    #reports .wall-shares {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 32px;
+      padding: 20px 0;
+    }
+    #reports .wall-share-col { min-width: 0; }
+    #reports .wall-share-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    #reports .wall-share-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 44px;
+      align-items: center;
+      gap: 12px;
+      padding: 4px 0;
+    }
+    #reports .wall-share-name {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      font-size: 12.5px;
+    }
+    #reports .wall-share-label {
+      color: var(--text);
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #reports .wall-share-amount {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      font-size: 11.5px;
+      font-weight: 500;
+    }
+    #reports .wall-share-bar {
+      grid-column: 1 / -1;
+      height: 4px;
+      background: #f3f4f6;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 2px;
+    }
+    #reports .wall-share-bar > span {
+      display: block;
+      height: 100%;
+      background: #0a0a0a;
+      border-radius: inherit;
+    }
+    #reports .wall-share-pct {
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    /* Tables — newspaper style, no card chrome */
+    #reports .wall-table-wrap { overflow: auto; }
+    #reports .wall-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: transparent;
+      font-size: 12.5px;
+    }
+    #reports .wall-table th {
+      background: transparent;
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 8px 12px 8px 0;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
+    #reports .wall-table th.report-money,
+    #reports .wall-table th.num { text-align: right; padding-right: 0; padding-left: 12px; }
+    #reports .wall-table td {
+      padding: 10px 12px 10px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    #reports .wall-table td.report-money,
+    #reports .wall-table td.num { text-align: right; padding-right: 0; padding-left: 12px; }
+    #reports .wall-table tbody tr:hover { background: #fafafa; }
+    #reports .wall-table .report-total-row td {
+      background: transparent;
+      font-weight: 700;
+      border-top: 1px solid #0a0a0a;
+      padding-top: 10px;
+    }
+    #reports .wall-table .row-sub {
+      color: var(--muted);
+      font-size: 10.5px;
+      font-weight: 500;
+      margin-top: 1px;
+    }
+    #reports .wall-table .row-sub.warn { color: #b45309; }
+    #reports .wall-table .summary-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 1px 7px;
+      border-radius: 3px;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    #reports .wall-table .summary-status.good { background: #ecfdf5; color: #166534; }
+    #reports .wall-table .summary-status.bad { background: #fef2f2; color: #b91c1c; }
+    #reports .wall-table .summary-status.warn { background: #fff7ed; color: #b45309; }
+
+    /* Footer */
+    #reports .wall-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 24px 0 16px;
+      color: var(--micro);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+    #reports .wall-footer-sep { opacity: 0.5; }
+
+    @media (max-width: 760px) {
+      #reports .wall-kpis { grid-template-columns: repeat(2, 1fr); }
+      #reports .wall-kpi { border-left: 0; border-top: 1px solid #e5e7eb; padding: 16px 0; }
+      #reports .wall-kpi:nth-child(odd) { padding-right: 16px; }
+      #reports .wall-kpi:nth-child(even) { padding-left: 16px; border-left: 1px solid #e5e7eb; }
+      #reports .wall-shares { grid-template-columns: 1fr; gap: 24px; }
+    }
+
+    /* ============================================================
+       OLD REPORTS EDITORIAL — kept below for any leftover selectors
+       ============================================================ */
+    #reports.report-editorial {
+      padding: 0;
+      background: transparent;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+    }
+    #reports .report-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      justify-content: flex-end;
+      padding: 14px 0;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    #reports .report-article {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+      background: transparent;
+    }
+    /* Masthead — magazine cover treatment */
+    #reports .report-masthead {
+      text-align: center;
+      padding: 32px 0 16px;
+      margin-bottom: 0;
+    }
+    #reports .masthead-eyebrow {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    #reports .masthead-title {
+      font-family: "Fraunces", "Iowan Old Style", "Georgia", serif;
+      font-size: clamp(48px, 7vw, 84px);
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      line-height: 1.0;
+      color: var(--text);
+      margin: 0 0 24px;
+      font-optical-sizing: auto;
+    }
+    #reports .masthead-rule {
+      width: 64px;
+      height: 2px;
+      background: #0a0a0a;
+      margin: 0 auto 8px;
+    }
+
+    /* Chapters — numbered editorial sections */
+    #reports .report-chapter {
+      padding: 48px 0 24px;
+      border-top: 1px solid #e5e7eb;
+      margin-top: 0;
+    }
+    #reports .report-chapter.chapter-hero {
+      border-top: 0;
+      padding-top: 32px;
+    }
+    #reports .chapter-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    #reports .chapter-num {
+      font-family: "Fraunces", serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      position: relative;
+      padding-right: 16px;
+    }
+    #reports .chapter-num::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: 1px;
+      height: 14px;
+      background: #d1d5db;
+    }
+    #reports .chapter-name {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    #reports .chapter-title {
+      font-family: "Fraunces", "Iowan Old Style", "Georgia", serif;
+      font-size: clamp(28px, 3.4vw, 40px);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      color: var(--text);
+      margin: 0 0 12px;
+      font-optical-sizing: auto;
+    }
+    #reports .chapter-narrative {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #404040;
+      max-width: 640px;
+      margin: 0 0 28px;
+      font-weight: 400;
+    }
+    #reports .chapter-narrative strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+    #reports .chapter-head-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    /* Hero chapter — oversized, magazine-style */
+    #reports .chapter-hero .report-hero {
+      background: transparent !important;
+      box-shadow: none !important;
+      border: 0 !important;
+      padding: 0 !important;
+      margin: 0 0 24px !important;
+      overflow: visible !important;
+    }
+    #reports .chapter-hero .report-hero-backdrop {
+      position: absolute;
+      inset: -20px -40px;
+      opacity: 0.14;
+    }
+    #reports .chapter-hero .report-hero-content {
+      grid-template-columns: minmax(0, 1.5fr) minmax(220px, 1fr);
+      gap: 32px;
+    }
+    #reports .chapter-hero .report-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    #reports .chapter-hero .report-hero-value {
+      font-family: "Fraunces", "Iowan Old Style", "Georgia", serif;
+      font-size: clamp(56px, 8vw, 96px);
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      margin: 0 0 16px;
+      font-optical-sizing: auto;
+    }
+    #reports .chapter-hero .report-hero-meta {
+      margin-top: 0;
+      margin-bottom: 24px;
+      gap: 10px;
+    }
+    #reports .chapter-hero .delta-chip {
+      font-size: 13px;
+      padding: 4px 12px;
+    }
+    #reports .chapter-hero .health-chip {
+      font-size: 13px;
+      padding: 4px 12px;
+    }
+    #reports .chapter-hero .report-substats {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-top: 24px;
+      padding-top: 20px;
+      gap: 0;
+    }
+    #reports .chapter-hero .substat strong {
+      font-family: "Fraunces", serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    #reports .chapter-hero .report-hero-right {
+      padding-left: 24px;
+      border-left: 1px solid #e5e7eb;
+      align-content: start;
+      gap: 16px;
+    }
+    #reports .chapter-hero .report-hero-right .report-insight strong {
+      font-family: "Fraunces", serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    /* Attention pill */
+    #reports .chapter-hero .report-attention {
+      background: transparent !important;
+      box-shadow: none !important;
+      border: 0 !important;
+      padding: 0 !important;
+      margin: 16px 0 0 !important;
+    }
+    #reports .report-attention.compact-clear {
+      width: auto;
+    }
+
+    /* Year-trend chart inside editorial */
+    #reports .report-chapter .chart-canvas-wrap {
+      min-height: 240px;
+      height: 280px;
+      margin: 8px 0 0;
+      background: transparent;
+    }
+
+    /* Long view inside editorial */
+    #reports .report-longview-grid {
+      gap: 32px;
+    }
+    #reports .report-longview-bars .chart-canvas-wrap {
+      min-height: 220px;
+      height: 240px;
+    }
+    #reports .report-longview-donut {
+      padding-left: 24px;
+      border-left: 1px solid #e5e7eb;
+    }
+
+    /* Mini tables in 3-col grid */
+    #reports .chapter-tables .report-3col {
+      gap: 32px;
+    }
+    #reports .report-mini {
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+      border: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    #reports .mini-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    #reports .mini-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    #reports .mini-meta {
+      color: var(--muted);
+      font-size: 11px;
+    }
+    #reports .report-mini .table-wrap {
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      border-radius: 0;
+    }
+    #reports .report-mini table { font-size: 12.5px; }
+    #reports .report-mini th {
+      background: transparent;
+      color: var(--micro);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      padding: 6px 6px 10px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    #reports .report-mini td {
+      padding: 10px 6px;
+      border-bottom: 1px solid #f1f1f3;
+      font-size: 12.5px;
+    }
+    #reports .report-mini tr:last-child td { border-bottom: 0; }
+    #reports .report-mini .report-total-row td {
+      background: transparent;
+      border-top: 2px solid #0a0a0a;
+      padding-top: 10px;
+      font-weight: 700;
+    }
+
+    /* Override module/card chrome that snuck in via deeper selectors */
+    #reports .report-article .report-module,
+    #reports .report-article .report-attention,
+    #reports .report-article .report-hero {
+      background: transparent;
+      box-shadow: none;
+      border: 0;
+    }
+
+    /* Colophon footer */
+    #reports .report-colophon {
+      margin-top: 64px;
+      padding-top: 24px;
+      text-align: center;
+    }
+    #reports .colophon-rule {
+      display: inline-block;
+      width: 32px;
+      height: 1px;
+      background: #d1d5db;
+      margin-bottom: 12px;
+    }
+    #reports .colophon-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    #reports .colophon-text strong {
+      color: var(--text);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      font-size: 13px;
+    }
+
+    @media (max-width: 720px) {
+      #reports .report-article { padding: 16px 16px 48px; }
+      #reports .masthead-title { font-size: 44px; }
+      #reports .chapter-title { font-size: 26px; }
+      #reports .chapter-hero .report-hero-value { font-size: 48px; }
+      #reports .chapter-hero .report-hero-content { grid-template-columns: 1fr; }
+      #reports .chapter-hero .report-hero-right { border-left: 0; padding-left: 0; border-top: 1px solid #e5e7eb; padding-top: 16px; }
+      #reports .chapter-hero .report-substats { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 900px) {
+      #reports .report-substats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      #reports .substat { border-left: 0; padding: 0; }
+      #reports .substat + .substat { border-top: 0; }
+    }
+    #reports .report-hero-right {
+      display: grid;
+      grid-template-rows: repeat(3, auto);
+      gap: 8px;
+      padding-left: 20px;
+      border-left: 1px solid #f1f1f3;
+      min-width: 0;
+      align-self: stretch;
+      align-content: center;
+    }
+    #reports .report-hero-right .report-insight {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 4px 0;
+      min-width: 0;
+      border-left: 0;
+    }
+    #reports .report-hero-right .report-insight + .report-insight {
+      border-top: 1px solid #f1f1f3;
+      padding-top: 8px;
+    }
+    #reports .report-hero-right .report-insight strong {
+      font-size: 14px;
+      font-weight: 720;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #reports .report-hero-right .report-insight-meta {
+      font-size: 11px;
+    }
+    #reports .report-insight-meta.warn { color: var(--warn); }
+    #reports .report-insight-meta.good { color: var(--good); }
+
+    @media (max-width: 900px) {
+      #reports .report-hero {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      #reports .report-hero-right {
+        border-left: 0;
+        border-top: 1px solid #f1f1f3;
+        padding-left: 0;
+        padding-top: 14px;
+      }
     }
     #reports .report-eyebrow,
     #reports .report-kpi-label,
@@ -1703,19 +2751,13 @@
       padding: 5px 10px;
       font-size: 11px;
     }
-    #reports .report-story {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.8fr);
-      gap: var(--dashboard-bento-gap);
-      margin-bottom: 10px;
-    }
-    #reports .report-narrative,
     #reports .report-attention {
       background: #ffffff;
       border-radius: var(--dashboard-card-radius);
       box-shadow: var(--dashboard-shadow);
-      padding: 13px 14px;
+      padding: var(--dashboard-card-padding);
       min-width: 0;
+      margin-bottom: 10px;
     }
     #reports .report-narrative-list,
     #reports .report-attention-list {
@@ -1811,26 +2853,57 @@
     #reports .report-kpi-value.bad { color: var(--bad); }
     #reports .report-insights {
       display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 0;
+      padding: 0;
     }
     #reports .report-insight {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-      align-items: center;
-      padding: 8px 0;
-      border-top: 1px solid #f1f1f3;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 0 14px;
+      border-left: 1px solid #f1f1f3;
+      min-width: 0;
     }
     #reports .report-insight:first-child {
-      border-top: 0;
-      padding-top: 0;
+      border-left: 0;
+      padding-left: 0;
+    }
+    #reports .report-insight:last-child { padding-right: 0; }
+    #reports .report-insight-label {
+      color: var(--micro);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
     #reports .report-insight strong {
       display: block;
       color: var(--text);
-      font-size: 12px;
-      font-weight: 740;
-      line-height: 1.25;
+      font-size: 14px;
+      font-weight: 720;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #reports .report-insight .report-insight-meta {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    @media (max-width: 760px) {
+      #reports .report-insights { grid-template-columns: 1fr; }
+      #reports .report-insight {
+        border-left: 0;
+        border-top: 1px solid #f1f1f3;
+        padding: 8px 0;
+      }
+      #reports .report-insight:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
     }
     #reports .report-layout {
       display: grid;
@@ -1868,13 +2941,23 @@
       box-shadow: inset 0 0 0 1px #eeeeef;
     }
     #reports .report-module-yeartrend {
-      padding: 16px;
+      padding: var(--dashboard-card-padding);
     }
-    #reports .report-module-yeartrend .report-chart-grid {
-      align-items: stretch;
+    #reports .report-module-yeartrend .chart-canvas-wrap {
+      min-height: 180px;
+      height: 200px;
+      margin-top: 4px;
     }
-    #reports .report-module-yeartrend .report-chart-box {
-      align-content: start;
+    #reports .report-module-yeartrend .chart-legend {
+      display: inline-flex;
+      gap: 12px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+    #reports .report-module-yeartrend .chart-legend .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
     #reports .report-chart-head {
       display: flex;
@@ -7734,6 +8817,7 @@
         grid-template-columns: 1fr;
       }
     }
+
   </style>
 </head>
 <body>
@@ -8096,7 +9180,6 @@
         <div class="topbar">
           <div>
             <h1>Clients</h1>
-            <div class="step-label">5 Client Profile</div>
             <p class="subtitle">Manage client records, payment frequency, default amount, status, and archives.</p>
           </div>
           <button class="btn" data-open="client">+ Add Client</button>
@@ -8203,124 +9286,118 @@
         <div class="table-wrap"><table id="paymentsTable"></table></div>
       </section>
 
-      <section id="reports" class="section">
-        <div class="topbar">
-          <div>
-            <h1>Reports</h1>
-            <div class="step-label">7 Report Preview</div>
-            <p class="subtitle">Monthly report preview based on selected month/year.</p>
+      <section id="reports" class="section report-wall">
+        <!-- ─── Topbar ───────────────────────────────────────── -->
+        <header class="wall-topbar">
+          <div class="wall-title">
+            <span class="wall-eyebrow">REPORTS</span>
+            <span class="wall-period" id="wallPeriodLabel">May 2026</span>
           </div>
-          <div class="button-group report-controlbar">
-            <div class="period-controls">
-              <div class="report-control">
-                <label>Month</label>
-                <select id="reportMonth"></select>
-              </div>
-              <div class="report-control">
-                <label>Year</label>
-                <select id="reportYear"></select>
-              </div>
+          <div class="wall-controls" data-print-hide>
+            <div class="period-presets" id="reportsPeriodPresets" role="group" aria-label="Reporting period presets">
+              <button class="preset-pill" data-reports-preset="thisMonth">This month</button>
+              <button class="preset-pill" data-reports-preset="lastMonth">Last month</button>
+              <button class="preset-pill" data-reports-preset="thisQuarter">This quarter</button>
+              <button class="preset-pill" data-reports-preset="thisYear">This year</button>
             </div>
-            <select class="report-filter-select" id="reportClientFilter" aria-label="Report client filter">
+            <select id="reportMonth" class="wall-select" aria-label="Month"></select>
+            <select id="reportYear" class="wall-select" aria-label="Year"></select>
+            <select id="reportClientFilter" class="wall-select" aria-label="Client filter">
               <option value="">All clients</option>
             </select>
-            <button class="btn secondary" id="printReport">Print Report</button>
+            <button class="wall-icon-btn" id="printReport" title="Print report" aria-label="Print">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="9" rx="2"/><path d="M6 15h12v6H6z"/></svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- ─── KPI strip (4 columns) ────────────────────────── -->
+        <div class="wall-kpis" id="wallKpis"></div>
+
+        <!-- ─── Year trend chart ─────────────────────────────── -->
+        <div class="wall-section">
+          <div class="wall-section-head">
+            <span class="wall-section-label">INCOME · PAYROLL · NET</span>
+            <span class="wall-section-meta" id="wallYearTrendMeta"></span>
+          </div>
+          <div class="wall-chart-wrap"><canvas id="reportYearTrendChart"></canvas></div>
+        </div>
+
+        <!-- ─── Top employees + Top clients (2 columns) ──────── -->
+        <div class="wall-section wall-shares">
+          <div class="wall-share-col">
+            <div class="wall-section-head">
+              <span class="wall-section-label">TOP EMPLOYEES · <span id="wallEmpYear">2026</span></span>
+              <span class="wall-section-meta" id="wallEmpMeta"></span>
+            </div>
+            <div class="wall-share-list" id="wallEmployeeShare"></div>
+          </div>
+          <div class="wall-share-col">
+            <div class="wall-section-head">
+              <span class="wall-section-label">TOP CLIENTS · <span id="wallClientMonth">MAY 2026</span></span>
+              <span class="wall-section-meta" id="wallClientMeta"></span>
+            </div>
+            <div class="wall-share-list" id="wallClientShare"></div>
           </div>
         </div>
 
-        <div class="report-brief">
-          <div class="report-hero" id="reportHero"></div>
-          <div class="report-insights" id="reportInsights"></div>
+        <!-- ─── Salary spend table ───────────────────────────── -->
+        <div class="wall-section">
+          <div class="wall-section-head">
+            <span class="wall-section-label">SALARY SPEND · SINCE 2022</span>
+            <div class="wall-section-actions" data-print-hide>
+              <div class="wall-pills" id="reportSalarySpendMode" role="group" aria-label="Salary spend view">
+                <button class="wall-pill active" data-report-spend-mode="year">Year</button>
+                <button class="wall-pill" data-report-spend-mode="month">Month</button>
+                <button class="wall-pill" data-report-spend-mode="employee">Employee</button>
+              </div>
+              <button class="wall-icon-btn small" data-export="salarySpendSince2022" title="Export CSV" aria-label="Export CSV">⤓</button>
+            </div>
+          </div>
+          <div class="wall-table-wrap"><table class="wall-table" id="salarySpendSinceTable"></table></div>
         </div>
 
-        <div class="report-summary" id="reportSummary"></div>
-
-        <div class="report-story">
-          <div class="report-narrative" id="reportNarrative"></div>
-          <div class="report-attention" id="reportAttention"></div>
+        <!-- ─── People cost table ────────────────────────────── -->
+        <div class="wall-section">
+          <div class="wall-section-head">
+            <span class="wall-section-label">PEOPLE COST · ANNUALIZED</span>
+            <div class="wall-section-actions" data-print-hide>
+              <button class="wall-icon-btn small" data-export="employeeYearlyCost" title="Export CSV" aria-label="Export CSV">⤓</button>
+            </div>
+          </div>
+          <div class="wall-table-wrap"><table class="wall-table" id="yearlyCostTable"></table></div>
         </div>
 
-        <div class="report-kpis" id="reportCards"></div>
-
-        <div class="report-layout">
-          <div class="report-module report-module-yeartrend">
-            <div class="report-module-head">
-              <div>
-                <div class="report-section-label">Year trend</div>
-                <div class="report-module-title">Salary expense and client payments</div>
-                <div class="report-hero-sub">Monthly movement for the selected report year.</div>
-              </div>
-            </div>
-            <div class="report-chart-grid">
-              <div class="report-chart-box">
-                <div class="report-chart-head" id="salaryChartSummary"></div>
-                <div class="report-callouts" id="salaryChartCallouts"></div>
-                <div class="chart-canvas-wrap"><canvas id="salaryExpenseChart"></canvas></div>
-              </div>
-              <div class="report-chart-box">
-                <div class="report-chart-head" id="incomeChartSummary"></div>
-                <div class="report-callouts" id="incomeChartCallouts"></div>
-                <div class="chart-canvas-wrap"><canvas id="clientIncomeChart"></canvas></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="report-module report-module-longview">
-            <div class="report-module-head">
-              <div>
-                <div class="report-section-label">Long view</div>
-                <div class="report-module-title">Salary Spend Since 2022</div>
-                <div class="report-hero-sub" id="salarySpendReportSub">Tracked salary outgoing by release date, grouped by year.</div>
-              </div>
-              <div class="report-module-tools">
-                <div class="series-toggle" id="reportSalarySpendMode" role="group" aria-label="Salary spend report view" data-print-hide>
-                  <button class="series-pill active" data-report-spend-mode="year">Year</button>
-                  <button class="series-pill" data-report-spend-mode="month">Month</button>
-                  <button class="series-pill" data-report-spend-mode="employee">Employee</button>
-                </div>
-                <button class="btn secondary" data-export="salarySpendSince2022">Export CSV</button>
-              </div>
-            </div>
-            <div class="chart-card" style="margin-bottom: 14px;">
-              <div class="chart-canvas-wrap"><canvas id="salarySpendSinceChart"></canvas></div>
-            </div>
-            <div class="report-table-summary" id="salarySpendStats"></div>
-            <div class="table-wrap"><table id="salarySpendSinceTable"></table></div>
-          </div>
-
-          <div class="report-module">
-            <div class="report-module-head">
-              <div>
-                <div class="report-section-label">Clients</div>
-                <div class="report-module-title">Client Payment Summary</div>
-                <div class="report-hero-sub">Expected, paid, pending, and overdue by client for the selected month.</div>
-              </div>
-              <button class="btn secondary" data-export="clientSummary">Export CSV</button>
-            </div>
-            <div class="report-table-summary" id="clientSummaryStats"></div>
-            <div class="table-wrap"><table id="clientSummaryTable"></table></div>
-          </div>
-
-          <div class="report-module">
-            <div class="report-module-head">
-              <div>
-                <div class="report-section-label">People cost</div>
-                <div class="report-module-title">Yearly Salary Cost Per Employee</div>
-                <div class="report-hero-sub">Annualized cost based on current monthly salaries.</div>
-              </div>
-              <button class="btn secondary" data-export="employeeYearlyCost">Export CSV</button>
-            </div>
-            <div class="report-table-summary" id="yearlyCostStats"></div>
-            <div class="table-wrap"><table id="yearlyCostTable"></table></div>
-          </div>
+        <!-- ─── Hidden but kept (legacy IDs that other code may target) ─ -->
+        <div hidden>
+          <div id="reportHero"></div>
+          <div id="reportAttention"></div>
+          <table id="clientSummaryTable"></table>
+          <canvas id="salaryDonutChart"></canvas>
+          <div id="salaryDonutLegend"></div>
+          <span id="salaryDonutTitle"></span>
+          <span id="yearTrendSummary"></span>
+          <span id="salarySpendReportSub"></span>
+          <span id="chapter02Narrative"></span>
+          <span id="chapter03Narrative"></span>
+          <span id="chapter04Narrative"></span>
+          <span id="reportMastheadTitle"></span>
+          <span id="reportColophonCompany"></span>
+          <span id="reportColophonDate"></span>
         </div>
+
+        <!-- ─── Footer ───────────────────────────────────────── -->
+        <footer class="wall-footer">
+          <span id="wallFooterCompany">KNB Web Solutions Incorporated</span>
+          <span class="wall-footer-sep">·</span>
+          <span>Generated <span id="wallFooterDate"></span></span>
+        </footer>
       </section>
 
       <section id="settings" class="section">
         <div class="topbar">
           <div>
             <h1>Settings</h1>
-            <div class="step-label">8 Browser Settings</div>
             <p class="subtitle">Local-only settings, backup/restore, and activity log.</p>
           </div>
         </div>
@@ -12283,35 +13360,26 @@
           ? salarySpendEmployeeRows(selectedReports.year)
           : salarySpendSinceRows(2022);
       const lifetime = rows.reduce((sum, row) => sum + row.tracked, 0);
+      const totalRecords = rows.reduce((sum, row) => sum + (row.releaseRows || 0), 0);
       const primaryLabel = mode === "month" ? "Month" : mode === "employee" ? "Employee" : "Year";
-      const avgLabel = mode === "year" ? "Avg Monthly Spend" : "Avg Per Row";
+      // Compact 3-col view: Label · Spend · Records
       $("#salarySpendSinceTable").html(`
-        <thead><tr><th>${primaryLabel}</th><th class="report-money">Tracked Salary Spend</th><th class="report-money">Paid Salary</th><th class="report-money">Scheduled / Pending</th><th>${mode === "year" ? "Active Months" : "Rows"}</th><th class="report-money">${avgLabel}</th><th>Records</th></tr></thead>
+        <thead><tr><th>${primaryLabel}</th><th class="report-money">Spend</th><th class="num">Rec</th></tr></thead>
         <tbody>
-          ${rows.length ? rows.map((row, index) => {
+          ${rows.length ? rows.map((row) => {
             const label = row.year || row.label || row.employee || row.month || "-";
             const rowCount = row.releaseRows || 0;
-            const avgValue = mode === "year" ? row.averageMonthly : rowCount ? row.tracked / rowCount : 0;
             return `
             <tr>
-              <td>
-                <div class="report-row-title">
-                  <span class="report-rank">${index + 1}</span>
-                  <strong>${escapeHtml(label)}</strong>
-                </div>
-              </td>
+              <td><strong>${escapeHtml(String(label))}</strong></td>
               <td class="report-money">${currency(row.tracked)}</td>
-              <td class="report-money">${currency(row.paid)}</td>
-              <td class="report-money">${currency(row.open)}</td>
-              <td>${mode === "year" ? (row.activeMonths || "-") : (rowCount || "-")}</td>
-              <td class="report-money">${avgValue ? currency(avgValue) : "-"}</td>
-              <td>${rowCount}</td>
+              <td class="num">${rowCount}</td>
             </tr>
-          `; }).join("") : `<tr><td colspan="7" class="table-empty">No salary outgoing records found.</td></tr>`}
+          `; }).join("") : `<tr><td colspan="3" class="table-empty">No salary records found.</td></tr>`}
           <tr class="report-total-row">
             <td><strong>${mode === "year" ? "Total since 2022" : `Total ${selectedReports.year}`}</strong></td>
             <td class="report-money"><strong>${currency(lifetime)}</strong></td>
-            <td colspan="5" class="muted">Based on salary outgoing records only.</td>
+            <td class="num"><strong>${totalRecords}</strong></td>
           </tr>
         </tbody>
       `);
@@ -12406,8 +13474,115 @@
           <option value="${escapeHtml(client.id)}">${escapeHtml(client.name)}</option>
         `).join("")}
       `).val(selectedReportClientId);
-      $("#reportSalarySpendMode .series-pill").removeClass("active");
-      $(`#reportSalarySpendMode .series-pill[data-report-spend-mode="${selectedReportSalarySpendMode}"]`).addClass("active");
+
+      renderReportsPresetState();
+
+      // ─── Minimalist data wall renders ───────────────────────
+      const periodLabel = `${months[period.month]} ${period.year}`;
+      $("#wallPeriodLabel").text(periodLabel);
+      $("#wallEmpYear").text(String(period.year));
+      $("#wallClientMonth").text(periodLabel.toUpperCase());
+      $("#wallFooterCompany").text(db.settings?.companyName || "KNB Web Solutions Incorporated");
+      $("#wallFooterDate").text(new Date().toLocaleDateString("en-PH", { dateStyle: "long" }));
+
+      // KPI strip — Net, Collected, Payroll, Open
+      const deltaArrowK = netDelta.dir === "up" ? "▲" : netDelta.dir === "down" ? "▼" : "—";
+      const deltaToneK = netDelta.dir === "down" ? "bad" : netDelta.dir === "up" ? "good" : "neutral";
+      const deltaPctK = netDelta.dir === "flat" ? "0%" : `${netDelta.dir === "up" ? "+" : ""}${netDelta.pct.toFixed(0)}%`;
+
+      const collectedNoteW = expected && paid >= expected - 0.5
+        ? "100% collected"
+        : expected
+          ? `${collectionPct}% of ${compactCurrency(expected)}`
+          : "Nothing billed";
+      const openNoteW = openIncome <= 0.5
+        ? "All collected"
+        : `${currency(pending)} pending`;
+      const salaryPaidPct = trackedOutgoing ? Math.round((paidOutgoing / trackedOutgoing) * 100) : 0;
+      const salaryNoteW = !trackedOutgoing
+        ? "Planned payroll"
+        : paidOutgoing >= trackedOutgoing - 0.5
+          ? "100% paid"
+          : `${salaryPaidPct}% paid`;
+
+      $("#wallKpis").html(`
+        <div class="wall-kpi">
+          <div class="wall-kpi-label">NET</div>
+          <div class="wall-kpi-value ${net < 0 ? "bad" : ""}">${currency(net)}</div>
+          <div class="wall-kpi-meta">
+            <span class="wall-kpi-delta ${deltaToneK}">${deltaArrowK} ${escapeHtml(deltaPctK)}</span>
+            ${net >= 0 ? "positive" : "negative"}
+          </div>
+        </div>
+        <div class="wall-kpi">
+          <div class="wall-kpi-label">COLLECTED</div>
+          <div class="wall-kpi-value">${currency(paid)}</div>
+          <div class="wall-kpi-meta ${collectionTone}">${escapeHtml(collectedNoteW)}</div>
+        </div>
+        <div class="wall-kpi">
+          <div class="wall-kpi-label">PAYROLL</div>
+          <div class="wall-kpi-value ${payrollRatio > 90 ? "warn" : ""}">${currency(outgoingBase)}</div>
+          <div class="wall-kpi-meta">${escapeHtml(salaryNoteW)} · ${payrollRatio}% of income</div>
+        </div>
+        <div class="wall-kpi">
+          <div class="wall-kpi-label">OPEN</div>
+          <div class="wall-kpi-value ${openIncome > 0.5 ? "warn" : ""}">${currency(openIncome)}</div>
+          <div class="wall-kpi-meta ${openIncome > 0.5 ? "warn" : "good"}">${escapeHtml(openNoteW)}</div>
+        </div>
+      `);
+
+      // Year-trend section meta
+      const yearIncomeW = yearlyPaidIncome + yearlyOpenIncome;
+      const yearNetW = yearIncomeW - yearlyPayroll;
+      $("#wallYearTrendMeta").html(
+        `${compactCurrency(yearIncomeW)} income · ${compactCurrency(yearlyPayroll)} payroll · ${compactCurrency(yearNetW)} net for ${period.year}`
+      );
+
+      // Top employees share (for the report year)
+      const empRows = (typeof salarySpendEmployeeRows === "function")
+        ? salarySpendEmployeeRows(period.year).filter(r => r.tracked > 0)
+        : [];
+      empRows.sort((a, b) => b.tracked - a.tracked);
+      const totalEmp = empRows.reduce((s, r) => s + r.tracked, 0);
+      const topEmpRows = empRows.slice(0, 7);
+      $("#wallEmpMeta").text(totalEmp > 0
+        ? `${empRows.length} ${empRows.length === 1 ? "employee" : "employees"} · ${compactCurrency(totalEmp)} tracked`
+        : "No salary data");
+      $("#wallEmployeeShare").html(topEmpRows.length ? topEmpRows.map(r => {
+        const pct = totalEmp ? Math.round((r.tracked / totalEmp) * 100) : 0;
+        return `
+          <div class="wall-share-row">
+            <div class="wall-share-name">
+              <span class="wall-share-label">${escapeHtml(r.employee || "—")}</span>
+              <span class="wall-share-amount">${compactCurrency(r.tracked)}</span>
+              <div class="wall-share-bar"><span style="width:${pct}%"></span></div>
+            </div>
+            <div class="wall-share-pct">${pct}%</div>
+          </div>
+        `;
+      }).join("") : `<div class="wall-share-row"><div class="wall-share-name"><span class="wall-share-label" style="color:var(--muted)">No salary data for ${period.year}</span></div></div>`);
+
+      // Top clients share (this month)
+      const clientShare = reportClientRows.slice().sort((a, b) => b.paid - a.paid).filter(r => r.paid > 0);
+      const totalClientPaid = clientShare.reduce((s, r) => s + r.paid, 0);
+      $("#wallClientMeta").text(clientShare.length
+        ? `${clientShare.length} paying · ${compactCurrency(totalClientPaid)} collected`
+        : "No payments collected");
+      $("#wallClientShare").html(clientShare.length ? clientShare.slice(0, 7).map(r => {
+        const pct = totalClientPaid ? Math.round((r.paid / totalClientPaid) * 100) : 0;
+        return `
+          <div class="wall-share-row">
+            <div class="wall-share-name">
+              <span class="wall-share-label">${escapeHtml(r.client)}</span>
+              <span class="wall-share-amount">${compactCurrency(r.paid)}</span>
+              <div class="wall-share-bar"><span style="width:${pct}%"></span></div>
+            </div>
+            <div class="wall-share-pct">${pct}%</div>
+          </div>
+        `;
+      }).join("") : `<div class="wall-share-row"><div class="wall-share-name"><span class="wall-share-label" style="color:var(--muted)">No collected payments this month</span></div></div>`);
+      $("#reportSalarySpendMode .wall-pill, #reportSalarySpendMode .series-pill").removeClass("active");
+      $(`#reportSalarySpendMode [data-report-spend-mode="${selectedReportSalarySpendMode}"]`).addClass("active");
       $(".report-module-longview").toggleClass("is-employee-view", selectedReportSalarySpendMode === "employee");
       $("#salarySpendReportSub").text(
         selectedReportSalarySpendMode === "month"
@@ -12416,104 +13591,123 @@
             ? `Tracked salary outgoing by employee for ${period.year}.`
             : "Tracked salary outgoing by release date, grouped by year."
       );
+      $("#salaryDonutTitle").text(`Top employees · ${period.year}`);
+
+      // Delta chip (▲/▼/—) with tone matching direction
+      const deltaArrow = netDelta.dir === "up" ? "▲" : netDelta.dir === "down" ? "▼" : "—";
+      const deltaChipTone = netDelta.dir === "down" ? "bad" : netDelta.dir === "up" ? "good" : "neutral";
+      const deltaPct = netDelta.dir === "flat"
+        ? "0%"
+        : `${netDelta.dir === "up" ? "+" : ""}${netDelta.pct.toFixed(0)}%`;
+      const deltaChipHtml = `<span class="delta-chip ${deltaChipTone}">${deltaArrow} ${escapeHtml(deltaPct)}</span><span class="delta-chip-label">vs last month</span>`;
+
+      // Top client with share — only show when there's actually some collection.
+      const totalCollectedThisMonth = reportClientRows.reduce((sum, row) => sum + row.paid, 0);
+      const topShare = (topClient && totalCollectedThisMonth > 0)
+        ? Math.round((topClient.paid / totalCollectedThisMonth) * 100)
+        : 0;
+      const topClientName = topClient && topClient.paid > 0
+        ? `${topClient.client}${topShare > 0 && reportClientRows.length > 1 ? ` (${topShare}%)` : ""}`
+        : "No collections yet";
+      const topClientMeta = topClient && topClient.paid > 0
+        ? `${currency(topClient.paid)} of ${currency(totalCollectedThisMonth)} collected`
+        : "Nothing collected this period";
+
+      // Highest open balance — collapse to "All clear" zero-state when nothing is open
+      const highestOpenAmount = (highestOpen?.pending || 0) + (highestOpen?.overdue || 0);
+      const openCount = reportClientRows.filter(row => (row.pending + row.overdue) > 0).length;
+      const openClientName = highestOpenAmount > 0 ? highestOpen.client : "✓ All clear";
+      const openMetaTone = highestOpenAmount > 0 ? "warn" : "good";
+      const openMetaText = highestOpenAmount > 0
+        ? `${currency(highestOpenAmount)} pending/overdue · ${openCount} client${openCount === 1 ? "" : "s"}`
+        : "0 open balances";
+
+      // Smart sub-stat subtitles (saturation/zero aware)
+      const collectedNote2 = expected && paid >= expected - 0.5
+        ? "100% collected"
+        : expected ? `${collectionPct}% collected` : "No invoices billed";
+      const openNote2 = openIncome <= 0.5 ? "All collected" : `${currency(pending)} open`;
+      let salaryNote2;
+      if (!trackedOutgoing) salaryNote2 = "Planned payroll";
+      else if (paidOutgoing >= trackedOutgoing - 0.5) salaryNote2 = "100% paid";
+      else {
+        const paidPct = trackedOutgoing ? Math.round((paidOutgoing / trackedOutgoing) * 100) : 0;
+        salaryNote2 = `${paidPct}% paid`;
+      }
+
+      // Top client with share — also build a tiny progress bar value
+      const topClientShareLabel = topClient && topClient.paid > 0
+        ? `${topClient.client}`
+        : "No collections";
+      const topClientMetaShort = topClient && topClient.paid > 0
+        ? `${topShare}% · ${currency(topClient.paid)} of ${currency(totalCollectedThisMonth)}`
+        : "Nothing collected";
 
       $("#reportHero").html(`
-        <div>
-          <div class="report-eyebrow">Report net · ${escapeHtml(label)}</div>
-          <div class="report-hero-value">${currency(net)}</div>
-          <div class="report-hero-sub">Expected income minus tracked salary outgoing.</div>
-        </div>
-        <div class="report-hero-pills">
-          <span class="health-chip ${netTone}"><span class="dot"></span>${net >= 0 ? "Positive" : "Negative"}</span>
-          <span class="health-chip ${collectionTone || "neutral"}"><span class="dot"></span>${collectionPct}% collected</span>
-          <span class="health-chip neutral"><span class="dot"></span>${payrollRatio}% payroll ratio</span>
-        </div>
-        <div class="report-actions" data-print-hide>
-          <button class="btn secondary" data-export="clientSummary">Export clients</button>
-          <button class="btn secondary" data-export="salarySpendSince2022">Export salary spend</button>
-          <button class="btn secondary" data-export="employeeYearlyCost">Export yearly cost</button>
-        </div>
-      `);
-
-      $("#reportInsights").html(`
-        <div class="report-insight">
-          <div>
-            <strong>${escapeHtml(topClient?.client || "No client collected yet")}</strong>
-            <div class="report-insight-meta">Top collected client for ${escapeHtml(label)}</div>
-          </div>
-          <div class="report-kpi-value">${currency(topClient?.paid || 0)}</div>
-        </div>
-        <div class="report-insight">
-          <div>
-            <strong>${escapeHtml(highestOpen?.client || "No open balance")}</strong>
-            <div class="report-insight-meta">Highest pending/overdue client balance</div>
-          </div>
-          <div class="report-kpi-value ${((highestOpen?.pending || 0) + (highestOpen?.overdue || 0)) > 0 ? "warn" : "good"}">${currency((highestOpen?.pending || 0) + (highestOpen?.overdue || 0))}</div>
-        </div>
-        <div class="report-insight">
-          <div>
-            <strong>${escapeHtml(String(period.year))} salary spend</strong>
-            <div class="report-insight-meta">${spendYear?.activeMonths || 0} active month${(spendYear?.activeMonths || 0) === 1 ? "" : "s"} tracked</div>
-          </div>
-          <div class="report-kpi-value">${currency(spendYear?.tracked || 0)}</div>
-        </div>
-      `);
-
-      $("#reportSummary").html(`
-        <div>
-          <div class="report-section-label">Executive summary</div>
-          <div class="report-summary-copy">
-            ${escapeHtml(label)} closed at ${currency(net)} net with ${currency(paid)} collected from ${currency(expected)} expected income.
-            Salary outgoing was ${currency(outgoingBase)} (${payrollRatio}% of expected income), leaving ${currency(openIncome)} still open.
-            ${escapeHtml(netDeltaText)} · ${escapeHtml(paidDeltaText)}.
-          </div>
-        </div>
-        <div class="report-score ${scoreTone}">
-          <div class="report-section-label">Health score</div>
-          <strong>${reportScore}</strong>
-          <div class="report-kpi-note">${reportScore >= 80 ? "Strong" : reportScore >= 55 ? "Needs watch" : "Needs attention"}</div>
-        </div>
-      `);
-
-      $("#reportNarrative").html(`
-        <div class="report-section-label">What changed</div>
-        <div class="report-module-title">${escapeHtml(label)} readout</div>
-        <div class="report-narrative-list">
-          <div class="report-narrative-item">
-            ${reportStoryIcon(netTone, netDelta.dir === "down" ? "!" : "+")}
-            <div class="report-story-copy">
-              <strong>${escapeHtml(netDeltaText)}</strong>
-              <span>Net is ${currency(net)} after salary outgoing of ${currency(outgoingBase)}.</span>
+        <div class="report-hero-backdrop"><canvas id="reportHeroSparkline"></canvas></div>
+        <div class="report-hero-content">
+          <div class="report-hero-left">
+            <div class="report-eyebrow">Report net · ${escapeHtml(label)}</div>
+            <div class="report-hero-value">${currency(net)}</div>
+            <div class="report-hero-meta">
+              ${deltaChipHtml}
+              <span class="health-chip ${netTone}"><span class="dot"></span>${net >= 0 ? "Positive" : "Negative"}</span>
+            </div>
+            <div class="report-substats">
+              <div class="substat">
+                <span class="substat-label">Expected</span>
+                <strong>${currency(expected)}</strong>
+                <span class="substat-meta">${expected ? "Billed this month" : "Nothing billed yet"}</span>
+              </div>
+              <div class="substat">
+                <span class="substat-label">Collected</span>
+                <strong class="${collectionTone}">${currency(paid)}</strong>
+                <span class="substat-meta">${escapeHtml(collectedNote2)}</span>
+              </div>
+              <div class="substat">
+                <span class="substat-label">Open</span>
+                <strong class="${openIncome > 0.5 ? "warn" : "good"}">${currency(openIncome)}</strong>
+                <span class="substat-meta ${openIncome > 0.5 ? "warn" : "good"}">${escapeHtml(openNote2)}</span>
+              </div>
+              <div class="substat">
+                <span class="substat-label">Salary</span>
+                <strong class="${payrollRatio > 80 ? "warn" : ""}">${currency(outgoingBase)}</strong>
+                <span class="substat-meta">${escapeHtml(salaryNote2)}</span>
+              </div>
             </div>
           </div>
-          <div class="report-narrative-item">
-            ${reportStoryIcon(collectionTone || "neutral", collectionPct >= 90 ? "OK" : "!")}
-            <div class="report-story-copy">
-              <strong>${collectionPct}% collection rate</strong>
-              <span>${currency(paid)} collected from ${currency(expected)} expected income.</span>
+          <div class="report-hero-right">
+            <div class="report-insight">
+              <span class="report-insight-label">Top client</span>
+              <strong>${escapeHtml(topClientShareLabel)}</strong>
+              ${topClient && topClient.paid > 0 ? `<div class="share-bar"><span style="width:${Math.max(2, Math.min(100, topShare))}%"></span></div>` : ""}
+              <span class="report-insight-meta">${escapeHtml(topClientMetaShort)}</span>
             </div>
-          </div>
-          <div class="report-narrative-item">
-            ${reportStoryIcon(payrollTone, payrollRatio <= 70 ? "OK" : "!")}
-            <div class="report-story-copy">
-              <strong>${payrollRatio}% payroll ratio</strong>
-              <span>${payrollRatio <= 70 ? "Payroll is within a healthy range." : payrollRatio <= 90 ? "Payroll is elevated and should be watched." : "Payroll is high against expected income."}</span>
+            <div class="report-insight">
+              <span class="report-insight-label">Open balance</span>
+              <strong>${escapeHtml(openClientName)}</strong>
+              <span class="report-insight-meta ${openMetaTone}">${escapeHtml(openMetaText)}</span>
             </div>
-          </div>
-          <div class="report-narrative-item">
-            ${reportStoryIcon(openIncome ? "warn" : "good", openIncome ? "!" : "OK")}
-            <div class="report-story-copy">
-              <strong>${currency(openIncome)} still open</strong>
-              <span>${highestOpen?.client ? `${escapeHtml(highestOpen.client)} carries the largest open balance.` : "No client currently carries an open balance."}</span>
+            <div class="report-insight">
+              <span class="report-insight-label">${escapeHtml(String(period.year))} salary spend</span>
+              <strong>${currency(spendYear?.tracked || 0)}</strong>
+              <span class="report-insight-meta">${spendYear?.activeMonths || 0} active month${(spendYear?.activeMonths || 0) === 1 ? "" : "s"} tracked</span>
             </div>
           </div>
         </div>
       `);
 
-      $("#reportAttention").html(`
-        <div class="report-section-label">Needs attention</div>
-        <div class="report-module-title">Client risk ranking</div>
-        ${attentionRows.length ? `
+      const $attention = $("#reportAttention");
+      $attention.removeClass("compact-clear");
+      if (!attentionRows.length) {
+        // Collapse to a tiny inline pill when there's nothing to flag.
+        $attention.addClass("compact-clear").html(`
+          <span class="attention-clear-chip"><span class="attention-clear-dot"></span>✓ All clients current · no unpaid balances this period</span>
+        `);
+      } else {
+        $attention.html(`
+          <div class="report-section-label">Needs attention</div>
+          <div class="report-module-title">Client risk ranking</div>
           <div class="report-attention-list">
             ${attentionRows.map((row, index) => {
               const tone = row.overdue > 0 ? "bad" : "warn";
@@ -12528,68 +13722,19 @@
               `;
             }).join("")}
           </div>
-        ` : `<div class="report-attention-empty">No unpaid client balances for this period.</div>`}
-      `);
+        `);
+      }
 
-      $("#salaryChartSummary").html(`
-        <div>
-          <div class="report-chart-title">Salary expense</div>
-          <div class="report-chart-meta">Tracked salary outgoing across ${period.year}</div>
-        </div>
-        <div>
-          <div class="report-chart-total">${currency(yearlyPayroll)}</div>
-          <div class="report-chart-meta">year total</div>
-        </div>
+      // Single-line summary above the combined year-trend chart:
+      // "₱X income · ₱Y payroll · ₱Z net for 2026" (Income = paid + open, matches the bars in the chart)
+      const yearIncome = yearlyPaidIncome + yearlyOpenIncome;
+      const yearNet = yearIncome - yearlyPayroll;
+      const yearNetTone = yearNet >= 0 ? "good" : "bad";
+      $("#yearTrendSummary").html(`
+        <strong>${currency(yearIncome)}</strong> income ·
+        <strong>${currency(yearlyPayroll)}</strong> payroll ·
+        <strong class="${yearNetTone}">${currency(yearNet)}</strong> net for ${escapeHtml(String(period.year))}
       `);
-      $("#salaryChartCallouts").html(`
-        <div class="report-callout">
-          <span>Highest month</span>
-          <strong>${escapeHtml(bestPayrollMonth?.month || "—")} · ${currency(bestPayrollMonth?.payroll || 0)}</strong>
-        </div>
-        <div class="report-callout">
-          <span>Lowest month</span>
-          <strong>${escapeHtml(lowestPayrollMonth?.month || "—")} · ${currency(lowestPayrollMonth?.payroll || 0)}</strong>
-        </div>
-      `);
-      $("#incomeChartSummary").html(`
-        <div>
-          <div class="report-chart-title">Client payments</div>
-          <div class="report-chart-meta">Collected income against pending and overdue balances</div>
-        </div>
-        <div>
-          <div class="report-chart-total">${currency(yearlyPaidIncome)}</div>
-          <div class="report-chart-meta">collected · ${currency(yearlyOpenIncome)} open</div>
-        </div>
-        <div class="report-legend" style="flex-basis:100%;">
-          <span>Paid</span>
-          <span class="muted-dot">Pending / overdue</span>
-        </div>
-      `);
-      $("#incomeChartCallouts").html(`
-        <div class="report-callout">
-          <span>Best collection</span>
-          <strong>${escapeHtml(bestPaidMonth?.month || "—")} · ${currency(bestPaidMonth?.paidIncome || 0)}</strong>
-        </div>
-        <div class="report-callout">
-          <span>Highest open</span>
-          <strong>${escapeHtml(highestOpenIncomeMonth?.month || "—")} · ${currency(highestOpenIncomeMonth?.pendingIncome || 0)}</strong>
-        </div>
-      `);
-
-      const cards = [
-        { label: "Expected income", value: currency(expected), note: "Paid + pending + overdue", tone: "" },
-        { label: "Collected", value: currency(paid), note: `${collectionPct}% collected`, tone: collectionTone },
-        { label: "Open income", value: currency(openIncome), note: `${currency(pending)} pending/overdue`, tone: openIncome ? "warn" : "good" },
-        { label: "Salary outgoing", value: currency(outgoingBase), note: trackedOutgoing ? `${currency(paidOutgoing)} paid` : "Planned payroll fallback", tone: payrollRatio > 80 ? "warn" : "" }
-      ];
-
-      $("#reportCards").html(cards.map(card => `
-        <div class="report-kpi">
-          <div class="report-kpi-label">${escapeHtml(card.label)}</div>
-          <div class="report-kpi-value ${card.tone || ""}">${card.value}</div>
-          <div class="report-kpi-note">${escapeHtml(card.note)}</div>
-        </div>
-      `).join(""));
 
       renderClientSummaryTable(period);
       renderSalarySpendSinceTable();
@@ -12601,40 +13746,23 @@
         { label: "Scheduled / pending", value: currency(lifetimeOpenSalary), tone: lifetimeOpenSalary ? "warn" : "good" }
       ]));
 
-      $("#clientSummaryStats").html(reportMiniStats([
-        { label: "Billed clients", value: String(clientsWithBilling) },
-        { label: "Expected", value: currency(clientExpectedTotal) },
-        { label: "Collected", value: currency(clientPaidTotal), tone: clientOpenTotal ? "" : "good" },
-        { label: "Still open", value: currency(clientOpenTotal), tone: clientOpenTotal ? "warn" : "good" }
-      ]));
-
-      $("#yearlyCostStats").html(reportMiniStats([
-        { label: "Active employees", value: String(activeEmployees.length) },
-        { label: "Monthly payroll", value: currency(monthlySalaryTotal) },
-        { label: "Annualized cost", value: currency(monthlySalaryTotal * 12) },
-        { label: "Avg monthly pay", value: currency(avgMonthlySalary) }
-      ]));
-
+      // Compact 3-col view: Employee (+dept sub-line) · Monthly · Yearly
       $("#yearlyCostTable").html(`
-        <thead><tr><th>Employee</th><th>Department</th><th>Status</th><th class="report-money">Monthly Salary</th><th class="report-money">Yearly Cost</th></tr></thead>
+        <thead><tr><th>Employee</th><th class="report-money">Monthly</th><th class="report-money">Yearly</th></tr></thead>
         <tbody>
-          ${activeEmployees.length ? activeEmployees.slice().sort((a, b) => Number(b.monthlySalary || 0) - Number(a.monthlySalary || 0)).map((e, index) => `
+          ${activeEmployees.length ? activeEmployees.slice().sort((a, b) => Number(b.monthlySalary || 0) - Number(a.monthlySalary || 0)).map((e) => `
             <tr>
               <td>
-                <div class="report-row-title">
-                  <span class="report-rank">${index + 1}</span>
-                  <strong>${escapeHtml(e.name)}</strong>
-                </div>
+                <strong>${escapeHtml(e.name)}</strong>
+                <div class="row-sub">${escapeHtml(e.department || "—")} · ${escapeHtml(e.status || "active")}</div>
               </td>
-              <td>${escapeHtml(e.department)}</td>
-              <td>${badge(e.status)}</td>
               <td class="report-money">${currency(e.monthlySalary)}</td>
               <td class="report-money">${currency(Number(e.monthlySalary) * 12)}</td>
             </tr>
-          `).join("") : `<tr><td colspan="5" class="table-empty">No employee records found.</td></tr>`}
+          `).join("") : `<tr><td colspan="3" class="table-empty">No employee records.</td></tr>`}
           ${activeEmployees.length ? `
             <tr class="report-total-row">
-              <td colspan="3"><strong>Total active payroll</strong></td>
+              <td><strong>Total active payroll</strong></td>
               <td class="report-money"><strong>${currency(monthlySalaryTotal)}</strong></td>
               <td class="report-money"><strong>${currency(monthlySalaryTotal * 12)}</strong></td>
             </tr>
@@ -12674,32 +13802,29 @@
       const rows = clientSummaryRows(period)
         .filter(row => !selectedReportClientId || String(row.clientId) === String(selectedReportClientId))
         .sort((a, b) => b.expected - a.expected);
+      // Compact 3-col view: Client (+open sub-line if any) · Paid · Status
       $("#clientSummaryTable").html(`
-        <thead><tr><th>Client</th><th class="report-money">Expected</th><th class="report-money">Paid</th><th class="report-money">Pending</th><th class="report-money">Overdue</th><th>Status</th></tr></thead>
+        <thead><tr><th>Client</th><th class="report-money">Paid</th><th>Status</th></tr></thead>
         <tbody>
-          ${rows.length ? rows.map((row, index) => {
+          ${rows.length ? rows.map((row) => {
             const statusClass = row.status === "Good" ? "good" : row.status === "Overdue" ? "bad" : row.status === "Pending" ? "warn" : "";
+            const openAmt = (row.pending || 0) + (row.overdue || 0);
+            const sub = openAmt > 0
+              ? `${currency(openAmt)} open`
+              : `Expected ${compactCurrency(row.expected)}`;
             return `<tr>
               <td>
-                <div class="report-row-title">
-                  <span class="report-rank">${index + 1}</span>
-                  <strong>${escapeHtml(row.client)}</strong>
-                </div>
+                <strong>${escapeHtml(row.client)}</strong>
+                <div class="row-sub ${openAmt > 0 ? "warn" : ""}">${escapeHtml(sub)}</div>
               </td>
-              <td class="report-money">${currency(row.expected)}</td>
               <td class="report-money">${currency(row.paid)}</td>
-              <td class="report-money">${currency(row.pending)}</td>
-              <td class="report-money">${currency(row.overdue)}</td>
               <td><span class="summary-status ${statusClass}">${escapeHtml(row.status)}</span></td>
             </tr>`;
-          }).join("") : `<tr><td colspan="6" class="table-empty">No clients found.</td></tr>`}
+          }).join("") : `<tr><td colspan="3" class="table-empty">No clients found.</td></tr>`}
           ${rows.length ? `
             <tr class="report-total-row">
               <td><strong>Total</strong></td>
-              <td class="report-money"><strong>${currency(rows.reduce((sum, row) => sum + row.expected, 0))}</strong></td>
               <td class="report-money"><strong>${currency(rows.reduce((sum, row) => sum + row.paid, 0))}</strong></td>
-              <td class="report-money"><strong>${currency(rows.reduce((sum, row) => sum + row.pending, 0))}</strong></td>
-              <td class="report-money"><strong>${currency(rows.reduce((sum, row) => sum + row.overdue, 0))}</strong></td>
               <td class="muted">Selected month</td>
             </tr>
           ` : ""}
@@ -13007,23 +14132,38 @@
       });
 
       const reportData = monthlyChartData(selectedReports.year);
-      const salaryCanvas = document.getElementById("salaryExpenseChart");
-      if (salaryCanvas) {
-        charts.salaryExpense = new Chart(salaryCanvas, {
-          type: "line",
+      // Mask future months for the current calendar year so the chart doesn't waste
+      // horizontal real estate on empty Jul-Dec when we're only in May.
+      const nowY = new Date().getFullYear();
+      const nowM = new Date().getMonth();
+      if (selectedReports.year === nowY) {
+        for (let i = nowM + 1; i < 12; i++) {
+          reportData[i].payroll = null;
+          reportData[i].expectedIncome = null;
+          reportData[i].paidIncome = null;
+          reportData[i].pendingIncome = null;
+        }
+      }
+      const yearTrendCanvas = document.getElementById("reportYearTrendChart");
+      if (yearTrendCanvas) {
+        const incomeSeries = reportData.map(d => (d.paidIncome == null && d.pendingIncome == null) ? null : Number(d.paidIncome || 0) + Number(d.pendingIncome || 0));
+        const payrollSeries = reportData.map(d => d.payroll == null ? null : Number(d.payroll || 0));
+        const netSeries = reportData.map((d, i) => (incomeSeries[i] == null || payrollSeries[i] == null) ? null : incomeSeries[i] - payrollSeries[i]);
+        charts.reportYearTrend = new Chart(yearTrendCanvas, {
+          type: "bar",
           data: {
             labels: reportData.map(item => item.month),
-            datasets: [{ label: "Salary Expense", data: reportData.map(item => item.payroll), tension: 0.35, borderColor: "#111111", borderWidth: 2, backgroundColor: "rgba(17, 17, 17, 0.055)", pointRadius: 2.5, pointHoverRadius: 4, pointBackgroundColor: "#111111", pointBorderColor: "#111111", fill: true }]
+            datasets: [
+              { type: "bar", label: "Income",  data: incomeSeries,  backgroundColor: "#16a34a", borderRadius: 4, maxBarThickness: 18 },
+              { type: "bar", label: "Payroll", data: payrollSeries, backgroundColor: "#a1a1aa", borderRadius: 4, maxBarThickness: 18 },
+              { type: "line", label: "Net",    data: netSeries, borderColor: "#0a0a0a", backgroundColor: "transparent", borderWidth: 2, tension: 0.32, fill: false, pointRadius: 2.5, pointBackgroundColor: "#0a0a0a", pointBorderColor: "#ffffff", pointBorderWidth: 1.5, pointHoverRadius: 4 }
+            ]
           },
           options: {
-            ...chartDefaults,
+            responsive: true,
+            maintainAspectRatio: false,
             interaction: { mode: "index", intersect: false },
-            scales: {
-              x: { ticks: { color: chartText, font: { size: 10 }, maxRotation: 0 }, grid: { display: false }, border: { display: false } },
-              y: { beginAtZero: true, ticks: { color: chartText, font: { size: 10 }, maxTicksLimit: 5, callback: (v) => compactCurrency(v) }, grid: { color: "rgba(229, 231, 235, 0.75)", drawBorder: false }, border: { display: false } }
-            },
             plugins: {
-              ...chartDefaults.plugins,
               legend: { display: false },
               tooltip: {
                 backgroundColor: "#111111",
@@ -13031,8 +14171,77 @@
                 bodyColor: "#ffffff",
                 padding: 10,
                 cornerRadius: 8,
-                callbacks: { label: (item) => `${item.dataset.label}: ${currency(item.parsed.y)}` }
+                displayColors: true,
+                callbacks: {
+                  title: (items) => items.length ? `${items[0].label} ${selectedReports.year}` : "",
+                  label: (item) => `${item.dataset.label}: ${currency(item.parsed.y)}`
+                }
               }
+            },
+            scales: {
+              x: { ticks: { color: "#71717a", font: { size: 11 }, maxRotation: 0 }, grid: { display: false }, border: { display: false } },
+              y: { beginAtZero: true, ticks: { color: "#71717a", font: { size: 11 }, callback: (v) => compactCurrency(v) }, grid: { color: "rgba(17,17,17,0.06)", drawBorder: false }, border: { display: false } }
+            }
+          }
+        });
+      }
+
+      // Rolling 12-month net trend sparkline inside the Reports hero
+      const heroSparkCanvas = document.getElementById("reportHeroSparkline");
+      if (heroSparkCanvas && typeof rolling12MonthsNet === "function") {
+        const series = rolling12MonthsNet({ month: selectedReports.month, year: selectedReports.year });
+        const values = series.map(p => p.value);
+        const labels = series.map(p => p.label);
+        const lastIdx = values.length - 1;
+        const sctx = heroSparkCanvas.getContext("2d");
+        const sgrad = sctx.createLinearGradient(0, 0, 0, 80);
+        sgrad.addColorStop(0, "rgba(10,10,10,0.10)");
+        sgrad.addColorStop(1, "rgba(10,10,10,0)");
+        charts.reportHeroSpark = new Chart(heroSparkCanvas, {
+          type: "line",
+          data: {
+            labels,
+            datasets: [{
+              label: "Net",
+              data: values,
+              borderColor: "#0a0a0a",
+              backgroundColor: sgrad,
+              borderWidth: 1.75,
+              tension: 0.36,
+              fill: true,
+              spanGaps: false,
+              pointRadius: values.map((_, i) => i === lastIdx ? 3 : 0),
+              pointBackgroundColor: values.map((_, i) => i === lastIdx ? "#0a0a0a" : "transparent"),
+              pointBorderColor: values.map((_, i) => i === lastIdx ? "#ffffff" : "transparent"),
+              pointBorderWidth: 1.5,
+              pointHoverRadius: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: "index", intersect: false },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: "#111111",
+                titleColor: "#ffffff",
+                bodyColor: "#ffffff",
+                padding: 8,
+                cornerRadius: 6,
+                displayColors: false,
+                callbacks: {
+                  title: (items) => {
+                    const idx = items[0]?.dataIndex ?? 0;
+                    return series[idx]?.fullLabel || items[0]?.label || "";
+                  },
+                  label: (item) => `Net: ${currency(item.parsed.y)}`
+                }
+              }
+            },
+            scales: {
+              x: { display: false },
+              y: { display: false, beginAtZero: false }
             }
           }
         });
@@ -13061,7 +14270,7 @@
                 borderRadius: 3,
                 maxBarThickness: isEmployeeSpendMode ? 18 : 34,
                 categoryPercentage: isEmployeeSpendMode ? 0.74 : 0.56,
-                barPercentage: isEmployeeSpendMode ? 0.82 : 0.82
+                barPercentage: 0.82
               },
               {
                 label: "Scheduled / pending",
@@ -13072,7 +14281,7 @@
                 borderRadius: 3,
                 maxBarThickness: isEmployeeSpendMode ? 18 : 34,
                 categoryPercentage: isEmployeeSpendMode ? 0.74 : 0.56,
-                barPercentage: isEmployeeSpendMode ? 0.82 : 0.82
+                barPercentage: 0.82
               }
             ]
           },
@@ -13110,39 +14319,77 @@
         });
       }
 
-      const incomeCanvas = document.getElementById("clientIncomeChart");
-      if (incomeCanvas) {
-        charts.clientIncome = new Chart(incomeCanvas, {
-          type: "line",
-          data: {
-            labels: reportData.map(item => item.month),
-            datasets: [
-              { label: "Paid Income", data: reportData.map(item => item.paidIncome), tension: 0.35, borderColor: "#111111", borderWidth: 2, backgroundColor: "rgba(17, 17, 17, 0.06)", pointRadius: 2.5, pointHoverRadius: 4, pointBackgroundColor: "#111111", pointBorderColor: "#111111" },
-              { label: "Pending / Overdue", data: reportData.map(item => item.pendingIncome), tension: 0.35, borderColor: "#9ca3af", borderWidth: 1.75, backgroundColor: "rgba(156, 163, 175, 0.08)", pointRadius: 2.5, pointHoverRadius: 4, pointBackgroundColor: "#9ca3af", pointBorderColor: "#9ca3af" }
-            ]
-          },
-          options: {
-            ...chartDefaults,
-            interaction: { mode: "index", intersect: false },
-            scales: {
-              x: { ticks: { color: chartText, font: { size: 10 }, maxRotation: 0 }, grid: { display: false }, border: { display: false } },
-              y: { beginAtZero: true, ticks: { color: chartText, font: { size: 10 }, maxTicksLimit: 5, callback: (v) => compactCurrency(v) }, grid: { color: "rgba(229, 231, 235, 0.75)", drawBorder: false }, border: { display: false } }
+      // Salary donut — top employees by share for the selected report year
+      const donutCanvas = document.getElementById("salaryDonutChart");
+      if (donutCanvas) {
+        const empRows = (typeof salarySpendEmployeeRows === "function")
+          ? salarySpendEmployeeRows(selectedReports.year).filter(r => r.tracked > 0)
+          : [];
+        empRows.sort((a, b) => b.tracked - a.tracked);
+        const TOP_N = 6;
+        const top = empRows.slice(0, TOP_N);
+        const restTotal = empRows.slice(TOP_N).reduce((s, r) => s + r.tracked, 0);
+        const segments = top.map(r => ({ label: r.employee || "—", value: r.tracked }));
+        if (restTotal > 0) segments.push({ label: "Others", value: restTotal });
+        const total = segments.reduce((s, x) => s + x.value, 0);
+        const palette = ["#0a0a0a", "#16a34a", "#0C5CAB", "#f59e0b", "#ef4444", "#71717a", "#c4b5fd"];
+        const colors = segments.map((_, i) => palette[i % palette.length]);
+
+        if (charts.salaryDonut) { try { charts.salaryDonut.destroy(); } catch (e) {} }
+        if (!segments.length) {
+          $("#salaryDonutLegend").html(`<div class="muted" style="font-size:11px">No salary data for ${selectedReports.year}</div>`);
+        } else {
+          charts.salaryDonut = new Chart(donutCanvas, {
+            type: "doughnut",
+            data: {
+              labels: segments.map(s => s.label),
+              datasets: [{
+                data: segments.map(s => s.value),
+                backgroundColor: colors,
+                borderColor: "#ffffff",
+                borderWidth: 2,
+                hoverOffset: 4
+              }]
             },
-            plugins: {
-              ...chartDefaults.plugins,
-              legend: { display: false },
-              tooltip: {
-                backgroundColor: "#111111",
-                titleColor: "#ffffff",
-                bodyColor: "#ffffff",
-                padding: 10,
-                cornerRadius: 8,
-                callbacks: { label: (item) => `${item.dataset.label}: ${currency(item.parsed.y)}` }
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: "65%",
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  backgroundColor: "#111111",
+                  titleColor: "#ffffff",
+                  bodyColor: "#ffffff",
+                  padding: 10,
+                  cornerRadius: 8,
+                  callbacks: {
+                    label: (item) => {
+                      const v = item.parsed;
+                      const pct = total ? Math.round((v / total) * 100) : 0;
+                      return `${item.label}: ${currency(v)} (${pct}%)`;
+                    }
+                  }
+                }
               }
             }
-          }
-        });
+          });
+          // Render compact legend list under the donut
+          const legendHtml = segments.map((s, i) => {
+            const pct = total ? Math.round((s.value / total) * 100) : 0;
+            return `
+              <div class="donut-legend-row">
+                <span class="donut-swatch" style="background:${colors[i]}"></span>
+                <span class="donut-legend-name">${escapeHtml(s.label)}</span>
+                <span class="donut-legend-pct">${pct}%</span>
+                <span class="donut-legend-val">${compactCurrency(s.value)}</span>
+              </div>
+            `;
+          }).join("");
+          $("#salaryDonutLegend").html(legendHtml);
+        }
       }
+
     }
 
     function chartsVisibleSection() {
@@ -14936,6 +16183,53 @@
     });
     $(document).on("click", "[data-report-spend-mode]", function () {
       selectedReportSalarySpendMode = $(this).data("report-spend-mode") || "year";
+      renderReports();
+      setTimeout(drawCharts, 0);
+    });
+
+    // Quick scope preset pills for the Reports topbar.
+    // Reports renders one month at a time, so each preset just sets month/year.
+    function applyReportsPreset(name) {
+      const now = new Date();
+      if (name === "thisMonth") {
+        selectedReports.month = now.getMonth();
+        selectedReports.year = now.getFullYear();
+      } else if (name === "lastMonth") {
+        const lm = now.getMonth() - 1;
+        selectedReports.month = lm < 0 ? 11 : lm;
+        selectedReports.year = lm < 0 ? now.getFullYear() - 1 : now.getFullYear();
+      } else if (name === "thisQuarter") {
+        // Anchor to the latest month of the current quarter (or today's month if mid-quarter)
+        const qStart = Math.floor(now.getMonth() / 3) * 3;
+        const target = Math.min(now.getMonth(), qStart + 2);
+        selectedReports.month = target;
+        selectedReports.year = now.getFullYear();
+      } else if (name === "thisYear") {
+        selectedReports.month = now.getMonth();
+        selectedReports.year = now.getFullYear();
+      }
+      $("#reportMonth").val(selectedReports.month);
+      $("#reportYear").val(selectedReports.year);
+    }
+
+    function renderReportsPresetState() {
+      const now = new Date();
+      const m = selectedReports.month, y = selectedReports.year;
+      let active = "";
+      if (m === now.getMonth() && y === now.getFullYear()) active = "thisMonth";
+      else {
+        const lm = now.getMonth() - 1;
+        const lmM = lm < 0 ? 11 : lm;
+        const lmY = lm < 0 ? now.getFullYear() - 1 : now.getFullYear();
+        if (m === lmM && y === lmY) active = "lastMonth";
+      }
+      $("#reportsPeriodPresets .preset-pill").each(function () {
+        $(this).toggleClass("active", $(this).data("reports-preset") === active);
+      });
+    }
+
+    $(document).on("click", "#reportsPeriodPresets .preset-pill", function () {
+      applyReportsPreset($(this).data("reports-preset"));
       renderReports();
       setTimeout(drawCharts, 0);
     });
